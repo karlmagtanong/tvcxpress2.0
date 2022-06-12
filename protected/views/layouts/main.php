@@ -135,13 +135,13 @@
 							<div class="collapse" id="order">
 								<ul class="nav sub-menu">
 									<li class="nav-item">
-										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/create" class="nav-link">Order Form</a>
+										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/create" >Order Form</a>
 									</li>
 									<li class="nav-item">
-										<a href="#" class="nav-link">Saved Orders</a>
+										<a href="#" >Saved Orders</a>
 									</li>
 									<li class="nav-item">
-										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/admin" class="nav-link">My Orders</a>
+										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/admin" >My Orders</a>
 									</li>
 								</ul>
 							</div>
