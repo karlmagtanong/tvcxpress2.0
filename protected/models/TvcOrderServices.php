@@ -1,25 +1,24 @@
 <?php
 
 /**
- * This is the model class for table "users".
+ * This is the model class for table "tvc_order_services".
  *
- * The followings are the available columns in table 'users':
+ * The followings are the available columns in table 'tvc_order_services':
  * @property integer $id
- * @property string $name
- * @property string $username
- * @property string $password
- * @property string $password_hash
- * @property integer $user_role
- * @property string $created_at
+ * @property string $order_id
+ * @property integer $sub_cat_id
+ * @property integer $cat_id
+ * @property double $price
+ * @property integer $qty
  */
-class Users extends CActiveRecord
+class TvcOrderServices extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'users';
+		return 'tvc_order_services';
 	}
 
 	/**
@@ -30,12 +29,12 @@ class Users extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('user_role', 'numerical', 'integerOnly'=>true),
-			array('name, username, password, password_hash', 'length', 'max'=>50),
-			array('created_at', 'safe'),
+			array('sub_cat_id, cat_id, qty', 'numerical', 'integerOnly'=>true),
+			array('price', 'numerical'),
+			array('order_id', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, username, password, password_hash, user_role, created_at', 'safe', 'on'=>'search'),
+			array('id, order_id, sub_cat_id, cat_id, price, qty', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -57,12 +56,11 @@ class Users extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'name' => 'Name',
-			'username' => 'Username',
-			'password' => 'Password',
-			'password_hash' => 'Password Hash',
-			'user_role' => 'User Role',
-			'created_at' => 'Created At',
+			'order_id' => 'Order',
+			'sub_cat_id' => 'Sub Cat',
+			'cat_id' => 'Cat',
+			'price' => 'Price',
+			'qty' => 'Qty',
 		);
 	}
 
@@ -85,16 +83,14 @@ class Users extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('name',$this->name,true);
-		$criteria->compare('username',$this->username,true);
-		$criteria->compare('password',$this->password,true);
-		$criteria->compare('password_hash',$this->password_hash,true);
-		$criteria->compare('user_role',$this->user_role);
-		$criteria->compare('created_at',$this->created_at,true);
+		$criteria->compare('order_id',$this->order_id,true);
+		$criteria->compare('sub_cat_id',$this->sub_cat_id);
+		$criteria->compare('cat_id',$this->cat_id);
+		$criteria->compare('price',$this->price);
+		$criteria->compare('qty',$this->qty);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
-			'pagination'=>false
 		));
 	}
 
@@ -102,7 +98,7 @@ class Users extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Users the static model class
+	 * @return TvcOrderServices the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

@@ -37,15 +37,68 @@
 
 	<link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/images/favicon.png" />
 
+	<link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/vendors/select2/select2.min.css">
+	<link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/vendors/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css">
+
+
+	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 </head>
 
 <body>
+	<style>
+		.btn-primary,
+		.wizard>.actions a,
+		.wizard>.actions a:active,
+		.wizard>.actions a:hover,
+		div.tox .tox-button:not(.tox-button--naked):not(.tox-button--secondary),
+		.swal2-popup .swal2-actions button.swal2-confirm,
+		.fc .fc-button-primary:not(:disabled).fc-button-active,
+		.fc .fc-button-primary:not(:disabled):active {
+			color: #fff !important;
+			background-color: #fb6340 !important;
+			border-color: #fb6340 !important;
 
-	<!-- <style>
-	.sidebar .sidebar-body .nav .nav-item.active .nav-link .link-icon {
-    fill: rgba(239, 243, 255, 0.5);
-    color: orange;
-} -->
+		}
+
+
+		.sidebar .sidebar-body .nav.sub-menu .nav-item .nav-link.active {
+			color: black !important;
+		}
+
+		.sidebar .sidebar-body .nav .nav-item.active .nav-link {
+			color: black !important;
+		}
+
+
+		.select2-container--default .select2-selection--single .select2-selection__rendered {
+			line-height: 28px !important;
+		}
+
+
+
+
+
+
+
+
+		/* .sidebar .sidebar-body .nav .nav-item.active .nav-link .link-icon {
+			fill: rgba(239, 243, 255, 0.5);
+			color: orange;
+		} */
+
+
+		.select2-container--default .select2-selection--single {
+
+			border-radius: 0px !important;
+		}
+
+		.select2-container .select2-selection--single {
+
+			height: 38px !important;
+
+		}
 	</style>
 
 
@@ -82,13 +135,13 @@
 							<div class="collapse" id="order">
 								<ul class="nav sub-menu">
 									<li class="nav-item">
-										<a href="#" class="nav-link">Order Form</a>
+										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/create" class="nav-link">Order Form</a>
 									</li>
 									<li class="nav-item">
 										<a href="#" class="nav-link">Saved Orders</a>
 									</li>
 									<li class="nav-item">
-										<a href="#" class="nav-link">My Orders</a>
+										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/admin" class="nav-link">My Orders</a>
 									</li>
 								</ul>
 							</div>
@@ -112,7 +165,7 @@
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="dashboard.html" class="nav-link">
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=TvcMgmtRate/admin" class="nav-link">
 								<i class="link-icon" data-feather="box"></i>
 								<span class="link-title">Rate Configuration</span>
 							</a>
@@ -125,29 +178,34 @@
 							</a>
 							<div class="collapse" id="datamanagement">
 								<ul class="nav sub-menu">
+
 									<li class="nav-item">
-										<a href="#" class="nav-link">Product Category</a>
+										<!-- <?php $controllers = Yii::app()->controller->id . "/" . Yii::app()->controller->action->id; ?> -->
+										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcMgmtProductCat/admin" class="nav-link " id="test">Product Category</a>
 									</li>
 									<li class="nav-item">
-										<a href="#" class="nav-link">Channels</a>
+										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcMgmtChannel/admin" class="nav-link ">Channels</a>
 									</li>
 									<li class="nav-item">
-										<a href="#" class="nav-link">Channel Cluster</a>
+										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcMgmtChannelCluster/admin" class="nav-link ">Channel Cluster</a>
 									</li>
 									<li class="nav-item">
-										<a href="#" class="nav-link">Extra Services</a>
+										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcMgmtExtraServices/admin" class="nav-link">Non-Transmission</a>
+									</li>
+									<li class="nav-item">
+										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=TvcMgmtExtraServicesSub/admin" class="nav-link">Non-Transmission (Sub-Cat)</a>
 									</li>
 									<li class="nav-item">
 										<a href="#" class="nav-link">Billing Information</a>
 									</li>
 									<li class="nav-item">
-										<a href="#" class="nav-link">Advertiser</a>
+										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=TvcMgmtAdvertiser/admin" class="nav-link">Advertiser</a>
 									</li>
 									<li class="nav-item">
-										<a href="#" class="nav-link">ASC Brand</a>
+										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=TvcMgmtAscBrand/admin" class="nav-link">ASC Brand</a>
 									</li>
 									<li class="nav-item">
-										<a href="#" class="nav-link">Producer</a>
+										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=TvcMgmtProducer/admin" class="nav-link">Producer</a>
 									</li>
 								</ul>
 							</div>
@@ -492,6 +550,7 @@
 	}
 
 	?>
+
 	<!-- core:js -->
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/vendors/core/core.js"></script>
 	<!-- endinject -->
@@ -512,7 +571,15 @@
 	<!-- Custom js for this page -->
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/dashboard-light.js"></script>
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/datepicker.js"></script>
+	<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/timepicker.js"></script>
+
 	<!-- End custom js for this page -->
+
+	<script src="<?php echo Yii::app()->request->baseUrl; ?>/vendors/select2/select2.min.js"></script>
+
+	<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/select2.js"></script>
+	<script src="<?php echo Yii::app()->request->baseUrl; ?>/vendors/moment/moment.min.js"></script>
+	<script src="<?php echo Yii::app()->request->baseUrl; ?>/vendors/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.js"></script>
 
 
 </body>

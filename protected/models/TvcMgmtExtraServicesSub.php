@@ -1,25 +1,22 @@
 <?php
 
 /**
- * This is the model class for table "users".
+ * This is the model class for table "tvc_mgmt_extra_services_sub".
  *
- * The followings are the available columns in table 'users':
+ * The followings are the available columns in table 'tvc_mgmt_extra_services_sub':
  * @property integer $id
- * @property string $name
- * @property string $username
- * @property string $password
- * @property string $password_hash
- * @property integer $user_role
- * @property string $created_at
+ * @property integer $serv_id
+ * @property string $sub_category
+ * @property double $price
  */
-class Users extends CActiveRecord
+class TvcMgmtExtraServicesSub extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'users';
+		return 'tvc_mgmt_extra_services_sub';
 	}
 
 	/**
@@ -30,12 +27,12 @@ class Users extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('user_role', 'numerical', 'integerOnly'=>true),
-			array('name, username, password, password_hash', 'length', 'max'=>50),
-			array('created_at', 'safe'),
+			array('id, serv_id', 'numerical', 'integerOnly' => true),
+			array('price', 'numerical'),
+			array('sub_category', 'length', 'max' => 50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, username, password, password_hash, user_role, created_at', 'safe', 'on'=>'search'),
+			array('id, serv_id, sub_category, price', 'safe', 'on' => 'search'),
 		);
 	}
 
@@ -47,6 +44,7 @@ class Users extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'services' => array(self::BELONGS_TO, 'TvcMgmtExtraServices', '', 'foreignKey' => array('serv_id' => 'id')),
 		);
 	}
 
@@ -57,12 +55,9 @@ class Users extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'name' => 'Name',
-			'username' => 'Username',
-			'password' => 'Password',
-			'password_hash' => 'Password Hash',
-			'user_role' => 'User Role',
-			'created_at' => 'Created At',
+			'serv_id' => 'Serv',
+			'sub_category' => 'Sub Category',
+			'price' => 'Price',
 		);
 	}
 
@@ -82,19 +77,30 @@ class Users extends CActiveRecord
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
-		$criteria=new CDbCriteria;
+		$criteria = new CDbCriteria;
+		$criteria->with = array('services');
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('name',$this->name,true);
-		$criteria->compare('username',$this->username,true);
-		$criteria->compare('password',$this->password,true);
-		$criteria->compare('password_hash',$this->password_hash,true);
-		$criteria->compare('user_role',$this->user_role);
-		$criteria->compare('created_at',$this->created_at,true);
+		$criteria->compare('id', $this->id);
+		$criteria->compare('serv_id', $this->serv_id);
+		$criteria->compare('sub_category', $this->sub_category, true);
+		$criteria->compare('price', $this->price);
+		$criteria->order = 'serv_id ASC';
 
 		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-			'pagination'=>false
+			'criteria' => $criteria,
+			'pagination' => false,
+		));
+	}
+
+	public function get_subcat($id)
+	{
+		$criteria = new CDbCriteria;
+		$criteria->addCondition('serv_id = ' . $id . '');
+
+		return new CActiveDataProvider($this, array(
+			'criteria' => $criteria,
+			'pagination' => false
+
 		));
 	}
 
@@ -102,9 +108,9 @@ class Users extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Users the static model class
+	 * @return TvcMgmtExtraServicesSub the static model class
 	 */
-	public static function model($className=__CLASS__)
+	public static function model($className = __CLASS__)
 	{
 		return parent::model($className);
 	}

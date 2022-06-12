@@ -1,25 +1,22 @@
 <?php
 
 /**
- * This is the model class for table "users".
+ * This is the model class for table "tvc_mgmt_producer".
  *
- * The followings are the available columns in table 'users':
- * @property integer $id
+ * The followings are the available columns in table 'tvc_mgmt_producer':
+ * @property integer $int
  * @property string $name
- * @property string $username
- * @property string $password
- * @property string $password_hash
- * @property integer $user_role
- * @property string $created_at
+ * @property string $contact_number
+ * @property string $email
  */
-class Users extends CActiveRecord
+class TvcMgmtProducer extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'users';
+		return 'tvc_mgmt_producer';
 	}
 
 	/**
@@ -30,12 +27,11 @@ class Users extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('user_role', 'numerical', 'integerOnly'=>true),
-			array('name, username, password, password_hash', 'length', 'max'=>50),
-			array('created_at', 'safe'),
+			array('id', 'numerical', 'integerOnly'=>true),
+			array('name, contact_number, email', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, username, password, password_hash, user_role, created_at', 'safe', 'on'=>'search'),
+			array('id, name, contact_number, email', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -56,13 +52,10 @@ class Users extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
+			'id' => 'id',
 			'name' => 'Name',
-			'username' => 'Username',
-			'password' => 'Password',
-			'password_hash' => 'Password Hash',
-			'user_role' => 'User Role',
-			'created_at' => 'Created At',
+			'contact_number' => 'Contact Number',
+			'email' => 'Email',
 		);
 	}
 
@@ -86,15 +79,11 @@ class Users extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('username',$this->username,true);
-		$criteria->compare('password',$this->password,true);
-		$criteria->compare('password_hash',$this->password_hash,true);
-		$criteria->compare('user_role',$this->user_role);
-		$criteria->compare('created_at',$this->created_at,true);
+		$criteria->compare('contact_number',$this->contact_number,true);
+		$criteria->compare('email',$this->email,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
-			'pagination'=>false
 		));
 	}
 
@@ -102,7 +91,7 @@ class Users extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Users the static model class
+	 * @return TvcMgmtProducer the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
