@@ -29,14 +29,14 @@ class TvcMgmtRate extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('type', 'numerical', 'integerOnly'=>true),
+			array('type', 'numerical', 'integerOnly' => true),
 			array('name', 'length', 'max' => 255),
 			array('amount,length_to,length_from', 'numerical'),
 
 
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, length_from, length_to, type, amount', 'safe', 'on'=>'search'),
+			array('id, name, length_from, length_to, type, amount', 'safe', 'on' => 'search'),
 		);
 	}
 
@@ -47,8 +47,7 @@ class TvcMgmtRate extends CActiveRecord
 	{
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
-		return array(
-		);
+		return array();
 	}
 
 	/**
@@ -82,42 +81,66 @@ class TvcMgmtRate extends CActiveRecord
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
-		$criteria=new CDbCriteria;
+		$criteria = new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('name',$this->name);
-		$criteria->compare('length_from',$this->length_from);
-		$criteria->compare('length_to',$this->length_to);
-		$criteria->compare('type',$this->type);
-		$criteria->compare('amount',$this->amount);
+		$criteria->compare('id', $this->id);
+		$criteria->compare('name', $this->name);
+		$criteria->compare('length_from', $this->length_from);
+		$criteria->compare('length_to', $this->length_to);
+		$criteria->compare('type', $this->type);
+		$criteria->compare('amount', $this->amount);
 
 		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-			'pagination'=>false,
+			'criteria' => $criteria,
+			'pagination' => false,
 		));
 	}
 
 	public function get_type_name($id)
 	{
 
-		if($id == 1){
+		if ($id == 1) {
 			return "Standard Rate";
 		}
-		if($id == 2){
+		if ($id == 2) {
 			return "Special Rate (Advertiser)";
 		}
-		if($id == 3){
+		if ($id == 3) {
 			return "Special Rate (Agency)";
 		}
 	}
 
-	/**
-	 * Returns the static model of the specified AR class.
-	 * Please note that you should have this exact method in all your CActiveRecord descendants!
-	 * @param string $className active record class name.
-	 * @return TvcMgmtRate the static model class
-	 */
-	public static function model($className=__CLASS__)
+	public function get_rate($adv, $agen, $len)
+	{
+		$advname = TvcMgmtAdvertiser::model()->get_name($adv);
+
+		if ($this->get_advertiser($advname) != "") {
+			$sql = $this->model()->findBySql('SELECT amount from tvc_mgmt_rate where length_from <= "' . $len . '" and length_to >= "' . $len . '" and type = 2 and name = "' . $advname . '"');
+			return $sql->amount;
+		} else if ($this->get_agency($agen) != "") {
+			$sql = $this->model()->findBySql('SELECT amount from tvc_mgmt_rate where length_from <= "' . $len . '" and length_to >= "' . $len . '" and type = 3 and name = "' . $agen . '"');
+			return $sql->amount;
+		} else {
+			$sql = $this->model()->findBySql('SELECT amount from tvc_mgmt_rate where length_from <= "' . $len . '" and length_to >= "' . $len . '" and type = 1');
+			return $sql->amount;
+		}
+	}
+
+	public function get_advertiser($id)
+	{
+		$sql = $this::model()->findByAttributes(['name' => $id, 'type' => 2]);
+
+		return $sql->name;
+	}
+
+	public function get_agency($id)
+	{
+		$sql = $this::model()->findByAttributes(['name' => $id, 'type' => 3]);
+
+		return $sql->name;
+	}
+
+	public static function model($className = __CLASS__)
 	{
 		return parent::model($className);
 	}

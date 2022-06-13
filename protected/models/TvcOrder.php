@@ -81,8 +81,8 @@ class TvcOrder extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('type, created_by', 'required'),
-			array('break_time_hh, break_time_mm, payment_terms, currency, mode_payment, service_type, platform, delivery_method, share_type, share_link, share_time_hh, share_time_mm, asc_upload, asc_time_hh, asc_time_mm, type, created_by', 'numerical', 'integerOnly'=>true),
-			array('order_id, order_code, advertiser, asc_brand, product_category, asc_project_title, length, break_time_aa, producer, producer_contact, producer_email, agency_company, agency_contact_person, agency_contact_no, agency_email, billing_ce, billing_company, billing_address, billing_contact_person, billing_contact_no, billing_contact_email, billing_tin, billing_business_type, gcash_name, gcash_email, gcash_number, delivery_company, delivery_contact_name, delivery_number, delivery_email, share_aa, asc_time_aa, asc_reference_code', 'length', 'max'=>255),
+			array('break_time_mm, payment_terms, currency, mode_payment, service_type, platform, delivery_method, share_type,  share_time_mm, asc_upload,  asc_time_mm, type, created_by', 'numerical', 'integerOnly'=>true),
+			array('break_time_hh, order_id, order_code, advertiser, asc_brand, product_category, asc_project_title, length, share_link, break_time_aa, share_time_hh,producer, asc_time_hh,producer_contact, producer_email, agency_company, agency_contact_person, agency_contact_no, agency_email, billing_ce, billing_company, billing_address, billing_contact_person, billing_contact_no, billing_contact_email, billing_tin, billing_business_type, gcash_name, gcash_email, gcash_number, delivery_company, delivery_contact_name, delivery_number, delivery_email, share_aa, asc_time_aa, asc_reference_code', 'length', 'max'=>255),
 			array('break_date, share_date, asc_date, asc_valid_from, asc_valid_to, created_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

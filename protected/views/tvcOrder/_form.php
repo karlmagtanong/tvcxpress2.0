@@ -13,6 +13,9 @@
 		// There is a call to performAjaxValidation() commented in generated controller code.
 		// See class documentation of CActiveForm for details on this.
 		'enableAjaxValidation' => false,
+		'method' => 'post',
+		//This is very important when uploading files
+		'htmlOptions' => array('enctype' => 'multipart/form-data',),
 	)); ?>
 
 
@@ -99,22 +102,13 @@
 						<div class="col-sm-2">
 							<div class="mb-3">
 								<label class="form-label">Break Date</label>
-								<div class="input-group date datepicker" id="datePickerExample">
-									<?php echo $form->textField($model, 'break_date', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
-									<span class="input-group-text input-group-addon"><i data-feather="calendar"></i></span>
-								</div>
+								<input size="60" maxlength="255" class="form-control" name="TvcOrder[break_date]" id="TvcOrder_break_date" type="date">
 							</div>
 						</div>
 						<div class="col-sm-2">
 							<div class="mb-3">
 								<label class="form-label">Break Time</label>
-								<div class="input-group date timepicker" id="datetimepickerExample" data-target-input="nearest">
-									<?php echo $form->textField($model, 'break_time_hh', array(
-										'data-target' => '#datetimepickerExample',
-										'class' => 'form-control datetimepicker-input'
-									)); ?>
-									<span class="input-group-text" data-target="#datetimepickerExample" data-toggle="datetimepicker"><i data-feather="clock"></i></span>
-								</div>
+								<?php echo $form->textField($model, 'break_time_hh', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control', 'data-inputmask' => "'alias': 'datetime'", 'data-inputmask-inputformat' => 'hh:mm')); ?>
 							</div>
 						</div>
 					</div>
@@ -425,26 +419,26 @@
 								<label class="form-label">Platform</label>
 								<div>
 									<div class="form-check form-check-inline">
-										<input type="radio" class="form-check-input" name="TvcOrder[service_type]" id="service_type1" value="1">
-										<label class="form-check-label" for="service_type1">
+										<input type="radio" class="form-check-input" name="TvcOrder[platform]" id="platform_type1" value="1">
+										<label class="form-check-label" for="platform_type1">
 											TV
 										</label>
 									</div>
 									<div class="form-check form-check-inline">
-										<input type="radio" class="form-check-input" name="TvcOrder[service_type]" id="service_type2" value="2">
-										<label class="form-check-label" for="service_type2">
+										<input type="radio" class="form-check-input" name="TvcOrder[platform]" id="platform_type2" value="2">
+										<label class="form-check-label" for="platform_type2">
 											Radio
 										</label>
 									</div>
 									<div class="form-check form-check-inline">
-										<input type="radio" class="form-check-input" name="TvcOrder[service_type]" id="service_type2" value="2">
-										<label class="form-check-label" for="service_type2">
+										<input type="radio" class="form-check-input" name="TvcOrder[platform]" id="platform_type3" value="2">
+										<label class="form-check-label" for="platform_type3">
 											Online
 										</label>
 									</div>
 									<div class="form-check form-check-inline">
-										<input type="radio" class="form-check-input" name="TvcOrder[service_type]" id="service_type2" value="2">
-										<label class="form-check-label" for="service_type2">
+										<input type="radio" class="form-check-input" name="TvcOrder[platform]" id="platform_type4" value="2">
+										<label class="form-check-label" for="platform_type4">
 											Print
 										</label>
 									</div>
@@ -478,7 +472,20 @@
 					</div>
 
 
-					<div class="row mb-3" id="nt_platform">
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="row mb-3" id="nt_platform">
+		<div class="col-md-12 stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<h6 class="card-title">MEDIA DETAILS</h6>
+					<div class="row mb-3">
 						<div class="row col-lg-12">
 							<?php
 							$non_tran_data = TvcMgmtExtraServices::model()->search()->getData();
@@ -503,11 +510,14 @@
 							<?php } ?>
 						</div>
 					</div>
-
 				</div>
 			</div>
 		</div>
 	</div>
+
+
+
+
 
 	<div class="row mb-3">
 		<div class="col-md-12 stretch-card">
@@ -592,15 +602,16 @@
 						</div>
 					</div>
 					<div class="row mb-3" id="shared_show_now">
-						<div class="row" id="link_item">
-							<div class="col-sm-6 mb-3">
+
+						<div id="link_item">
+							<div class="row mb-3">
 								<label class="form-label">Link or Drive</label>
-								<?php echo $form->textField($model, 'share_link[]', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
+								<input size="60" maxlength="255" class="form-control" name="share_link[]" id="share_link" type="text">
 							</div>
 						</div>
 						<div class="row">
 							<div class="mb-3 col-sm-6">
-								<button type="button" class="btn btn-primary btn-xs btn-icon-text btn-block" onclick="add_item()">
+								<button type="button" class="btn btn-primary btn-xs btn-icon-text btn-block" onclick="add_item_link()">
 									<i class="btn-icon-prepend" data-feather="plus"></i> ADD SHARED LINK / DRIVE
 								</button>
 							</div>
@@ -612,11 +623,11 @@
 						<div class="row">
 							<div class="col-sm-6 mb-3">
 								<label class="form-label">Share Date</label>
-								<?php echo $form->textField($model, 'share_date', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
+								<input size="60" maxlength="255" class="form-control" name="TvcOrder[share_date]" id="TvcOrder_share_date" type="date">
 							</div>
 							<div class="col-sm-6 mb-3">
 								<label class="form-label">Share Time</label>
-								<?php echo $form->textField($model, 'share_time_hh', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
+								<?php echo $form->textField($model, 'share_time_hh', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control', 'data-inputmask' => "'alias': 'datetime'", 'data-inputmask-inputformat' => 'hh:mm')); ?>
 							</div>
 						</div>
 					</div>
@@ -625,13 +636,13 @@
 						<div class="col-sm-6">
 							<div>
 								<div class="form-check form-check-inline">
-									<input type="radio" class="form-check-input" name="TvcOrder[share_type]" id="upload_type1" value="1">
+									<input type="radio" class="form-check-input" name="TvcOrder[share_type]" id="upload_type1" value="3">
 									<label class="form-check-label" for="upload_type1">
 										Upload Now
 									</label>
 								</div>
 								<div class="form-check form-check-inline">
-									<input type="radio" class="form-check-input" name="TvcOrder[share_type]" id="upload_type2" value="2">
+									<input type="radio" class="form-check-input" name="TvcOrder[share_type]" id="upload_type2" value="4">
 									<label class="form-check-label" for="upload_type2">
 										Upload Later
 									</label>
@@ -643,14 +654,14 @@
 					<div class="row mb-3" id="upload_show_now">
 						<div class="col-sm-4">
 							<div class="mb-3">
-								<div id="pofile">
+								<div id="upload_mat">
 									<div class="row mb-3">
 										<label class="form-label">Upload Material </label>
-										<input type="file" class="custom-file-input" id="customFileLang" name="po_file[]">
+										<input type="file" class="custom-file-input" id="customFileLang" name="material_file[]">
 									</div>
 								</div>
 								<div class="row d-grid gap-2 mb-3">
-									<button type="button" class="btn btn-primary btn-xs btn-icon-text btn-block" onclick="add_item()">
+									<button type="button" class="btn btn-primary btn-xs btn-icon-text btn-block" onclick="add_item_upload()">
 										<i class="btn-icon-prepend" data-feather="plus"></i> ADD MATERIAL ITEM
 									</button>
 
@@ -663,11 +674,12 @@
 						<div class="row">
 							<div class="col-sm-6 mb-3">
 								<label class="form-label">Upload Date</label>
-								<?php echo $form->textField($model, 'share_date', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
+								<input size="60" maxlength="255" class="form-control" name="TvcOrder[share_date]" id="TvcOrder_share_date" type="date">
 							</div>
 							<div class="col-sm-6 mb-3">
 								<label class="form-label">Upload Time</label>
-								<?php echo $form->textField($model, 'share_time_hh', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
+								<?php echo $form->textField($model, 'share_time_hh', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control', 'data-inputmask' => "'alias': 'datetime'", 'data-inputmask-inputformat' => 'hh:mm')); ?>
+
 							</div>
 						</div>
 					</div>
@@ -700,12 +712,13 @@
 									</div>
 								</div>
 							</div>
-							<div class="row mb-3">
-								<div class="col-sm-12">
-									<input type="file" class="custom-file-input" id="customFileLang" name="asc_file[]" accept="application/pdf,image/jpeg" multiple="">
+
+							<div class="row mb-3" id="asc_upload_now">
+								<div class="row mb-3">
+									<div class="col-sm-12">
+										<input type="file" class="custom-file-input" id="customFileLang" name="asc_file[]" accept="application/pdf,image/jpeg" multiple="">
+									</div>
 								</div>
-							</div>
-							<div class="row mb-3">
 								<div class="col-sm-4">
 									<div class="mb-3">
 										<label class="form-label">Reference Code</label>
@@ -715,21 +728,27 @@
 								<div class="col-sm-4">
 									<div class="mb-3">
 										<label class="form-label">Valid From</label>
-										<div class="input-group date datepicker asdasd" id="datePickerExample">
-											<?php echo $form->textField($model, 'asc_valid_from', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
-											<span class="input-group-text input-group-addon"><i data-feather="calendar"></i></span>
-										</div>
+										<input size="60" maxlength="255" class="form-control" name="TvcOrder[asc_valid_from]" id="TvcOrder_asc_valid_from" type="date">
 									</div>
 								</div>
 								<div class="col-sm-4">
 									<div class="mb-3">
 										<label class="form-label">Valid To</label>
-										<div class="input-group date datepicker" id="datePickerExamples">
-											<?php echo $form->textField($model, 'asc_valid_to', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
-											<span class="input-group-text input-group-addon"><i data-feather="calendar"></i></span>
-										</div>
+										<input size="60" maxlength="255" class="form-control" name="TvcOrder[asc_valid_to]" id="TvcOrder_asc_valid_to" type="date">
 									</div>
 								</div>
+							</div>
+						</div>
+
+						<div class="row mb-3" id="asc_upload_later">
+							<div class="col-sm-6 mb-3">
+								<label class="form-label">Upload ASC Date</label>
+								<input size="60" maxlength="255" class="form-control" name="TvcOrder[asc_date]" id="TvcOrder_asc_date" type="date">
+
+							</div>
+							<div class="col-sm-6 mb-3">
+								<label class="form-label">Upload ASC Time</label>
+								<?php echo $form->textField($model, 'asc_time_hh', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control', 'data-inputmask' => "'alias': 'datetime'", 'data-inputmask-inputformat' => 'hh:mm')); ?>
 							</div>
 						</div>
 					</div>
@@ -738,6 +757,9 @@
 		</div>
 	</div>
 
+
+
+	<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array('class' => 'btn btn-primary me-2')); ?>
 
 	<?php $this->endWidget(); ?>
 
@@ -750,4 +772,135 @@
 										<input type="file" class="custom-file-input" id="customFileLang" name="po_file[]">\n\
 									</div>');
 	}
+
+	function add_item_upload() {
+
+		$("#upload_mat").append('<div class="row mb-3">\n\
+								<input type="file" class="custom-file-input" id="customFileLang" name="material_file[]">\n\
+							</div>');
+	}
+
+	function add_item_link() {
+
+		$("#link_item").append('<div class="row mb-3">\n\
+		<input size="60" maxlength="255" class="form-control" name="share_link[]" id="share_link" type="text">\n\
+					</div>');
+	}
+
+
+	$("#transmission_show").hide();
+	$("#nt_platform").hide();
+
+
+	$('input[type="radio"][name="TvcOrder[service_type]"]').click(function() {
+
+		if ($(this).attr("value") == "1") {
+			$("#transmission_show").show();
+			$("#nt_platform").hide();
+		}
+		if ($(this).attr("value") == "2") {
+			$("#transmission_show").hide();
+			$("#nt_platform").show();
+		}
+
+	})
+
+	$("#tv_platform").hide();
+	$('input[type="radio"][name="TvcOrder[platform]"]').click(function() {
+
+		if ($(this).attr("value") == "1") {
+			$("#tv_platform").show();
+		}
+		if ($(this).attr("value") == "2") {
+			$("#tv_platform").hide();
+		}
+		if ($(this).attr("value") == "3") {
+			$("#tv_platform").hide();
+		}
+		if ($(this).attr("value") == "4") {
+			$("#tv_platform").hide();
+		}
+
+
+	})
+
+	$("#pd_show").hide();
+	$("#shared_show").hide();
+	$("#upload_show").hide();
+	$("#shared_show_now").hide();
+	$("#shared_show_later").hide();
+	$("#upload_show_now").hide();
+	$("#upload_show_later").hide();
+	$('input[type="radio"][name="TvcOrder[delivery_method]"]').click(function() {
+
+		if ($(this).attr("value") == "1") {
+			$("#pd_show").show();
+			$("#shared_show").hide();
+			$("#upload_show").hide();
+			$("#shared_show_now").hide();
+			$("#shared_show_later").hide();
+			$("#upload_show_now").hide();
+			$("#upload_show_later").hide();
+		}
+		if ($(this).attr("value") == "2") {
+			$("#pd_show").hide();
+			$("#shared_show").show();
+			$("#upload_show").hide();
+			$("#shared_show_now").hide();
+			$("#shared_show_later").hide();
+			$("#upload_show_now").hide();
+			$("#upload_show_later").hide();
+		}
+		if ($(this).attr("value") == "3") {
+			$("#pd_show").hide();
+			$("#shared_show").hide();
+			$("#upload_show").show();
+			$("#shared_show_now").hide();
+			$("#shared_show_later").hide();
+			$("#upload_show_now").hide();
+			$("#upload_show_later").hide();
+		}
+
+
+	})
+
+	$('input[type="radio"][name="TvcOrder[share_type]"]').click(function() {
+
+		if ($(this).attr("value") == "1") {
+			$("#shared_show_now").show();
+			$("#shared_show_later").hide();
+		}
+		if ($(this).attr("value") == "2") {
+			$("#shared_show_now").hide();
+			$("#shared_show_later").show();
+		}
+		if ($(this).attr("value") == "3") {
+			$("#upload_show_now").show();
+			$("#upload_show_later").hide();
+		}
+		if ($(this).attr("value") == "4") {
+			$("#upload_show_now").hide();
+			$("#upload_show_later").show();
+		}
+
+
+
+	})
+
+	$("#asc_upload_now").hide();
+	$("#asc_upload_later").hide();
+	$('input[type="radio"][name="TvcOrder[asc_upload]"]').click(function() {
+
+		if ($(this).attr("value") == "1") {
+			$("#asc_upload_now").show();
+			$("#asc_upload_later").hide();
+		}
+		if ($(this).attr("value") == "2") {
+			$("#asc_upload_now").hide();
+			$("#asc_upload_later").show();
+		}
+
+
+
+	})
 </script>

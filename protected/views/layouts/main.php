@@ -43,6 +43,8 @@
 
 	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
 
 </head>
 
@@ -135,13 +137,13 @@
 							<div class="collapse" id="order">
 								<ul class="nav sub-menu">
 									<li class="nav-item">
-										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/create" >Order Form</a>
+										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/create">Order Form</a>
 									</li>
 									<li class="nav-item">
-										<a href="#" >Saved Orders</a>
+										<a href="#">Saved Orders</a>
 									</li>
 									<li class="nav-item">
-										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/admin" >My Orders</a>
+										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/admin">My Orders</a>
 									</li>
 								</ul>
 							</div>
@@ -551,6 +553,7 @@
 
 	?>
 
+	
 	<!-- core:js -->
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/vendors/core/core.js"></script>
 	<!-- endinject -->
@@ -561,6 +564,8 @@
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/vendors/jquery.flot/jquery.flot.resize.js"></script>
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/vendors/apexcharts/apexcharts.min.js"></script>
+	<script src="<?php echo Yii::app()->request->baseUrl; ?>/vendors/inputmask/jquery.inputmask.min.js"></script>
+
 	<!-- End plugin js for this page -->
 
 	<!-- inject:js -->
@@ -580,6 +585,8 @@
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/select2.js"></script>
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/vendors/moment/moment.min.js"></script>
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/vendors/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.js"></script>
+	<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/inputmask.js"></script>
+
 
 
 </body>

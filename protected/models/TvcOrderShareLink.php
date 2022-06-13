@@ -1,22 +1,21 @@
 <?php
 
 /**
- * This is the model class for table "tvc_mgmt_channel".
+ * This is the model class for table "tvc_order_share_link".
  *
- * The followings are the available columns in table 'tvc_mgmt_channel':
+ * The followings are the available columns in table 'tvc_order_share_link':
  * @property integer $id
- * @property string $name
- * @property integer $type
- * @property integer $cluster
+ * @property string $order_id
+ * @property string $share_link
  */
-class TvcMgmtChannel extends CActiveRecord
+class TvcOrderShareLink extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'tvc_mgmt_channel';
+		return 'tvc_order_share_link';
 	}
 
 	/**
@@ -27,11 +26,10 @@ class TvcMgmtChannel extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('type, cluster', 'numerical', 'integerOnly' => true),
-			array('name', 'length', 'max' => 255),
+			array('order_id, share_link', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, type, cluster', 'safe', 'on' => 'search'),
+			array('id, order_id, share_link', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -43,7 +41,6 @@ class TvcMgmtChannel extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'clusters' => array(self::BELONGS_TO, 'TvcMgmtChannelCluster', '', 'foreignKey' => array('cluster' => 'id')),
 		);
 	}
 
@@ -54,9 +51,8 @@ class TvcMgmtChannel extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'name' => 'Name',
-			'type' => 'Type',
-			'cluster' => 'Cluster',
+			'order_id' => 'Order',
+			'share_link' => 'Share Link',
 		);
 	}
 
@@ -76,47 +72,24 @@ class TvcMgmtChannel extends CActiveRecord
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
-		$criteria = new CDbCriteria;
-		$criteria->with = array('clusters');
+		$criteria=new CDbCriteria;
 
-		$criteria->compare('id', $this->id);
-		$criteria->compare('name', $this->name, true);
-		$criteria->compare('type', $this->type);
-		$criteria->compare('cluster', $this->cluster);
+		$criteria->compare('id',$this->id);
+		$criteria->compare('order_id',$this->order_id,true);
+		$criteria->compare('share_link',$this->share_link,true);
 
 		return new CActiveDataProvider($this, array(
-			'criteria' => $criteria,
-			'pagination' => false
-
+			'criteria'=>$criteria,
 		));
 	}
-
-	public function get_channels($id)
-	{
-		$criteria = new CDbCriteria;
-		$criteria->addCondition('cluster = ' . $id . '');
-
-		return new CActiveDataProvider($this, array(
-			'criteria' => $criteria,
-			'pagination' => false
-
-		));
-	}
-
-	public function get_cluster_id($id)
-    {
-        $sql = $this::model()->findByAttributes(['id' => $id]);
-
-        return $sql->cluster;
-    }
 
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return TvcMgmtChannel the static model class
+	 * @return TvcOrderShareLink the static model class
 	 */
-	public static function model($className = __CLASS__)
+	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
 	}

@@ -104,6 +104,21 @@ class TvcMgmtExtraServicesSub extends CActiveRecord
 		));
 	}
 
+	public function get_price($id)
+    {
+        $sql = $this::model()->findByAttributes(['id' => $id]);
+
+        return $sql->price;
+    }
+
+	public function get_cat_id($id)
+    {
+        $sql = $this::model()->findByAttributes(['id' => $id]);
+
+        return $sql->serv_id;
+    }
+
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
