@@ -28,12 +28,12 @@ class TvcOrderChannel extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('channel_id, cluster_id', 'numerical', 'integerOnly'=>true),
+			array('channel_id, cluster_id', 'numerical', 'integerOnly' => true),
 			array('price', 'numerical'),
-			array('order_id', 'length', 'max'=>255),
+			array('order_id', 'length', 'max' => 255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, order_id, channel_id, cluster_id, price', 'safe', 'on'=>'search'),
+			array('id, order_id, channel_id, cluster_id, price', 'safe', 'on' => 'search'),
 		);
 	}
 
@@ -44,8 +44,7 @@ class TvcOrderChannel extends CActiveRecord
 	{
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
-		return array(
-		);
+		return array();
 	}
 
 	/**
@@ -78,16 +77,39 @@ class TvcOrderChannel extends CActiveRecord
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
-		$criteria=new CDbCriteria;
+		$criteria = new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('order_id',$this->order_id,true);
-		$criteria->compare('channel_id',$this->channel_id);
-		$criteria->compare('cluster_id',$this->cluster_id);
-		$criteria->compare('price',$this->price);
+		$criteria->compare('id', $this->id);
+		$criteria->compare('order_id', $this->order_id, true);
+		$criteria->compare('channel_id', $this->channel_id);
+		$criteria->compare('cluster_id', $this->cluster_id);
+		$criteria->compare('price', $this->price);
 
 		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
+			'criteria' => $criteria,
+		));
+	}
+
+	public function get_order_channel($order)
+	{
+		$criteria = new CDbCriteria;
+
+		$criteria->addCondition('t.order_id = "' . $order . '"');
+		$criteria->group = 'cluster_id';
+
+		return new CActiveDataProvider($this, array(
+			'criteria' => $criteria,
+		));
+	}
+
+	public function get_order_channel_per_cluster($order,$cluster)
+	{
+		$criteria = new CDbCriteria;
+
+		$criteria->addCondition('t.order_id = "' . $order . '" and t.cluster_id = "'.$cluster.'"');
+
+		return new CActiveDataProvider($this, array(
+			'criteria' => $criteria,
 		));
 	}
 
@@ -97,7 +119,7 @@ class TvcOrderChannel extends CActiveRecord
 	 * @param string $className active record class name.
 	 * @return TvcOrderChannel the static model class
 	 */
-	public static function model($className=__CLASS__)
+	public static function model($className = __CLASS__)
 	{
 		return parent::model($className);
 	}

@@ -26,6 +26,7 @@
 			<div class="card">
 				<div class="card-body">
 					<h6 class="card-title">Order Information</h6>
+					<?php echo $form->hiddenField($model, 'order_id', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
 					<div class="row">
 						<div class="col-sm-4">
 							<div class="mb-3">

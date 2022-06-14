@@ -81,6 +81,13 @@ class TvcMgmtChannelCluster extends CActiveRecord
 		));
 	}
 
+	public function get_name($id)
+    {
+        $sql = $this::model()->findByAttributes(['id' => $id]);
+
+        return $sql->name;
+    }
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!

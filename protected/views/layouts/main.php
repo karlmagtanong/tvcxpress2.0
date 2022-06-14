@@ -112,7 +112,7 @@
 			<nav class="sidebar">
 				<div class="sidebar-header">
 					<a href="#" class="sidebar-brand">
-						TVCXpress 2.0
+						<!-- TVCXpress 2.0 -->
 					</a>
 					<div class="sidebar-toggler not-active">
 						<span></span>
@@ -129,6 +129,26 @@
 							</a>
 						</li>
 						<li class="nav-item">
+							<a class="nav-link" data-bs-toggle="collapse" href="#emails" role="button" aria-expanded="false" aria-controls="emails">
+								<i class="link-icon" data-feather="mail"></i>
+								<span class="link-title">Email</span>
+								<i class="link-arrow" data-feather="chevron-down"></i>
+							</a>
+							<div class="collapse" id="emails">
+								<ul class="nav sub-menu">
+									<li class="nav-item">
+										<a href="../../pages/email/inbox.html" class="nav-link">Inbox</a>
+									</li>
+									<li class="nav-item">
+										<a href="../../pages/email/read.html" class="nav-link">Read</a>
+									</li>
+									<li class="nav-item">
+										<a href="../../pages/email/compose.html" class="nav-link">Compose</a>
+									</li>
+								</ul>
+							</div>
+						</li>
+						<li class="nav-item">
 							<a class="nav-link" data-bs-toggle="collapse" href="#order" role="button" aria-expanded="false" aria-controls="order">
 								<i class="link-icon" data-feather="shopping-cart"></i>
 								<span class="link-title">Orders</span>
@@ -137,13 +157,13 @@
 							<div class="collapse" id="order">
 								<ul class="nav sub-menu">
 									<li class="nav-item">
-										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/create">Order Form</a>
+										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/create" class="nav-link">Order Form</a>
 									</li>
 									<li class="nav-item">
-										<a href="#">Saved Orders</a>
+										<a href="#" class="nav-link">Saved Orders</a>
 									</li>
 									<li class="nav-item">
-										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/admin">My Orders</a>
+										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/admin" class="nav-link">My Orders</a>
 									</li>
 								</ul>
 							</div>
@@ -244,38 +264,6 @@
 							</div>
 						</li>
 					</ul>
-				</div>
-			</nav>
-			<nav class="settings-sidebar">
-				<div class="sidebar-body">
-					<a href="#" class="settings-sidebar-toggler">
-						<i data-feather="settings"></i>
-					</a>
-					<h6 class="text-muted mb-2">Sidebar:</h6>
-					<div class="mb-3 pb-3 border-bottom">
-						<div class="form-check form-check-inline">
-							<input type="radio" class="form-check-input" name="sidebarThemeSettings" id="sidebarLight" value="sidebar-light" checked>
-							<label class="form-check-label" for="sidebarLight">
-								Light
-							</label>
-						</div>
-						<div class="form-check form-check-inline">
-							<input type="radio" class="form-check-input" name="sidebarThemeSettings" id="sidebarDark" value="sidebar-dark">
-							<label class="form-check-label" for="sidebarDark">
-								Dark
-							</label>
-						</div>
-					</div>
-					<div class="theme-wrapper">
-						<h6 class="text-muted mb-2">Light Theme:</h6>
-						<a class="theme-item active" href="../demo1/dashboard.html">
-							<img src="../assets/images/screenshots/light.jpg" alt="light theme">
-						</a>
-						<h6 class="text-muted mb-2">Dark Theme:</h6>
-						<a class="theme-item" href="../demo2/dashboard.html">
-							<img src="../assets/images/screenshots/dark.jpg" alt="light theme">
-						</a>
-					</div>
 				</div>
 			</nav>
 			<!-- partial -->
@@ -553,7 +541,7 @@
 
 	?>
 
-	
+
 	<!-- core:js -->
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/vendors/core/core.js"></script>
 	<!-- endinject -->
@@ -565,6 +553,9 @@
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/vendors/apexcharts/apexcharts.min.js"></script>
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/vendors/inputmask/jquery.inputmask.min.js"></script>
+	<script src="<?php echo Yii::app()->request->baseUrl; ?>/vendors/typeahead.js/typeahead.bundle.min.js"></script>
+
+
 
 	<!-- End plugin js for this page -->
 
@@ -586,8 +577,20 @@
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/vendors/moment/moment.min.js"></script>
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/vendors/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.js"></script>
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/inputmask.js"></script>
+	<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/typeahead.js"></script>
 
+	<script>
+	
+		$(document).on('click', '.nav-link.active', function() {
+			$('.nav .nav-item').removeClass('active');
+			var $this = $(this);
+			if (!$this.hasClass('active')) {
+				$this.addClass('active');
+			}
+			e.preventDefault();
 
+		});
+	</script>
 
 </body>
 

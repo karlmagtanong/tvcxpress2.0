@@ -28,10 +28,10 @@ class TvcMgmtChannel extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('type, cluster', 'numerical', 'integerOnly' => true),
-			array('name', 'length', 'max' => 255),
+			array('name,order_id', 'length', 'max' => 255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, type, cluster', 'safe', 'on' => 'search'),
+			array('id, name,  type, cluster', 'safe', 'on' => 'search'),
 		);
 	}
 
@@ -108,6 +108,13 @@ class TvcMgmtChannel extends CActiveRecord
         $sql = $this::model()->findByAttributes(['id' => $id]);
 
         return $sql->cluster;
+    }
+
+	public function get_name($id)
+    {
+        $sql = $this::model()->findByAttributes(['id' => $id]);
+
+        return $sql->name;
     }
 
 	/**

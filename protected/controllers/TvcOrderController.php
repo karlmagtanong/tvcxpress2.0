@@ -40,13 +40,29 @@ class TvcOrderController extends Controller
 			array(
 				'allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions' => array('admin', 'delete'),
-				'users' => array('admin'),
+				'users' => array('@'),
+			),
+			array(
+				'allow', // allow admin user to perform 'admin' and 'delete' actions
+				'actions' => array('advertiser'),
+				'users' => array('@'),
 			),
 			array(
 				'deny',  // deny all users
 				'users' => array('*'),
 			),
 		);
+	}
+
+	public function actionAdvertiser()
+	{
+		$data = TvcMgmtAdvertiser::model()->search()->getData();
+		$datas = array();
+		foreach ($data as $val) {
+			$datas[] .= $val['name'];
+		}
+
+		echo json_encode($datas);
 	}
 
 	/**
@@ -71,11 +87,10 @@ class TvcOrderController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-
-
 		if (isset($_POST['TvcOrder'])) {
 
 			$uniqid = uniqid();
+
 			$model->attributes = $_POST['TvcOrder'];
 
 			$model->break_date = $_POST['TvcOrder']['break_date'] == "" ? NULL : $_POST['TvcOrder']['break_date'];
@@ -107,6 +122,7 @@ class TvcOrderController extends Controller
 				$c = 0;
 
 				foreach ($_POST['channel'] as $val) {
+					$channelorder = new TvcOrderChannel;
 					$channelorder->order_id = $uniqid;
 					$channelorder = new TvcOrderChannel;
 					$channelorder->channel_id = $_POST['channel'][$c];
@@ -231,6 +247,8 @@ class TvcOrderController extends Controller
 			// $model->attributes=$_POST['TvcOrder'];
 			// if($model->save())
 			// 	$this->redirect(array('view','id'=>$model->id));
+
+			$this->redirect(array('view', 'id' => $model->id));
 		}
 
 		$this->render('create', array(
@@ -247,17 +265,185 @@ class TvcOrderController extends Controller
 	{
 		$model = $this->loadModel($id);
 
+		Yii::app()->db
+			->createCommand("UPDATE tvc_order SET type = 4 WHERE order_id=:order_id")
+			->bindValues(array(':order_id' => $_POST['TvcOrder']['order_id']))
+			->execute();
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
+
+		$models = new TvcOrder;
+
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
 		if (isset($_POST['TvcOrder'])) {
-			$model->attributes = $_POST['TvcOrder'];
-			if ($model->save())
-				$this->redirect(array('view', 'id' => $model->id));
+
+			$uniqid = uniqid();
+
+			$models->attributes = $_POST['TvcOrder'];
+
+			$models->break_date = $_POST['TvcOrder']['break_date'] == "" ? NULL : $_POST['TvcOrder']['break_date'];
+			$models->share_date = $_POST['TvcOrder']['share_date'] == "" ? NULL : $_POST['TvcOrder']['share_date'];
+			$models->asc_date = $_POST['TvcOrder']['asc_date'] == "" ? NULL : $_POST['TvcOrder']['asc_date'];
+			$models->asc_valid_from = $_POST['TvcOrder']['asc_valid_from'] == "" ? NULL : $_POST['TvcOrder']['asc_valid_from'];
+			$models->asc_valid_to = $_POST['TvcOrder']['asc_valid_to'] == "" ? NULL : $_POST['TvcOrder']['asc_valid_to'];
+			$models->order_id = $uniqid;
+			$models->type = 1;
+			$models->created_by = 1;
+			$models->created_at = date("Y-m-d");
+			$models->save();
+
+
+
+			if ($_POST['share_link'] != "") {
+				$s = 0;
+				foreach ($_POST['share_link'] as $val) {
+					$sharelink = new TvcOrderShareLink;
+					$sharelink->order_id = $uniqid;
+					$sharelink->share_link = $_POST['share_link'][$s];
+					$sharelink->save();
+					$s++;
+				}
+			}
+
+			$grandtotal = 0.0;
+			if ($_POST['TvcOrder']['service_type'] == 1) {
+				$c = 0;
+
+				foreach ($_POST['channel'] as $val) {
+					$channelorder = new TvcOrderChannel;
+					$channelorder->order_id = $uniqid;
+					$channelorder = new TvcOrderChannel;
+					$channelorder->channel_id = $_POST['channel'][$c];
+					$channelorder->cluster_id = TvcMgmtChannel::model()->get_cluster_id($_POST['channel'][$c]);
+					$channelorder->price = TvcMgmtRate::model()->get_rate($_POST['TvcOrder']['advertiser'], $_POST['TvcOrder']['agency_company'], $_POST['TvcOrder']['length']);
+					$channelorder->save();
+					$c++;
+				}
+			}
+			if ($_POST['TvcOrder']['service_type'] == 2) {
+				$n = 0;
+				foreach ($_POST['non_tran']['id'] as $val) {
+					$channelnontran = new TvcOrderServices;
+					$channelnontran->order_id = $uniqid;
+					$channelnontran->sub_cat_id = $_POST['non_tran']['id'][$n];
+					$channelnontran->qty = $_POST['non_tran']['qty'][$n];
+					$channelnontran->price = TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]) * $_POST['non_tran']['qty'][$n];
+					$channelnontran->cat_id = TvcMgmtExtraServicesSub::model()->get_cat_id($_POST['non_tran']['id'][$n]);
+					$channelnontran->save();
+					$n++;
+				}
+			}
+
+
+
+
+
+
+			if (!empty($_FILES['po_file']['name'])) {
+				$po = 0;
+				foreach ($_FILES['po_file']['name'] as $val) {
+					$targetDir = 'attachments/upload_pdf/';
+					$fileName = basename($_FILES['po_file']['name'][$po]);
+					$targetFilePath = $targetDir . $fileName;
+					$size = filesize($_FILES['po_file']['tmp_name']); // bytes
+					$fileType = pathinfo($fileName, PATHINFO_EXTENSION);
+
+
+					if (move_uploaded_file($_FILES['po_file']['tmp_name'][$po], $targetFilePath)) {
+						$attachment = new TvcOrderAttachment;
+						$attachment->order_id = $uniqid;
+						$attachment->filename = $fileName;
+						$attachment->path = $targetFilePath;
+						$attachment->filesize = $size;
+						$attachment->format = $fileType;
+						$attachment->save();
+
+						echo "success";
+					} else {
+						echo "error asdasd";
+					}
+
+					$po++;
+				}
+			}
+
+			if (!empty($_FILES['material_file']['name'])) {
+				$po = 0;
+				foreach ($_FILES['material_file']['name'] as $val) {
+					$targetDir = 'attachments/materials/';
+					$fileName = basename($_FILES['material_file']['name'][$po]);
+					$targetFilePath = $targetDir . $fileName;
+					$size = filesize($_FILES['material_file']['tmp_name']); // bytes
+					$fileType = pathinfo($fileName, PATHINFO_EXTENSION);
+
+
+					if (move_uploaded_file($_FILES['material_file']['tmp_name'][$po], $targetFilePath)) {
+						$attachment = new TvcOrderAttachment;
+						$attachment->order_id = $uniqid;
+						$attachment->filename = $fileName;
+						$attachment->path = $targetFilePath;
+						$attachment->filesize = $size;
+						$attachment->format = $fileType;
+						$attachment->save();
+
+						echo "success";
+					} else {
+						echo "error asdasd";
+					}
+
+					$po++;
+				}
+			}
+
+			if (!empty($_FILES['asc_file']['name'])) {
+				$po = 0;
+				foreach ($_FILES['asc_file']['name'] as $val) {
+					$targetDir = 'attachments/asc_clearance/';
+					$fileName = basename($_FILES['asc_file']['name'][$po]);
+					$targetFilePath = $targetDir . $fileName;
+					$size = filesize($_FILES['asc_file']['tmp_name']); // bytes
+					$fileType = pathinfo($fileName, PATHINFO_EXTENSION);
+
+
+					if (move_uploaded_file($_FILES['asc_file']['tmp_name'][$po], $targetFilePath)) {
+						$attachment = new TvcOrderAttachment;
+						$attachment->order_id = $uniqid;
+						$attachment->filename = $fileName;
+						$attachment->path = $targetFilePath;
+						$attachment->filesize = $size;
+						$attachment->format = $fileType;
+						$attachment->save();
+
+						echo "success";
+					} else {
+						echo "error asdasd";
+					}
+
+					$po++;
+				}
+			}
+
+
+
+
+			// print_r($_FILES);
+			// print_r($_POST);
+
+
+
+			// print_r($_POST);
+			// $model->attributes=$_POST['TvcOrder'];
+			// if($model->save())
+			// 	$this->redirect(array('view','id'=>$model->id));
+
+			$this->redirect(array('view', 'id' => $models->id));
 		}
 
 		$this->render('update', array(
 			'model' => $model,
+			'models' => $models,
 		));
 	}
 
