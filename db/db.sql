@@ -344,10 +344,18 @@ CREATE TABLE IF NOT EXISTS `tvc_order` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
--- Dumping data for table tvcxpress_db.tvc_order: ~8 rows (approximately)
+-- Dumping data for table tvcxpress_db.tvc_order: ~1 rows (approximately)
 /*!40000 ALTER TABLE `tvc_order` DISABLE KEYS */;
 INSERT INTO `tvc_order` (`id`, `order_id`, `order_code`, `advertiser`, `asc_brand`, `product_category`, `asc_project_title`, `length`, `break_date`, `break_time_hh`, `break_time_mm`, `break_time_aa`, `producer`, `producer_contact`, `producer_email`, `agency_company`, `agency_contact_person`, `agency_contact_no`, `agency_email`, `billing_ce`, `billing_company`, `billing_address`, `billing_contact_person`, `billing_contact_no`, `billing_contact_email`, `billing_tin`, `billing_business_type`, `payment_terms`, `currency`, `mode_payment`, `gcash_name`, `gcash_email`, `gcash_number`, `service_type`, `platform`, `delivery_method`, `delivery_company`, `delivery_contact_name`, `delivery_number`, `delivery_email`, `share_type`, `share_link`, `share_date`, `share_time_hh`, `share_time_mm`, `share_aa`, `asc_upload`, `asc_date`, `asc_time_hh`, `asc_time_mm`, `asc_time_aa`, `asc_reference_code`, `asc_valid_from`, `asc_valid_to`, `type`, `created_by`, `created_at`) VALUES
-	(9, '62a8df0462594', NULL, 'TEST ADVERTISER', 'Brand 1', 'Alcoholic Beverages', 'project title', '30', NULL, '', NULL, NULL, '', '09176233252', 'prod@gmail.com', 'company agency', 'agency contact', '09176233255', 'agency@gmail.com', '01222', 'company billing', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', 30, 1, 1, NULL, NULL, NULL, 1, 1, 3, 'company delivery', 'name delivery', 'number delivery', 'email@gmail.com', 3, NULL, NULL, '', NULL, NULL, 2, NULL, '01:02', NULL, NULL, '', NULL, NULL, 1, 1, '2022-06-14');
+	(9, '62a8df0462594', NULL, 'TEST ADVERTISER', 'Brand 1', 'Alcoholic Beverages', 'project title', '30', '2022-06-15', '', NULL, '12:25', '', '09176233252', 'prod@gmail.com', 'company agency', 'agency contact', '09176233255', 'agency@gmail.com', '01222', 'company billing', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', 30, 1, 1, NULL, NULL, NULL, 1, 1, 3, 'company delivery', 'name delivery', 'number delivery', 'email@gmail.com', 3, NULL, NULL, '', NULL, NULL, 2, NULL, '01:02', NULL, NULL, '', NULL, NULL, 4, 1, '2022-06-14'),
+	(11, '62a8e8c699c36', NULL, 'TEST ADVERTISER', 'Brand 1', 'Alcoholic Beverages', 'project title', '30', '2022-06-15', '02:02', NULL, NULL, 'Producer 1', '09176233252', 'prod@gmail.com', 'company agency', 'agency contact', '09176233255', 'agency@gmail.com', '01222', 'company billing', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', 30, 1, 1, NULL, NULL, NULL, 1, 1, 1, 'company delivery', 'name delivery', 'number delivery', 'email@gmail.com', NULL, NULL, NULL, '', NULL, NULL, 1, NULL, '01:02', NULL, NULL, 'reference', '2022-06-16', '2022-06-17', 4, 1, '2022-06-14'),
+	(12, '62a8eb0e600c3', NULL, 'TEST ADVERTISER', 'Brand 1', 'Alcoholic Beverages', 'project title', '30', '2022-06-15', '02:02', NULL, NULL, 'Producer 1', '09176233252', 'prod@gmail.com', 'company agency', 'agency contact', '09176233255', 'agency@gmail.com', '01222', 'company billing', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', 30, 1, 1, NULL, NULL, NULL, 1, 1, NULL, 'company delivery', 'name delivery', 'number delivery', 'email@gmail.com', NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, '01:02', NULL, NULL, 'reference', NULL, NULL, 1, 1, '2022-06-14'),
+	(13, '62a8eb356bada', NULL, 'TEST ADVERTISER', 'Brand 1', 'Alcoholic Beverages', 'project title', '30', '2022-06-15', '02:02', NULL, NULL, 'Producer 1', '09176233252', 'prod@gmail.com', 'company agency', 'agency contact', '09176233255', 'agency@gmail.com', '01222', 'company billing', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', 30, 1, 1, NULL, NULL, NULL, 1, 1, NULL, 'company delivery', 'name delivery', 'number delivery', 'email@gmail.com', NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, '01:02', NULL, NULL, 'reference', NULL, NULL, 1, 1, '2022-06-14'),
+	(14, '62a8eb4250aa7', NULL, 'TEST ADVERTISER', 'Brand 1', 'Alcoholic Beverages', 'project title', '30', '2022-06-15', '02:02', NULL, NULL, 'Producer 1', '09176233252', 'prod@gmail.com', 'company agency', 'agency contact', '09176233255', 'agency@gmail.com', '01222', 'company billing', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', 30, 1, 1, NULL, NULL, NULL, 1, 1, NULL, 'company delivery', 'name delivery', 'number delivery', 'email@gmail.com', NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, '01:02', NULL, NULL, 'reference', NULL, NULL, 1, 1, '2022-06-14'),
+	(15, '62a8eb613bc46', NULL, 'TEST ADVERTISER', 'Brand 1', 'Alcoholic Beverages', 'project title', '30', '2022-06-15', '02:02', NULL, NULL, 'Producer 1', '09176233252', 'prod@gmail.com', 'company agency', 'agency contact', '09176233255', 'agency@gmail.com', '01222', 'company billing', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', 30, 1, 1, NULL, NULL, NULL, 1, 1, 1, 'company delivery', 'name delivery', 'number delivery', 'email@gmail.com', NULL, NULL, NULL, '', NULL, NULL, 1, NULL, '01:02', NULL, NULL, 'reference', '2022-06-16', '2022-06-17', 4, 1, '2022-06-14'),
+	(16, '62a8f09794ee8', NULL, 'TEST ADVERTISER', 'Brand 1', 'Alcoholic Beverages', 'project title', '30', '2022-06-15', '02:02', NULL, NULL, 'Producer 1', '09176233252', 'prod@gmail.com', 'company agency', 'agency contact', '09176233255', 'agency@gmail.com', '01222', 'company billing', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', 30, 1, 1, NULL, NULL, NULL, 1, 1, 1, 'company delivery', 'name delivery', 'number delivery', 'email@gmail.com', NULL, NULL, NULL, '', NULL, NULL, 2, NULL, '01:02', NULL, NULL, 'reference', '2022-06-16', '2022-06-17', 4, 1, '2022-06-14'),
+	(17, '62a8f0b13c1d9', NULL, 'TEST ADVERTISER', 'Brand 1', 'Alcoholic Beverages', 'project title', '30', '2022-06-15', '02:02', NULL, NULL, 'Producer 1', '09176233252', 'prod@gmail.com', 'company agency', 'agency contact', '09176233255', 'agency@gmail.com', '01222', 'company billing', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', 30, 1, 1, NULL, NULL, NULL, 1, 1, 1, 'company delivery', 'name delivery', 'number delivery', 'email@gmail.com', NULL, NULL, NULL, '', NULL, NULL, 2, '2022-06-16', '01:02', NULL, NULL, 'reference', '2022-06-16', '2022-06-17', 4, 1, '2022-06-14'),
+	(18, '62a8f11bcf7a9', NULL, 'TEST ADVERTISER', 'Brand 1', 'Alcoholic Beverages', 'project title', '30', '2022-06-15', '02:02', NULL, NULL, 'Producer 1', '09176233252', 'prod@gmail.com', 'company agency', 'agency contact', '09176233255', 'agency@gmail.com', '01222', 'company billing', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', 30, 1, 1, NULL, NULL, NULL, 2, 1, 2, 'company delivery', 'name delivery', 'number delivery', 'email@gmail.com', 1, NULL, NULL, '', NULL, NULL, 2, '2022-06-16', '01:02', NULL, NULL, 'reference', '2022-06-16', '2022-06-17', 1, 1, '2022-06-14');
 /*!40000 ALTER TABLE `tvc_order` ENABLE KEYS */;
 
 -- Dumping structure for table tvcxpress_db.tvc_order_attachment
@@ -361,13 +369,15 @@ CREATE TABLE IF NOT EXISTS `tvc_order_attachment` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
--- Dumping data for table tvcxpress_db.tvc_order_attachment: ~3 rows (approximately)
+-- Dumping data for table tvcxpress_db.tvc_order_attachment: ~4 rows (approximately)
 /*!40000 ALTER TABLE `tvc_order_attachment` DISABLE KEYS */;
 INSERT INTO `tvc_order_attachment` (`id`, `order_id`, `filename`, `path`, `filesize`, `format`) VALUES
 	(21, '62a8c677d0de0', '119279.jpg', 'attachments/upload_pdf/119279.jpg', NULL, 'jpg'),
 	(22, '62a8c677d0de0', '331660.jpg', 'attachments/upload_pdf/331660.jpg', NULL, 'jpg'),
 	(23, '62a8c677d0de0', 'sss-logo.png', 'attachments/materials/sss-logo.png', NULL, 'png'),
-	(24, '62a8c677d0de0', 'list of files.jpg', 'attachments/materials/list of files.jpg', NULL, 'jpg');
+	(24, '62a8c677d0de0', 'list of files.jpg', 'attachments/materials/list of files.jpg', NULL, 'jpg'),
+	(25, '62a8e8c699c36', 'SPASS.jpg', 'attachments/asc_clearance/SPASS.jpg', NULL, 'jpg'),
+	(26, '62a8eb613bc46', 'ssslogobar.jpg', 'attachments/asc_clearance/ssslogobar.jpg', NULL, 'jpg');
 /*!40000 ALTER TABLE `tvc_order_attachment` ENABLE KEYS */;
 
 -- Dumping structure for table tvcxpress_db.tvc_order_channel
@@ -380,7 +390,7 @@ CREATE TABLE IF NOT EXISTS `tvc_order_channel` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8;
 
--- Dumping data for table tvcxpress_db.tvc_order_channel: ~17 rows (approximately)
+-- Dumping data for table tvcxpress_db.tvc_order_channel: ~7 rows (approximately)
 /*!40000 ALTER TABLE `tvc_order_channel` DISABLE KEYS */;
 INSERT INTO `tvc_order_channel` (`id`, `order_id`, `channel_id`, `cluster_id`, `price`) VALUES
 	(42, '62a8c677d0de0', 289, 1, 900.00),
@@ -389,7 +399,39 @@ INSERT INTO `tvc_order_channel` (`id`, `order_id`, `channel_id`, `cluster_id`, `
 	(45, '62a8c677d0de0', 305, 2, 900.00),
 	(46, '62a8c677d0de0', 311, 3, 900.00),
 	(47, '62a8c677d0de0', 278, 5, 900.00),
-	(48, '62a8c677d0de0', 279, 5, 900.00);
+	(48, '62a8c677d0de0', 279, 5, 900.00),
+	(49, NULL, 290, 1, 2755.00),
+	(50, NULL, 291, 1, 2755.00),
+	(51, NULL, 306, 2, 2755.00),
+	(52, NULL, 312, 3, 2755.00),
+	(53, NULL, 280, 5, 2755.00),
+	(54, NULL, 284, 6, 2755.00),
+	(55, NULL, 289, 1, 2755.00),
+	(56, NULL, 290, 1, 2755.00),
+	(57, NULL, 306, 2, 2755.00),
+	(58, '62a8eb356bada', 292, 1, 2755.00),
+	(59, '62a8eb356bada', 307, 2, 2755.00),
+	(60, '62a8eb4250aa7', 292, 1, 2755.00),
+	(61, '62a8eb4250aa7', 307, 2, 2755.00),
+	(62, '62a8eb4250aa7', 309, 2, 2755.00),
+	(63, '62a8eb613bc46', 289, 1, 2755.00),
+	(64, '62a8eb613bc46', 290, 1, 2755.00),
+	(65, '62a8eb613bc46', 306, 2, 2755.00),
+	(66, '62a8eb613bc46', 307, 2, 2755.00),
+	(67, '62a8eb613bc46', 309, 2, 2755.00),
+	(68, '62a8eb613bc46', 279, 5, 2755.00),
+	(69, '62a8f09794ee8', 289, 1, 2755.00),
+	(70, '62a8f09794ee8', 290, 1, 2755.00),
+	(71, '62a8f09794ee8', 306, 2, 2755.00),
+	(72, '62a8f09794ee8', 307, 2, 2755.00),
+	(73, '62a8f09794ee8', 309, 2, 2755.00),
+	(74, '62a8f09794ee8', 279, 5, 2755.00),
+	(75, '62a8f0b13c1d9', 289, 1, 2755.00),
+	(76, '62a8f0b13c1d9', 290, 1, 2755.00),
+	(77, '62a8f0b13c1d9', 306, 2, 2755.00),
+	(78, '62a8f0b13c1d9', 307, 2, 2755.00),
+	(79, '62a8f0b13c1d9', 309, 2, 2755.00),
+	(80, '62a8f0b13c1d9', 279, 5, 2755.00);
 /*!40000 ALTER TABLE `tvc_order_channel` ENABLE KEYS */;
 
 -- Dumping structure for table tvcxpress_db.tvc_order_charges
@@ -417,6 +459,10 @@ CREATE TABLE IF NOT EXISTS `tvc_order_services` (
 
 -- Dumping data for table tvcxpress_db.tvc_order_services: ~0 rows (approximately)
 /*!40000 ALTER TABLE `tvc_order_services` DISABLE KEYS */;
+INSERT INTO `tvc_order_services` (`id`, `order_id`, `sub_cat_id`, `cat_id`, `price`, `qty`) VALUES
+	(1, '62a8f11bcf7a9', 4, 1, 2000.00, 2),
+	(2, '62a8f11bcf7a9', 5, 1, 6000.00, 3),
+	(3, '62a8f11bcf7a9', 7, 3, 0.00, NULL);
 /*!40000 ALTER TABLE `tvc_order_services` ENABLE KEYS */;
 
 -- Dumping structure for table tvcxpress_db.tvc_order_share_link
@@ -427,13 +473,22 @@ CREATE TABLE IF NOT EXISTS `tvc_order_share_link` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
--- Dumping data for table tvcxpress_db.tvc_order_share_link: ~9 rows (approximately)
+-- Dumping data for table tvcxpress_db.tvc_order_share_link: ~4 rows (approximately)
 /*!40000 ALTER TABLE `tvc_order_share_link` DISABLE KEYS */;
 INSERT INTO `tvc_order_share_link` (`id`, `order_id`, `share_link`) VALUES
 	(11, '62a8c677d0de0', ''),
 	(12, '62a8deca5ad5c', ''),
 	(13, '62a8df0462594', ''),
-	(14, '62a8dfcf7a28c', '');
+	(14, '62a8dfcf7a28c', ''),
+	(15, '62a8e8c699c36', ''),
+	(16, '62a8eb0e600c3', ''),
+	(17, '62a8eb356bada', ''),
+	(18, '62a8eb4250aa7', ''),
+	(19, '62a8eb613bc46', ''),
+	(20, '62a8f09794ee8', ''),
+	(21, '62a8f0b13c1d9', ''),
+	(22, '62a8f11bcf7a9', 'sdasd'),
+	(23, '62a8f11bcf7a9', 'asdasdasd');
 /*!40000 ALTER TABLE `tvc_order_share_link` ENABLE KEYS */;
 
 -- Dumping structure for table tvcxpress_db.tvc_traffic
