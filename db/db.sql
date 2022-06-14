@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `tvc_mgmt_channel` (
   `type` int(11) DEFAULT NULL,
   `cluster` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=317 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=316 DEFAULT CHARSET=utf8;
 
 -- Dumping data for table tvcxpress_db.tvc_mgmt_channel: ~41 rows (approximately)
 /*!40000 ALTER TABLE `tvc_mgmt_channel` DISABLE KEYS */;
@@ -139,7 +139,7 @@ CREATE TABLE IF NOT EXISTS `tvc_mgmt_channel_cluster` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- Dumping data for table tvcxpress_db.tvc_mgmt_channel_cluster: ~7 rows (approximately)
 /*!40000 ALTER TABLE `tvc_mgmt_channel_cluster` DISABLE KEYS */;
@@ -162,7 +162,7 @@ CREATE TABLE IF NOT EXISTS `tvc_mgmt_extra_services` (
   `price` float(11,2) DEFAULT NULL,
   `type` int(11) DEFAULT NULL COMMENT '1 = main cat 2 = sub cat',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 -- Dumping data for table tvcxpress_db.tvc_mgmt_extra_services: ~11 rows (approximately)
 /*!40000 ALTER TABLE `tvc_mgmt_extra_services` DISABLE KEYS */;
@@ -219,7 +219,7 @@ CREATE TABLE IF NOT EXISTS `tvc_mgmt_product_cat` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 
 -- Dumping data for table tvcxpress_db.tvc_mgmt_product_cat: ~28 rows (approximately)
 /*!40000 ALTER TABLE `tvc_mgmt_product_cat` DISABLE KEYS */;
@@ -338,23 +338,16 @@ CREATE TABLE IF NOT EXISTS `tvc_order` (
   `asc_reference_code` varchar(255) DEFAULT NULL,
   `asc_valid_from` date DEFAULT NULL,
   `asc_valid_to` date DEFAULT NULL,
-  `type` int(11) NOT NULL,
+  `type` int(11) NOT NULL COMMENT '1 = Active 2 = Summary 3 = Save 4 = History',
   `created_by` int(11) NOT NULL,
   `created_at` date DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
--- Dumping data for table tvcxpress_db.tvc_order: ~0 rows (approximately)
+-- Dumping data for table tvcxpress_db.tvc_order: ~8 rows (approximately)
 /*!40000 ALTER TABLE `tvc_order` DISABLE KEYS */;
 INSERT INTO `tvc_order` (`id`, `order_id`, `order_code`, `advertiser`, `asc_brand`, `product_category`, `asc_project_title`, `length`, `break_date`, `break_time_hh`, `break_time_mm`, `break_time_aa`, `producer`, `producer_contact`, `producer_email`, `agency_company`, `agency_contact_person`, `agency_contact_no`, `agency_email`, `billing_ce`, `billing_company`, `billing_address`, `billing_contact_person`, `billing_contact_no`, `billing_contact_email`, `billing_tin`, `billing_business_type`, `payment_terms`, `currency`, `mode_payment`, `gcash_name`, `gcash_email`, `gcash_number`, `service_type`, `platform`, `delivery_method`, `delivery_company`, `delivery_contact_name`, `delivery_number`, `delivery_email`, `share_type`, `share_link`, `share_date`, `share_time_hh`, `share_time_mm`, `share_aa`, `asc_upload`, `asc_date`, `asc_time_hh`, `asc_time_mm`, `asc_time_aa`, `asc_reference_code`, `asc_valid_from`, `asc_valid_to`, `type`, `created_by`, `created_at`) VALUES
-	(1, '62a7873b4a1c7', NULL, '3', '1', '1', 'Title', '5', '2022-06-15', '12:03', NULL, NULL, '1', '09176233252', 'prod@gmail.com', 'company agency', 'agency contact', '09176233255', 'agency@gmail.com', '01222', 'company billing', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', 30, 1, 1, NULL, NULL, NULL, 1, 1, 2, 'company delivery', 'name delivery', 'number delivery', 'email@gmail.com', 1, NULL, NULL, '', NULL, NULL, 1, NULL, '', NULL, NULL, 'reference', '2022-06-14', '2022-06-15', 1, 1, '2022-06-13'),
-	(2, '62a78f52c1c51', NULL, '', '', '', '', '5', NULL, '', NULL, NULL, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, NULL, '', '', '', '', NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, '', NULL, NULL, '', NULL, NULL, 1, 1, '2022-06-13'),
-	(3, '62a78f6ed405a', NULL, '', '', '', '', '30', NULL, '', NULL, NULL, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, NULL, '', '', '', '', NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, '', NULL, NULL, '', NULL, NULL, 1, 1, '2022-06-13'),
-	(4, '62a790547dcf1', NULL, '', '', '', '', '15', NULL, '', NULL, NULL, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', NULL, NULL, 1, NULL, NULL, NULL, 1, 1, NULL, '', '', '', '', NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, '', NULL, NULL, '', NULL, NULL, 1, 1, '2022-06-13'),
-	(5, '62a790646a880', NULL, '', '', '', '', '5', NULL, '', NULL, NULL, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, NULL, '', '', '', '', NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, '', NULL, NULL, '', NULL, NULL, 1, 1, '2022-06-13'),
-	(6, '62a7908579680', NULL, '3', '', '', '', '5', NULL, '', NULL, NULL, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, NULL, '', '', '', '', NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, '', NULL, NULL, '', NULL, NULL, 1, 1, '2022-06-13'),
-	(7, '62a7909948e2f', NULL, '3', '', '', '', '15', NULL, '', NULL, NULL, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, NULL, '', '', '', '', NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, '', NULL, NULL, '', NULL, NULL, 1, 1, '2022-06-13'),
-	(8, '62a790b3f1d53', NULL, '4', '', '', '', '15', NULL, '', NULL, NULL, '', '', '', 'PUBLICIS JIMENEZBASIC, INC.', '', '', '', '', '', '', '', '', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, '', '', '', '', NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, '', NULL, NULL, '', NULL, NULL, 1, 1, '2022-06-13');
+	(9, '62a8df0462594', NULL, 'TEST ADVERTISER', 'Brand 1', 'Alcoholic Beverages', 'project title', '30', NULL, '', NULL, NULL, '', '09176233252', 'prod@gmail.com', 'company agency', 'agency contact', '09176233255', 'agency@gmail.com', '01222', 'company billing', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', 30, 1, 1, NULL, NULL, NULL, 1, 1, 3, 'company delivery', 'name delivery', 'number delivery', 'email@gmail.com', 3, NULL, NULL, '', NULL, NULL, 2, NULL, '01:02', NULL, NULL, '', NULL, NULL, 1, 1, '2022-06-14');
 /*!40000 ALTER TABLE `tvc_order` ENABLE KEYS */;
 
 -- Dumping structure for table tvcxpress_db.tvc_order_attachment
@@ -366,14 +359,15 @@ CREATE TABLE IF NOT EXISTS `tvc_order_attachment` (
   `filesize` varchar(255) DEFAULT NULL,
   `format` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
--- Dumping data for table tvcxpress_db.tvc_order_attachment: ~0 rows (approximately)
+-- Dumping data for table tvcxpress_db.tvc_order_attachment: ~3 rows (approximately)
 /*!40000 ALTER TABLE `tvc_order_attachment` DISABLE KEYS */;
 INSERT INTO `tvc_order_attachment` (`id`, `order_id`, `filename`, `path`, `filesize`, `format`) VALUES
-	(18, '62a7873b4a1c7', 'Chill.jpg', 'attachments/upload_pdf/Chill.jpg', NULL, 'jpg'),
-	(19, '62a7873b4a1c7', '331660.jpg', 'attachments/upload_pdf/331660.jpg', NULL, 'jpg'),
-	(20, '62a7873b4a1c7', 'Party Jam.jpg', 'attachments/asc_clearance/Party Jam.jpg', NULL, 'jpg');
+	(21, '62a8c677d0de0', '119279.jpg', 'attachments/upload_pdf/119279.jpg', NULL, 'jpg'),
+	(22, '62a8c677d0de0', '331660.jpg', 'attachments/upload_pdf/331660.jpg', NULL, 'jpg'),
+	(23, '62a8c677d0de0', 'sss-logo.png', 'attachments/materials/sss-logo.png', NULL, 'png'),
+	(24, '62a8c677d0de0', 'list of files.jpg', 'attachments/materials/list of files.jpg', NULL, 'jpg');
 /*!40000 ALTER TABLE `tvc_order_attachment` ENABLE KEYS */;
 
 -- Dumping structure for table tvcxpress_db.tvc_order_channel
@@ -384,28 +378,18 @@ CREATE TABLE IF NOT EXISTS `tvc_order_channel` (
   `cluster_id` int(11) DEFAULT NULL,
   `price` float(11,2) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8;
 
--- Dumping data for table tvcxpress_db.tvc_order_channel: ~0 rows (approximately)
+-- Dumping data for table tvcxpress_db.tvc_order_channel: ~17 rows (approximately)
 /*!40000 ALTER TABLE `tvc_order_channel` DISABLE KEYS */;
 INSERT INTO `tvc_order_channel` (`id`, `order_id`, `channel_id`, `cluster_id`, `price`) VALUES
-	(25, NULL, 289, 1, 2755.00),
-	(26, NULL, 290, 1, 2755.00),
-	(27, NULL, 305, 2, 2755.00),
-	(28, NULL, 306, 2, 2755.00),
-	(29, NULL, 311, 3, 2755.00),
-	(30, NULL, 277, 5, 900.00),
-	(31, NULL, 278, 5, 900.00),
-	(32, NULL, 284, 6, 900.00),
-	(33, NULL, 289, 1, 900.00),
-	(34, NULL, 305, 2, 900.00),
-	(35, NULL, 311, 3, 900.00),
-	(36, NULL, 289, 1, 2000.00),
-	(37, NULL, 305, 2, 2000.00),
-	(38, NULL, 311, 3, 2000.00),
-	(39, NULL, 289, 1, 2400.00),
-	(40, NULL, 290, 1, 2400.00),
-	(41, NULL, 308, 2, 2400.00);
+	(42, '62a8c677d0de0', 289, 1, 900.00),
+	(43, '62a8c677d0de0', 290, 1, 900.00),
+	(44, '62a8c677d0de0', 291, 1, 900.00),
+	(45, '62a8c677d0de0', 305, 2, 900.00),
+	(46, '62a8c677d0de0', 311, 3, 900.00),
+	(47, '62a8c677d0de0', 278, 5, 900.00),
+	(48, '62a8c677d0de0', 279, 5, 900.00);
 /*!40000 ALTER TABLE `tvc_order_channel` ENABLE KEYS */;
 
 -- Dumping structure for table tvcxpress_db.tvc_order_charges
@@ -429,7 +413,7 @@ CREATE TABLE IF NOT EXISTS `tvc_order_services` (
   `price` float(11,2) DEFAULT NULL,
   `qty` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Dumping data for table tvcxpress_db.tvc_order_services: ~0 rows (approximately)
 /*!40000 ALTER TABLE `tvc_order_services` DISABLE KEYS */;
@@ -441,20 +425,15 @@ CREATE TABLE IF NOT EXISTS `tvc_order_share_link` (
   `order_id` varchar(255) DEFAULT NULL,
   `share_link` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
--- Dumping data for table tvcxpress_db.tvc_order_share_link: ~1 rows (approximately)
+-- Dumping data for table tvcxpress_db.tvc_order_share_link: ~9 rows (approximately)
 /*!40000 ALTER TABLE `tvc_order_share_link` DISABLE KEYS */;
 INSERT INTO `tvc_order_share_link` (`id`, `order_id`, `share_link`) VALUES
-	(2, '62a7873b4a1c7', NULL),
-	(3, '62a7873b4a1c7', NULL),
-	(4, '62a78f52c1c51', ''),
-	(5, '62a78f6ed405a', ''),
-	(6, '62a790547dcf1', ''),
-	(7, '62a790646a880', ''),
-	(8, '62a7908579680', ''),
-	(9, '62a7909948e2f', ''),
-	(10, '62a790b3f1d53', '');
+	(11, '62a8c677d0de0', ''),
+	(12, '62a8deca5ad5c', ''),
+	(13, '62a8df0462594', ''),
+	(14, '62a8dfcf7a28c', '');
 /*!40000 ALTER TABLE `tvc_order_share_link` ENABLE KEYS */;
 
 -- Dumping structure for table tvcxpress_db.tvc_traffic
