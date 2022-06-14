@@ -64,6 +64,13 @@ class TvcMgmtExtraServices extends CActiveRecord
 		);
 	}
 
+	public function get_name($id)
+	{
+		$sql = $this::model()->findByAttributes(['id' => $id]);
+
+		return $sql->name;
+	}
+
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 *

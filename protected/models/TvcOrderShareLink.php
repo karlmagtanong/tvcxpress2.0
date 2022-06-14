@@ -26,10 +26,10 @@ class TvcOrderShareLink extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('order_id, share_link', 'length', 'max'=>255),
+			array('order_id, share_link', 'length', 'max' => 255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, order_id, share_link', 'safe', 'on'=>'search'),
+			array('id, order_id, share_link', 'safe', 'on' => 'search'),
 		);
 	}
 
@@ -40,8 +40,7 @@ class TvcOrderShareLink extends CActiveRecord
 	{
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
-		return array(
-		);
+		return array();
 	}
 
 	/**
@@ -72,14 +71,26 @@ class TvcOrderShareLink extends CActiveRecord
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
-		$criteria=new CDbCriteria;
+		$criteria = new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('order_id',$this->order_id,true);
-		$criteria->compare('share_link',$this->share_link,true);
+		$criteria->compare('id', $this->id);
+		$criteria->compare('order_id', $this->order_id, true);
+		$criteria->compare('share_link', $this->share_link, true);
 
 		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
+			'criteria' => $criteria,
+		));
+	}
+
+	public function get_link($orderid)
+	{
+		// @todo Please modify the following code to remove attributes that should not be searched.
+
+		$criteria = new CDbCriteria;
+		$criteria->addCondition('order_id = "' . $orderid . '"');
+
+		return new CActiveDataProvider($this, array(
+			'criteria' => $criteria,
 		));
 	}
 
@@ -89,7 +100,7 @@ class TvcOrderShareLink extends CActiveRecord
 	 * @param string $className active record class name.
 	 * @return TvcOrderShareLink the static model class
 	 */
-	public static function model($className=__CLASS__)
+	public static function model($className = __CLASS__)
 	{
 		return parent::model($className);
 	}

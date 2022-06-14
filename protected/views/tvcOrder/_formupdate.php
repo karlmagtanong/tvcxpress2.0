@@ -103,13 +103,13 @@
 						<div class="col-sm-2">
 							<div class="mb-3">
 								<label class="form-label">Break Date</label>
-								<input size="60" maxlength="255" class="form-control" name="TvcOrder[break_date]" id="TvcOrder_break_date" type="date">
+								<input size="60" maxlength="255" class="form-control" name="TvcOrder[break_date]" id="TvcOrder_break_date" type="date" value="<?php echo $model->break_date ?>">
 							</div>
 						</div>
 						<div class="col-sm-2">
 							<div class="mb-3">
 								<label class="form-label">Break Time</label>
-								<?php echo $form->textField($model, 'break_time_hh', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control', 'data-inputmask' => "'alias': 'datetime'", 'data-inputmask-inputformat' => 'hh:mm')); ?>
+								<?php echo $form->textField($model, 'break_time_hh', array('size' => 60, 'maxlength' => 255, "value" => "<?php echo $model->break_date ?>", 'class' => 'form-control', 'data-inputmask' => "'alias': 'datetime'", 'data-inputmask-inputformat' => 'hh:mm'));  ?>
 							</div>
 						</div>
 					</div>
@@ -268,13 +268,13 @@
 								<label class="form-label">Terms</label>
 								<div>
 									<div class="form-check form-check-inline">
-										<input type="radio" class="form-check-input" name="TvcOrder[payment_terms]" id="term1" value="30">
+										<input type="radio" class="form-check-input" name="TvcOrder[payment_terms]" id="term1" value="30" <?php echo $model->payment_terms == 30 ? "checked" : "" ?>>
 										<label class="form-check-label" for="term1">
 											30 days upon receipt of invoice
 										</label>
 									</div>
 									<div class="form-check form-check-inline">
-										<input type="radio" class="form-check-input" name="TvcOrder[payment_terms]" id="term2" value="1">
+										<input type="radio" class="form-check-input" name="TvcOrder[payment_terms]" id="term2" value="1" <?php echo $model->payment_terms == 1 ? "checked" : "" ?>>
 										<label class="form-check-label" for="term2">
 											Same day payment
 										</label>
@@ -298,13 +298,13 @@
 							<div class="row mb-3">
 								<div>
 									<div class="form-check form-check-inline">
-										<input type="radio" class="form-check-input" name="TvcOrder[currency]" id="currency1" value="1">
+										<input type="radio" class="form-check-input" name="TvcOrder[currency]" id="currency1" value="1" <?php echo $model->currency == 1 ? "checked" : "" ?>>
 										<label class="form-check-label" for="currency1">
 											Philippine Peso
 										</label>
 									</div>
 									<div class="form-check form-check-inline">
-										<input type="radio" class="form-check-input" name="TvcOrder[currency]" id="currency2" value="2">
+										<input type="radio" class="form-check-input" name="TvcOrder[currency]" id="currency2" value="2" <?php echo $model->currency == 2 ? "checked" : "" ?>>
 										<label class="form-check-label" for="currency2">
 											US Dollars
 										</label>
@@ -328,43 +328,43 @@
 							<div class="row mb-3">
 								<div>
 									<div class="form-check form-check-inline">
-										<input type="radio" class="form-check-input" name="TvcOrder[mode_payment]" id="mode_payment1" value="1">
+										<input type="radio" class="form-check-input" name="TvcOrder[mode_payment]" id="mode_payment1" value="1" <?php echo $model->mode_payment == 1 ? "checked" : "" ?>>
 										<label class="form-check-label" for="mode_payment1">
 											Cash Payment
 										</label>
 									</div>
 									<div class="form-check form-check-inline">
-										<input type="radio" class="form-check-input" name="TvcOrder[mode_payment]" id="mode_payment2" value="2">
+										<input type="radio" class="form-check-input" name="TvcOrder[mode_payment]" id="mode_payment2" value="2" <?php echo $model->mode_payment == 2 ? "checked" : "" ?>>
 										<label class="form-check-label" for="mode_payment2">
 											Check Payment
 										</label>
 									</div>
 									<div class="form-check form-check-inline">
-										<input type="radio" class="form-check-input" name="TvcOrder[mode_payment]" id="mode_payment3" value="3">
+										<input type="radio" class="form-check-input" name="TvcOrder[mode_payment]" id="mode_payment3" value="3" <?php echo $model->mode_payment == 3 ? "checked" : "" ?>>
 										<label class="form-check-label" for="mode_payment3">
 											Bank Deposit/Transfer
 										</label>
 									</div>
 									<div class="form-check form-check-inline">
-										<input type="radio" class="form-check-input" name="TvcOrder[mode_payment]" id="mode_payment4" value="4">
+										<input type="radio" class="form-check-input" name="TvcOrder[mode_payment]" id="mode_payment4" value="4" <?php echo $model->mode_payment == 4 ? "checked" : "" ?>>
 										<label class="form-check-label" for="mode_payment4">
 											Paypal
 										</label>
 									</div>
 									<div class="form-check form-check-inline">
-										<input type="radio" class="form-check-input" name="TvcOrder[mode_payment]" id="mode_payment5" value="5">
+										<input type="radio" class="form-check-input" name="TvcOrder[mode_payment]" id="mode_payment5" value="5" <?php echo $model->mode_payment == 5 ? "checked" : "" ?>>
 										<label class="form-check-label" for="mode_payment5">
 											GCash
 										</label>
 									</div>
 									<div class="form-check form-check-inline">
-										<input type="radio" class="form-check-input" name="TvcOrder[mode_payment]" id="mode_payment6" value="6">
+										<input type="radio" class="form-check-input" name="TvcOrder[mode_payment]" id="mode_payment6" value="6" <?php echo $model->mode_payment == 6 ? "checked" : "" ?>>
 										<label class="form-check-label" for="mode_payment6">
 											PayMaya
 										</label>
 									</div>
 									<div class="form-check form-check-inline">
-										<input type="radio" class="form-check-input" name="TvcOrder[mode_payment]" id="mode_payment7" value="7">
+										<input type="radio" class="form-check-input" name="TvcOrder[mode_payment]" id="mode_payment7" value="7" <?php echo $model->mode_payment == 7 ? "checked" : "" ?>>
 										<label class="form-check-label" for="mode_payment7">
 											Credit / Debit
 										</label>
@@ -389,13 +389,13 @@
 							<div class="row mb-3">
 								<div>
 									<div class="form-check form-check-inline">
-										<input type="radio" class="form-check-input" name="TvcOrder[service_type]" id="service_type1" value="1">
+										<input type="radio" class="form-check-input" name="TvcOrder[service_type]" id="service_type1" value="1" <?php echo $model->service_type == 1 ? "checked" : "" ?>>
 										<label class="form-check-label" for="service_type1">
 											Transmission
 										</label>
 									</div>
 									<div class="form-check form-check-inline">
-										<input type="radio" class="form-check-input" name="TvcOrder[service_type]" id="service_type2" value="2">
+										<input type="radio" class="form-check-input" name="TvcOrder[service_type]" id="service_type2" value="2" <?php echo $model->service_type == 2 ? "checked" : "" ?>>
 										<label class="form-check-label" for="service_type2">
 											Non-Transmission
 										</label>
@@ -420,34 +420,29 @@
 								<label class="form-label">Platform</label>
 								<div>
 									<div class="form-check form-check-inline">
-										<input type="radio" class="form-check-input" name="TvcOrder[platform]" id="platform_type1" value="1">
-										<label class="form-check-label" for="platform_type1">
-											TV
+										<input type="radio" class="form-check-input" name="TvcOrder[platform]" id="platform_type1" value="1" <?php echo $model->platform == 1 ? "checked" : "" ?> <label class="form-check-label" for="platform_type1">
+										TV
 										</label>
 									</div>
 									<div class="form-check form-check-inline">
-										<input type="radio" class="form-check-input" name="TvcOrder[platform]" id="platform_type2" value="2">
-										<label class="form-check-label" for="platform_type2">
-											Radio
+										<input type="radio" class="form-check-input" name="TvcOrder[platform]" id="platform_type2" value="2" <?php echo $model->platform == 2 ? "checked" : "" ?> <label class="form-check-label" for="platform_type2">
+										Radio
 										</label>
 									</div>
 									<div class="form-check form-check-inline">
-										<input type="radio" class="form-check-input" name="TvcOrder[platform]" id="platform_type3" value="2">
-										<label class="form-check-label" for="platform_type3">
-											Online
+										<input type="radio" class="form-check-input" name="TvcOrder[platform]" id="platform_type3" value="2" <?php echo $model->platform == 3 ? "checked" : "" ?> <label class="form-check-label" for="platform_type3">
+										Online
 										</label>
 									</div>
 									<div class="form-check form-check-inline">
-										<input type="radio" class="form-check-input" name="TvcOrder[platform]" id="platform_type4" value="2">
-										<label class="form-check-label" for="platform_type4">
-											Print
+										<input type="radio" class="form-check-input" name="TvcOrder[platform]" id="platform_type4" value="2" <?php echo $model->platform == 4 ? "checked" : "" ?> <label class="form-check-label" for="platform_type4">
+										Print
 										</label>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-
 					<div class="row mb-3" id="tv_platform">
 						<div class="row col-lg-12">
 							<?php
@@ -461,8 +456,9 @@
 									$channel_data = TvcMgmtChannel::model()->get_channels($val['id'])->getData();
 									foreach ($channel_data as $val2) {
 									?>
-										<input type="checkbox" class="form-check-input" id="channel" name="channel[]" value="<?php echo $val2['id'] ?>">
+										<input type="checkbox" class="form-check-input" id="channel" name="channel[]" value="<?php echo $val2['id'] ?>" <?php echo TvcOrderChannel::model()->get_channel_selected($val2['id'], $model->order_id) != "" ? "checked" : "" ?>>
 										<label class="form-check-label" for="channel">
+											<!-- <?php echo TvcOrderChannel::model()->get_channel_selected($val2['id'], $model->order_id) ?> -->
 											<?php echo $val2['name'] ?>
 										</label><br>
 
@@ -556,19 +552,19 @@
 							<div class="row mb-3">
 								<div>
 									<div class="form-check form-check-inline">
-										<input type="radio" class="form-check-input" name="TvcOrder[delivery_method]" id="delivery_method1" value="1">
+										<input type="radio" class="form-check-input" name="TvcOrder[delivery_method]" id="delivery_method1" value="1" <?php echo $model->delivery_method == 1 ? "checked" : "" ?>>
 										<label class="form-check-label" for="delivery_method1">
 											Physical Delivery
 										</label>
 									</div>
 									<div class="form-check form-check-inline">
-										<input type="radio" class="form-check-input" name="TvcOrder[delivery_method]" id="delivery_method2" value="2">
+										<input type="radio" class="form-check-input" name="TvcOrder[delivery_method]" id="delivery_method2" value="2" <?php echo $model->delivery_method == 2 ? "checked" : "" ?>>
 										<label class="form-check-label" for="delivery_method2">
 											Shared Drive or Download Link
 										</label>
 									</div>
 									<div class="form-check form-check-inline">
-										<input type="radio" class="form-check-input" name="TvcOrder[delivery_method]" id="delivery_method3" value="3">
+										<input type="radio" class="form-check-input" name="TvcOrder[delivery_method]" id="delivery_method3" value="3" <?php echo $model->delivery_method == 3 ? "checked" : "" ?>>
 										<label class="form-check-label" for="delivery_method3">
 											Upload Materials
 										</label>
@@ -588,13 +584,13 @@
 						<div class="col-sm-6">
 							<div>
 								<div class="form-check form-check-inline">
-									<input type="radio" class="form-check-input" name="TvcOrder[share_type]" id="share_type1" value="1">
+									<input type="radio" class="form-check-input" name="TvcOrder[share_type]" id="share_type1" value="1" <?php echo $model->share_type == 1 ? "checked" : "" ?>>
 									<label class="form-check-label" for="share_type1">
 										Share Now
 									</label>
 								</div>
 								<div class="form-check form-check-inline">
-									<input type="radio" class="form-check-input" name="TvcOrder[share_type]" id="share_type2" value="2">
+									<input type="radio" class="form-check-input" name="TvcOrder[share_type]" id="share_type2" value="2" <?php echo $model->share_type == 2 ? "checked" : "" ?>>
 									<label class="form-check-label" for="share_type2">
 										Share Later
 									</label>
@@ -637,13 +633,13 @@
 						<div class="col-sm-6">
 							<div>
 								<div class="form-check form-check-inline">
-									<input type="radio" class="form-check-input" name="TvcOrder[share_type]" id="upload_type1" value="3">
+									<input type="radio" class="form-check-input" name="TvcOrder[share_type]" id="upload_type1" value="3" <?php echo $model->share_type == 3 ? "checked" : "" ?>>
 									<label class="form-check-label" for="upload_type1">
 										Upload Now
 									</label>
 								</div>
 								<div class="form-check form-check-inline">
-									<input type="radio" class="form-check-input" name="TvcOrder[share_type]" id="upload_type2" value="4">
+									<input type="radio" class="form-check-input" name="TvcOrder[share_type]" id="upload_type2" value="4" <?php echo $model->share_type == 4 ? "checked" : "" ?>>
 									<label class="form-check-label" for="upload_type2">
 										Upload Later
 									</label>
@@ -700,13 +696,13 @@
 							<div class="row mb-3">
 								<div>
 									<div class="form-check form-check-inline">
-										<input type="radio" class="form-check-input" name="TvcOrder[asc_upload]" id="asc_upload1" value="1">
+										<input type="radio" class="form-check-input" name="TvcOrder[asc_upload]" id="asc_upload1" value="1" <?php echo $model->asc_upload == 1 ? "checked" : "" ?>>
 										<label class="form-check-label" for="asc_upload1">
 											Upload Now
 										</label>
 									</div>
 									<div class="form-check form-check-inline">
-										<input type="radio" class="form-check-input" name="TvcOrder[asc_upload]" id="asc_upload2" value="2">
+										<input type="radio" class="form-check-input" name="TvcOrder[asc_upload]" id="asc_upload2" value="2" <?php echo $model->asc_upload == 2 ? "checked" : "" ?>>
 										<label class="form-check-label" for="asc_upload2">
 											Upload Later
 										</label>
@@ -723,19 +719,19 @@
 								<div class="col-sm-4">
 									<div class="mb-3">
 										<label class="form-label">Reference Code</label>
-										<?php echo $form->textField($model, 'asc_reference_code', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
+										<?php echo $form->textField($model, 'asc_reference_code', array('size' => 60, "value"=>$model->asc_reference_code,'maxlength' => 255, 'class' => 'form-control')); ?>
 									</div>
 								</div>
 								<div class="col-sm-4">
 									<div class="mb-3">
 										<label class="form-label">Valid From</label>
-										<input size="60" maxlength="255" class="form-control" name="TvcOrder[asc_valid_from]" id="TvcOrder_asc_valid_from" type="date">
+										<input size="60" maxlength="255" class="form-control" name="TvcOrder[asc_valid_from]" id="TvcOrder_asc_valid_from" type="date" value="<?php echo $model->asc_valid_from ?>">
 									</div>
 								</div>
 								<div class="col-sm-4">
 									<div class="mb-3">
 										<label class="form-label">Valid To</label>
-										<input size="60" maxlength="255" class="form-control" name="TvcOrder[asc_valid_to]" id="TvcOrder_asc_valid_to" type="date">
+										<input size="60" maxlength="255" class="form-control" name="TvcOrder[asc_valid_to]" id="TvcOrder_asc_valid_to" type="date" value="<?php echo $model->asc_valid_to ?>">
 									</div>
 								</div>
 							</div>
@@ -744,12 +740,12 @@
 						<div class="row mb-3" id="asc_upload_later">
 							<div class="col-sm-6 mb-3">
 								<label class="form-label">Upload ASC Date</label>
-								<input size="60" maxlength="255" class="form-control" name="TvcOrder[asc_date]" id="TvcOrder_asc_date" type="date">
+								<input size="60" maxlength="255" class="form-control" name="TvcOrder[asc_date]" id="TvcOrder_asc_date" type="date" value="<?php echo $model->asc_date ?>">
 
 							</div>
 							<div class="col-sm-6 mb-3">
 								<label class="form-label">Upload ASC Time</label>
-								<?php echo $form->textField($model, 'asc_time_hh', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control', 'data-inputmask' => "'alias': 'datetime'", 'data-inputmask-inputformat' => 'hh:mm')); ?>
+								<?php echo $form->textField($model, 'asc_time_hh', array('size' => 60, 'maxlength' => 255, "value"=>$model->asc_time_hh ,'class' => 'form-control', 'data-inputmask' => "'alias': 'datetime'", 'data-inputmask-inputformat' => 'hh:mm')); ?>
 							</div>
 						</div>
 					</div>
@@ -788,10 +784,14 @@
 					</div>');
 	}
 
-
-	$("#transmission_show").hide();
-	$("#nt_platform").hide();
-
+	if ('<?php echo $model->service_type ?>' == 1) {
+		$("#transmission_show").show();
+		$("#nt_platform").hide();
+	}
+	if ('<?php echo $model->service_type ?>' == 2) {
+		$("#transmission_show").hide();
+		$("#nt_platform").show();
+	}
 
 	$('input[type="radio"][name="TvcOrder[service_type]"]').click(function() {
 
@@ -806,7 +806,13 @@
 
 	})
 
-	$("#tv_platform").hide();
+	if ('<?php echo $model->platform ?>' == 1) {
+		$("#tv_platform").show();
+	} else {
+		$("#tv_platform").hide();
+	}
+
+
 	$('input[type="radio"][name="TvcOrder[platform]"]').click(function() {
 
 		if ($(this).attr("value") == "1") {
@@ -825,13 +831,42 @@
 
 	})
 
-	$("#pd_show").hide();
-	$("#shared_show").hide();
-	$("#upload_show").hide();
-	$("#shared_show_now").hide();
-	$("#shared_show_later").hide();
-	$("#upload_show_now").hide();
-	$("#upload_show_later").hide();
+
+
+	if ('<?php echo $model->delivery_method ?>' == 1) {
+		$("#tv_platform").show();
+		$("#shared_show").hide();
+		$("#upload_show").hide();
+		$("#shared_show_now").hide();
+		$("#shared_show_later").hide();
+		$("#upload_show_now").hide();
+		$("#upload_show_later").hide();
+	}
+
+	if ('<?php echo $model->delivery_method ?>' == 2) {
+		$("#pd_show").hide();
+		$("#shared_show").show();
+		$("#upload_show").hide();
+		$("#shared_show_now").hide();
+		$("#shared_show_later").hide();
+		$("#upload_show_now").hide();
+		$("#upload_show_later").hide();
+	}
+
+	if ('<?php echo $model->delivery_method ?>' == 3) {
+		$("#pd_show").hide();
+		$("#shared_show").hide();
+		$("#upload_show").show();
+		$("#shared_show_now").hide();
+		$("#shared_show_later").hide();
+		$("#upload_show_now").hide();
+		$("#upload_show_later").hide();
+	}
+
+
+
+
+
 	$('input[type="radio"][name="TvcOrder[delivery_method]"]').click(function() {
 
 		if ($(this).attr("value") == "1") {
@@ -865,6 +900,23 @@
 
 	})
 
+	if ('<?php echo $model->share_type ?>' == 1) {
+		$("#shared_show_now").show();
+		$("#shared_show_later").hide();
+	}
+	if ('<?php echo $model->share_type ?>' == 2) {
+		$("#shared_show_now").hide();
+		$("#shared_show_later").show();
+	}
+	if ('<?php echo $model->share_type ?>' == 3) {
+		$("#upload_show_now").show();
+		$("#upload_show_later").hide();
+	}
+	if ('<?php echo $model->share_type ?>' == 4) {
+		$("#upload_show_now").hide();
+		$("#upload_show_later").show();
+	}
+
 	$('input[type="radio"][name="TvcOrder[share_type]"]').click(function() {
 
 		if ($(this).attr("value") == "1") {
@@ -888,8 +940,16 @@
 
 	})
 
-	$("#asc_upload_now").hide();
-	$("#asc_upload_later").hide();
+	if ('<?php echo $model->asc_upload ?>' == 1) {
+		$("#asc_upload_now").show();
+		$("#asc_upload_later").hide();
+	}
+	if ('<?php echo $model->asc_upload ?>' == 2) {
+		$("#asc_upload_now").hide();
+		$("#asc_upload_later").show();
+	}
+
+
 	$('input[type="radio"][name="TvcOrder[asc_upload]"]').click(function() {
 
 		if ($(this).attr("value") == "1") {

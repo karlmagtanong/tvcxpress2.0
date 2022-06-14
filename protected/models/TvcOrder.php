@@ -81,12 +81,12 @@ class TvcOrder extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('type, created_by', 'required'),
-			array('break_time_mm, payment_terms, currency, mode_payment, service_type, platform, delivery_method, share_type,  share_time_mm, asc_upload,  asc_time_mm, type, created_by', 'numerical', 'integerOnly'=>true),
-			array('break_time_hh, order_id, order_code, advertiser, asc_brand, product_category, asc_project_title, length, share_link, break_time_aa, share_time_hh,producer, asc_time_hh,producer_contact, producer_email, agency_company, agency_contact_person, agency_contact_no, agency_email, billing_ce, billing_company, billing_address, billing_contact_person, billing_contact_no, billing_contact_email, billing_tin, billing_business_type, gcash_name, gcash_email, gcash_number, delivery_company, delivery_contact_name, delivery_number, delivery_email, share_aa, asc_time_aa, asc_reference_code', 'length', 'max'=>255),
+			array('break_time_mm, payment_terms, currency, mode_payment, service_type, platform, delivery_method, share_type,  share_time_mm, asc_upload,  asc_time_mm, type, created_by', 'numerical', 'integerOnly' => true),
+			array('break_time_hh, order_id, order_code, advertiser, asc_brand, product_category, asc_project_title, length, share_link, break_time_aa, share_time_hh,producer, asc_time_hh,producer_contact, producer_email, agency_company, agency_contact_person, agency_contact_no, agency_email, billing_ce, billing_company, billing_address, billing_contact_person, billing_contact_no, billing_contact_email, billing_tin, billing_business_type, gcash_name, gcash_email, gcash_number, delivery_company, delivery_contact_name, delivery_number, delivery_email, share_aa, asc_time_aa, asc_reference_code', 'length', 'max' => 255),
 			array('break_date, share_date, asc_date, asc_valid_from, asc_valid_to, created_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, order_id, order_code, advertiser, asc_brand, product_category, asc_project_title, length, break_date, break_time_hh, break_time_mm, break_time_aa, producer, producer_contact, producer_email, agency_company, agency_contact_person, agency_contact_no, agency_email, billing_ce, billing_company, billing_address, billing_contact_person, billing_contact_no, billing_contact_email, billing_tin, billing_business_type, payment_terms, currency, mode_payment, gcash_name, gcash_email, gcash_number, service_type, platform, delivery_method, delivery_company, delivery_contact_name, delivery_number, delivery_email, share_type, share_link, share_date, share_time_hh, share_time_mm, share_aa, asc_upload, asc_date, asc_time_hh, asc_time_mm, asc_time_aa, asc_reference_code, asc_valid_from, asc_valid_to, type, created_by, created_at', 'safe', 'on'=>'search'),
+			array('id, order_id, order_code, advertiser, asc_brand, product_category, asc_project_title, length, break_date, break_time_hh, break_time_mm, break_time_aa, producer, producer_contact, producer_email, agency_company, agency_contact_person, agency_contact_no, agency_email, billing_ce, billing_company, billing_address, billing_contact_person, billing_contact_no, billing_contact_email, billing_tin, billing_business_type, payment_terms, currency, mode_payment, gcash_name, gcash_email, gcash_number, service_type, platform, delivery_method, delivery_company, delivery_contact_name, delivery_number, delivery_email, share_type, share_link, share_date, share_time_hh, share_time_mm, share_aa, asc_upload, asc_date, asc_time_hh, asc_time_mm, asc_time_aa, asc_reference_code, asc_valid_from, asc_valid_to, type, created_by, created_at', 'safe', 'on' => 'search'),
 		);
 	}
 
@@ -97,8 +97,7 @@ class TvcOrder extends CActiveRecord
 	{
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
-		return array(
-		);
+		return array();
 	}
 
 	/**
@@ -183,70 +182,157 @@ class TvcOrder extends CActiveRecord
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
-		$criteria=new CDbCriteria;
+		$criteria = new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('order_id',$this->order_id,true);
-		$criteria->compare('order_code',$this->order_code,true);
-		$criteria->compare('advertiser',$this->advertiser,true);
-		$criteria->compare('asc_brand',$this->asc_brand,true);
-		$criteria->compare('product_category',$this->product_category,true);
-		$criteria->compare('asc_project_title',$this->asc_project_title,true);
-		$criteria->compare('length',$this->length,true);
-		$criteria->compare('break_date',$this->break_date,true);
-		$criteria->compare('break_time_hh',$this->break_time_hh);
-		$criteria->compare('break_time_mm',$this->break_time_mm);
-		$criteria->compare('break_time_aa',$this->break_time_aa,true);
-		$criteria->compare('producer',$this->producer,true);
-		$criteria->compare('producer_contact',$this->producer_contact,true);
-		$criteria->compare('producer_email',$this->producer_email,true);
-		$criteria->compare('agency_company',$this->agency_company,true);
-		$criteria->compare('agency_contact_person',$this->agency_contact_person,true);
-		$criteria->compare('agency_contact_no',$this->agency_contact_no,true);
-		$criteria->compare('agency_email',$this->agency_email,true);
-		$criteria->compare('billing_ce',$this->billing_ce,true);
-		$criteria->compare('billing_company',$this->billing_company,true);
-		$criteria->compare('billing_address',$this->billing_address,true);
-		$criteria->compare('billing_contact_person',$this->billing_contact_person,true);
-		$criteria->compare('billing_contact_no',$this->billing_contact_no,true);
-		$criteria->compare('billing_contact_email',$this->billing_contact_email,true);
-		$criteria->compare('billing_tin',$this->billing_tin,true);
-		$criteria->compare('billing_business_type',$this->billing_business_type,true);
-		$criteria->compare('payment_terms',$this->payment_terms);
-		$criteria->compare('currency',$this->currency);
-		$criteria->compare('mode_payment',$this->mode_payment);
-		$criteria->compare('gcash_name',$this->gcash_name,true);
-		$criteria->compare('gcash_email',$this->gcash_email,true);
-		$criteria->compare('gcash_number',$this->gcash_number,true);
-		$criteria->compare('service_type',$this->service_type);
-		$criteria->compare('platform',$this->platform);
-		$criteria->compare('delivery_method',$this->delivery_method);
-		$criteria->compare('delivery_company',$this->delivery_company,true);
-		$criteria->compare('delivery_contact_name',$this->delivery_contact_name,true);
-		$criteria->compare('delivery_number',$this->delivery_number,true);
-		$criteria->compare('delivery_email',$this->delivery_email,true);
-		$criteria->compare('share_type',$this->share_type);
-		$criteria->compare('share_link',$this->share_link);
-		$criteria->compare('share_date',$this->share_date,true);
-		$criteria->compare('share_time_hh',$this->share_time_hh);
-		$criteria->compare('share_time_mm',$this->share_time_mm);
-		$criteria->compare('share_aa',$this->share_aa,true);
-		$criteria->compare('asc_upload',$this->asc_upload);
-		$criteria->compare('asc_date',$this->asc_date,true);
-		$criteria->compare('asc_time_hh',$this->asc_time_hh);
-		$criteria->compare('asc_time_mm',$this->asc_time_mm);
-		$criteria->compare('asc_time_aa',$this->asc_time_aa,true);
-		$criteria->compare('asc_reference_code',$this->asc_reference_code,true);
-		$criteria->compare('asc_valid_from',$this->asc_valid_from,true);
-		$criteria->compare('asc_valid_to',$this->asc_valid_to,true);
-		$criteria->compare('type',$this->type);
-		$criteria->compare('created_by',$this->created_by);
-		$criteria->compare('created_at',$this->created_at,true);
+		$criteria->compare('id', $this->id);
+		$criteria->compare('order_id', $this->order_id, true);
+		$criteria->compare('order_code', $this->order_code, true);
+		$criteria->compare('advertiser', $this->advertiser, true);
+		$criteria->compare('asc_brand', $this->asc_brand, true);
+		$criteria->compare('product_category', $this->product_category, true);
+		$criteria->compare('asc_project_title', $this->asc_project_title, true);
+		$criteria->compare('length', $this->length, true);
+		$criteria->compare('break_date', $this->break_date, true);
+		$criteria->compare('break_time_hh', $this->break_time_hh);
+		$criteria->compare('break_time_mm', $this->break_time_mm);
+		$criteria->compare('break_time_aa', $this->break_time_aa, true);
+		$criteria->compare('producer', $this->producer, true);
+		$criteria->compare('producer_contact', $this->producer_contact, true);
+		$criteria->compare('producer_email', $this->producer_email, true);
+		$criteria->compare('agency_company', $this->agency_company, true);
+		$criteria->compare('agency_contact_person', $this->agency_contact_person, true);
+		$criteria->compare('agency_contact_no', $this->agency_contact_no, true);
+		$criteria->compare('agency_email', $this->agency_email, true);
+		$criteria->compare('billing_ce', $this->billing_ce, true);
+		$criteria->compare('billing_company', $this->billing_company, true);
+		$criteria->compare('billing_address', $this->billing_address, true);
+		$criteria->compare('billing_contact_person', $this->billing_contact_person, true);
+		$criteria->compare('billing_contact_no', $this->billing_contact_no, true);
+		$criteria->compare('billing_contact_email', $this->billing_contact_email, true);
+		$criteria->compare('billing_tin', $this->billing_tin, true);
+		$criteria->compare('billing_business_type', $this->billing_business_type, true);
+		$criteria->compare('payment_terms', $this->payment_terms);
+		$criteria->compare('currency', $this->currency);
+		$criteria->compare('mode_payment', $this->mode_payment);
+		$criteria->compare('gcash_name', $this->gcash_name, true);
+		$criteria->compare('gcash_email', $this->gcash_email, true);
+		$criteria->compare('gcash_number', $this->gcash_number, true);
+		$criteria->compare('service_type', $this->service_type);
+		$criteria->compare('platform', $this->platform);
+		$criteria->compare('delivery_method', $this->delivery_method);
+		$criteria->compare('delivery_company', $this->delivery_company, true);
+		$criteria->compare('delivery_contact_name', $this->delivery_contact_name, true);
+		$criteria->compare('delivery_number', $this->delivery_number, true);
+		$criteria->compare('delivery_email', $this->delivery_email, true);
+		$criteria->compare('share_type', $this->share_type);
+		$criteria->compare('share_link', $this->share_link);
+		$criteria->compare('share_date', $this->share_date, true);
+		$criteria->compare('share_time_hh', $this->share_time_hh);
+		$criteria->compare('share_time_mm', $this->share_time_mm);
+		$criteria->compare('share_aa', $this->share_aa, true);
+		$criteria->compare('asc_upload', $this->asc_upload);
+		$criteria->compare('asc_date', $this->asc_date, true);
+		$criteria->compare('asc_time_hh', $this->asc_time_hh);
+		$criteria->compare('asc_time_mm', $this->asc_time_mm);
+		$criteria->compare('asc_time_aa', $this->asc_time_aa, true);
+		$criteria->compare('asc_reference_code', $this->asc_reference_code, true);
+		$criteria->compare('asc_valid_from', $this->asc_valid_from, true);
+		$criteria->compare('asc_valid_to', $this->asc_valid_to, true);
+		$criteria->compare('type', $this->type);
+		$criteria->compare('created_by', $this->created_by);
+		$criteria->compare('created_at', $this->created_at, true);
 
 		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
+			'criteria' => $criteria,
 		));
 	}
+
+	public function get_terms_name($id)
+	{
+		if ($id == 1) {
+			return "Same day payment";
+		}
+		if ($id == 30) {
+			return "30 days upon receipt of invoice";
+		}
+	}
+
+	public function get_currency_name($id)
+	{
+		if ($id == 1) {
+			return "Philippine Peso";
+		}
+		if ($id == 2) {
+			return "US Dollars";
+		}
+	}
+
+	public function get_payment_name($id)
+	{
+		if ($id == 1) {
+			return "Cash Payment";
+		}
+		if ($id == 2) {
+			return "Check Payment";
+		}
+		if ($id == 3) {
+			return "Bank Deposit/Transfer";
+		}
+		if ($id == 4) {
+			return "Paypal";
+		}
+		if ($id == 5) {
+			return "GCash";
+		}
+		if ($id == 6) {
+			return "PayMaya";
+		}
+		if ($id == 7) {
+			return "Credit / Debit";
+		}
+	}
+
+	public function get_service_name($id)
+	{
+		if ($id == 1) {
+			return "Transmission";
+		}
+		if ($id == 2) {
+			return "Non-Transmission";
+		}
+	}
+
+	public function get_platform_name($id)
+	{
+		if ($id == 1) {
+			return "TV";
+		}
+		if ($id == 2) {
+			return "Radio";
+		}
+		if ($id == 3) {
+			return "Online";
+		}
+		if ($id == 4) {
+			return "Print";
+		}
+	}
+
+	public function get_method_name($id)
+	{
+		if ($id == 1) {
+			return "Physical Delivery";
+		}
+		if ($id == 2) {
+			return "Shared Drive or Download Link";
+		}
+		if ($id == 3) {
+			return "Upload Materials";
+		}
+	
+	}
+
+
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -254,7 +340,7 @@ class TvcOrder extends CActiveRecord
 	 * @param string $className active record class name.
 	 * @return TvcOrder the static model class
 	 */
-	public static function model($className=__CLASS__)
+	public static function model($className = __CLASS__)
 	{
 		return parent::model($className);
 	}

@@ -124,7 +124,6 @@ class TvcOrderController extends Controller
 				foreach ($_POST['channel'] as $val) {
 					$channelorder = new TvcOrderChannel;
 					$channelorder->order_id = $uniqid;
-					$channelorder = new TvcOrderChannel;
 					$channelorder->channel_id = $_POST['channel'][$c];
 					$channelorder->cluster_id = TvcMgmtChannel::model()->get_cluster_id($_POST['channel'][$c]);
 					$channelorder->price = TvcMgmtRate::model()->get_rate($_POST['TvcOrder']['advertiser'], $_POST['TvcOrder']['agency_company'], $_POST['TvcOrder']['length']);
@@ -312,9 +311,9 @@ class TvcOrderController extends Controller
 				$c = 0;
 
 				foreach ($_POST['channel'] as $val) {
+				
 					$channelorder = new TvcOrderChannel;
 					$channelorder->order_id = $uniqid;
-					$channelorder = new TvcOrderChannel;
 					$channelorder->channel_id = $_POST['channel'][$c];
 					$channelorder->cluster_id = TvcMgmtChannel::model()->get_cluster_id($_POST['channel'][$c]);
 					$channelorder->price = TvcMgmtRate::model()->get_rate($_POST['TvcOrder']['advertiser'], $_POST['TvcOrder']['agency_company'], $_POST['TvcOrder']['length']);

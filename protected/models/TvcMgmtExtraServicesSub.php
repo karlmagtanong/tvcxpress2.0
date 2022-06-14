@@ -118,6 +118,13 @@ class TvcMgmtExtraServicesSub extends CActiveRecord
         return $sql->serv_id;
     }
 
+	public function get_name($id)
+	{
+		$sql = $this::model()->findByAttributes(['id' => $id]);
+
+		return $sql->sub_category;
+	}
+
 
 	/**
 	 * Returns the static model of the specified AR class.

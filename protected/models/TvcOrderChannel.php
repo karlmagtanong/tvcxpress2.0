@@ -102,15 +102,22 @@ class TvcOrderChannel extends CActiveRecord
 		));
 	}
 
-	public function get_order_channel_per_cluster($order,$cluster)
+	public function get_order_channel_per_cluster($order, $cluster)
 	{
 		$criteria = new CDbCriteria;
 
-		$criteria->addCondition('t.order_id = "' . $order . '" and t.cluster_id = "'.$cluster.'"');
+		$criteria->addCondition('t.order_id = "' . $order . '" and t.cluster_id = "' . $cluster . '"');
 
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,
 		));
+	}
+
+	public function get_channel_selected($id, $orderid)
+	{
+		$sql = $this::model()->findByAttributes(['channel_id' => $id,'order_id' => $orderid]);
+
+		return $sql->id;
 	}
 
 	/**

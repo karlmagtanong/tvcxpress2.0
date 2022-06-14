@@ -29,12 +29,12 @@ class TvcOrderServices extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('sub_cat_id, cat_id, qty', 'numerical', 'integerOnly'=>true),
+			array('sub_cat_id, cat_id, qty', 'numerical', 'integerOnly' => true),
 			array('price', 'numerical'),
-			array('order_id', 'length', 'max'=>255),
+			array('order_id', 'length', 'max' => 255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, order_id, sub_cat_id, cat_id, price, qty', 'safe', 'on'=>'search'),
+			array('id, order_id, sub_cat_id, cat_id, price, qty', 'safe', 'on' => 'search'),
 		);
 	}
 
@@ -45,8 +45,7 @@ class TvcOrderServices extends CActiveRecord
 	{
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
-		return array(
-		);
+		return array();
 	}
 
 	/**
@@ -80,27 +79,50 @@ class TvcOrderServices extends CActiveRecord
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
-		$criteria=new CDbCriteria;
+		$criteria = new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('order_id',$this->order_id,true);
-		$criteria->compare('sub_cat_id',$this->sub_cat_id);
-		$criteria->compare('cat_id',$this->cat_id);
-		$criteria->compare('price',$this->price);
-		$criteria->compare('qty',$this->qty);
+		$criteria->compare('id', $this->id);
+		$criteria->compare('order_id', $this->order_id, true);
+		$criteria->compare('sub_cat_id', $this->sub_cat_id);
+		$criteria->compare('cat_id', $this->cat_id);
+		$criteria->compare('price', $this->price);
+		$criteria->compare('qty', $this->qty);
 
 		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
+			'criteria' => $criteria,
 		));
 	}
 
+
+	public function get_order_service($order)
+	{
+		$criteria = new CDbCriteria;
+
+		$criteria->addCondition('t.order_id = "' . $order . '"');
+		$criteria->group = 'cat_id';
+
+		return new CActiveDataProvider($this, array(
+			'criteria' => $criteria,
+		));
+	}
+
+	public function get_order_service_per_cat($order, $cat)
+	{
+		$criteria = new CDbCriteria;
+
+		$criteria->addCondition('t.order_id = "' . $order . '" and t.cat_id = "' . $cat . '"');
+
+		return new CActiveDataProvider($this, array(
+			'criteria' => $criteria,
+		));
+	}
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
 	 * @return TvcOrderServices the static model class
 	 */
-	public static function model($className=__CLASS__)
+	public static function model($className = __CLASS__)
 	{
 		return parent::model($className);
 	}

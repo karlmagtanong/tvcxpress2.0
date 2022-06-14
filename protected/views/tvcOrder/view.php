@@ -96,15 +96,15 @@
 				<div class="row ms-2">
 					<div class="row mb-3">
 						<div class="col-lg-2 ps-0"><b>Terms :</b></div>
-						<div class="col-lg-5 pe-0"><?php echo $model->payment_terms ?></div>
+						<div class="col-lg-5 pe-0"><?php echo TvcOrder::model()->get_terms_name($model->payment_terms) ?></div>
 					</div>
 					<div class="row mb-3">
 						<div class="col-lg-2 ps-0"><b>Currency </b></div>
-						<div class="col-lg-5 pe-0"><?php echo $model->currency ?></div>
+						<div class="col-lg-5 pe-0"><?php echo TvcOrder::model()->get_currency_name($model->currency) ?></div>
 					</div>
 					<div class="row mb-3">
 						<div class="col-lg-2 ps-0"><b>Mode of Payment:</b></div>
-						<div class="col-lg-5 pe-0"><?php echo $model->mode_payment ?></div>
+						<div class="col-lg-5 pe-0"><?php echo TvcOrder::model()->get_payment_name($model->mode_payment) ?></div>
 					</div>
 
 				</div>
@@ -116,13 +116,13 @@
 				<div class="row ms-2">
 					<div class="row mb-3">
 						<div class="col-lg-2 ps-0"><b>Service:</b></div>
-						<div class="col-lg-5 pe-0"><?php echo $model->service_type ?></div>
+						<div class="col-lg-5 pe-0"><?php echo TvcOrder::model()->get_service_name($model->service_type) ?></div>
 					</div>
 
 					<?php if ($model->service_type == 1) { ?>
 						<div class="row mb-3">
 							<div class="col-lg-2 ps-0"><b>Platform:</b></div>
-							<div class="col-lg-5 pe-0"><?php echo $model->platform ?></div>
+							<div class="col-lg-5 pe-0"><?php echo TvcOrder::model()->get_platform_name($model->platform) ?></div>
 						</div>
 						<div class="row mb-3">
 							<div class="col-lg-2 ps-0"><b>Selected Channels:</b></div>
@@ -173,6 +173,49 @@
 					<?php if ($model->service_type == 2) { ?>
 						<div class="row mb-3">
 							<div class="col-lg-2 ps-0"><b>Selected Services:</b></div>
+							<table class="table align-items-center" style="font-size:10px;padding:1px;border-spacing: 5px;">
+								<thead class="thead-light">
+									<tr style="background-color: ##8898aa;">
+										<th>PARTICULARS</th>
+										<th>QTY</th>
+										<th>UNIT PRICE</th>
+										<th>AMOUNT</th>
+									</tr>
+								</thead>
+								<br>
+								<tbody>
+									<?php $services_sel = TvcOrderServices::model()->get_order_service($model->order_id)->getData();
+									$serv_price_total = 0.0;
+									foreach ($services_sel as $val) {
+										// 
+									?>
+
+										<tr>
+											<td class="text-start"><b><?php echo TvcMgmtExtraServices::model()->get_name($val['cat_id']); ?></b></td>
+											<?php $services_sel2 = TvcOrderServices::model()->get_order_service_per_cat($model->order_id, $val['cat_id'])->getData();
+
+											foreach ($services_sel2 as $val2) {
+												$serv_price_total += $val2['price'];
+											?>
+										<tr>
+											<td> &nbsp;&nbsp;- <?php echo TvcMgmtExtraServicesSub::model()->get_name($val2['sub_cat_id']); ?></td>
+											<td><?php echo $val2['qty'] ?></td>
+											<td><?php echo $val2['price'] / $val2['qty'] ?></td>
+											<td><?php echo $val2['price'] ?></td>
+										</tr>
+									<?php } ?>
+									</tr>
+
+								<?php } ?>
+								</tbody>
+								<tfoot>
+									<tr>
+										<td class="text-end" colspan="2"><b>SUB-TOTAL</b></td>
+										<td></td>
+										<td><b><?php echo number_format($serv_price_total, 2) ?></b></td>
+									</tr>
+								</tfoot>
+							</table>
 						</div>
 					<?php } ?>
 
@@ -185,7 +228,7 @@
 				<div class="row ms-2">
 					<div class="row mb-3">
 						<div class="col-lg-1 ps-0"><b>Method :</b></div>
-						<div class="col-lg-5 pe-0"><?php echo $model->delivery_method ?></div>
+						<div class="col-lg-5 pe-0"><?php echo TvcOrder::model()->get_method_name($model->delivery_method) ?></div>
 					</div>
 					<div class="row mb-3">
 						<div class="col-lg-1 ps-0"><b>Company :</b></div>
@@ -211,6 +254,19 @@
 						<?php if ($model->share_type == 1) { ?>
 							<div class="row mb-3">
 								<div class="col-lg-1 ps-0"><b>Link or Drive :</b></div>
+							</div>
+							<div class="row mb-3">
+								<table class="table align-items-center" style="font-size:10px;padding:1px;border-spacing: 5px;">
+									<?php $linkdata = TvcOrderShareLink::model()->get_link($model->order_id)->getData();
+									$no = 1;
+									foreach ($linkdata as $val) { ?>
+										<tr>
+											<td class="col-1"><?php echo $no; ?></td>
+											<td><?php echo $val['share_link'] ?></td>
+										</tr>
+									<?php $no++;
+									} ?>
+								</table>
 							</div>
 						<?php } ?>
 						<?php if ($model->share_type == 2) { ?>
@@ -252,7 +308,12 @@
 			<div class="card-body">
 				<h4 class="mb-3 mt-4 ">ASC CLEARANCE</h4>
 				<br>
+
 				<div class="row ms-2">
+					<div class="row mb-3">
+						<div class="col-lg-2 ps-0"><b>ASC Upload Type:</b></div>
+						<div class="col-lg-2 pe-0"><?php echo $model->asc_upload == 1 ? "Upload Now" : "Upload Later" ?></div>
+					</div>
 					<?php if ($model->asc_upload == 1) { ?>
 
 						<div class="row mb-3">
@@ -266,9 +327,9 @@
 					<?php } ?>
 					<?php if ($model->asc_upload == 2) { ?>
 						<div class="row mb-3">
-							<div class="col-lg-1 ps-0"><b>Upload ASC Date :</b></div>
+							<div class="col-lg-2 ps-0"><b>Upload ASC Date :</b></div>
 							<div class="col-lg-2 pe-0"><?php echo $model->asc_date ?></div>
-							<div class="col-lg-1 ps-0"><b>Upload ASC Time :</b></div>
+							<div class="col-lg-2 ps-0"><b>Upload ASC Time :</b></div>
 							<div class="col-lg-2 pe-0"><?php echo $model->asc_time_hh ?></div>
 						</div>
 					<?php } ?>
