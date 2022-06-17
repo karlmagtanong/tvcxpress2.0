@@ -52,7 +52,7 @@ return [
             'connectionString' => 'mysql:host=127.0.0.1; dbname=tvcxpress_db',
             'emulatePrepare' => true,
             'username' => 'root',
-            'password' => 'supermanako123',
+            'password' => '',
             'charset' => 'utf8',
         ],
         'errorHandler' => [
