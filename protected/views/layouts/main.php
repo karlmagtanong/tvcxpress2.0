@@ -38,12 +38,17 @@
 	<link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/images/favicon.png" />
 
 	<link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/vendors/select2/select2.min.css">
+	
 	<link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/vendors/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css">
 
 
 	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap-4-autocomplete/dist/bootstrap-4-autocomplete.min.js" crossorigin="anonymous"></script>
+
 
 
 </head>
@@ -160,7 +165,7 @@
 										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/create" class="nav-link">Order Form</a>
 									</li>
 									<li class="nav-item">
-										<a href="#" class="nav-link">Saved Orders</a>
+										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/admin_save" class="nav-link">Saved Orders</a>
 									</li>
 									<li class="nav-item">
 										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/admin" class="nav-link">My Orders</a>
@@ -202,7 +207,7 @@
 								<ul class="nav sub-menu">
 
 									<li class="nav-item">
-										<!-- <?php $controllers = Yii::app()->controller->id . "/" . Yii::app()->controller->action->id; ?> -->
+										<!-- <?php $controllers = Yii::app()->controller->id.'/'.Yii::app()->controller->action->id; ?> -->
 										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcMgmtProductCat/admin" class="nav-link " id="test">Product Category</a>
 									</li>
 									<li class="nav-item">
@@ -536,10 +541,10 @@
 
 
 	<?php } else {
-		echo $content;
-	}
+    echo $content;
+}
 
-	?>
+    ?>
 
 
 	<!-- core:js -->
@@ -579,6 +584,7 @@
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/inputmask.js"></script>
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/typeahead.js"></script>
 
+	<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 	<script>
 	
 		$(document).on('click', '.nav-link.active', function() {

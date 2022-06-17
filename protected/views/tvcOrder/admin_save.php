@@ -53,7 +53,7 @@ $('.search-form form').submit(function(){
 					<tbody>
 							<?php
                             $i = 1;
-                            foreach ($model->search()->getData() as $val) { ?>
+                            foreach ($model->search_saved()->getData() as $val) { ?>
 								<tr>
 									<td><?php echo $i; ?></td>
 									<td><?php echo strtoupper($val['order_code']); ?></td>

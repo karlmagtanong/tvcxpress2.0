@@ -1,22 +1,47 @@
+<!-- <script src="https://cdn.jsdelivr.net/npm/datalist-css/dist/datalist-css.min.js"></script> -->
 <?php
 /* @var $this TvcOrderController */
 /* @var $model TvcOrder */
 /* @var $form CActiveForm */
 ?>
+<style>
+/* <datalist> and <option> styling */
+datalist {
+  position: absolute;
+  max-height: 20em;
+  border: 0 none;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+datalist option {
+  font-size: 0.8em;
+  padding: 0.3em 1em;
+  background-color: white;
+  cursor: pointer;
+}
+
+/* option active styles */
+datalist option:hover, datalist option:focus {
+  color: black;
+  background-color: orange;
+  outline: 0 none;
+}
+	</style>
 
 <div class="form">
 
-	<?php $form = $this->beginWidget('CActiveForm', array(
-		'id' => 'tvc-order-form',
-		// Please note: When you enable ajax validation, make sure the corresponding
-		// controller action is handling ajax validation correctly.
-		// There is a call to performAjaxValidation() commented in generated controller code.
-		// See class documentation of CActiveForm for details on this.
-		'enableAjaxValidation' => false,
-		'method' => 'post',
-		//This is very important when uploading files
-		'htmlOptions' => array('enctype' => 'multipart/form-data',),
-	)); ?>
+	<?php $form = $this->beginWidget('CActiveForm', [
+        'id' => 'tvc-order-form',
+        // Please note: When you enable ajax validation, make sure the corresponding
+        // controller action is handling ajax validation correctly.
+        // There is a call to performAjaxValidation() commented in generated controller code.
+        // See class documentation of CActiveForm for details on this.
+        'enableAjaxValidation' => false,
+        'method' => 'post',
+        //This is very important when uploading files
+        'htmlOptions' => ['enctype' => 'multipart/form-data'],
+    ]); ?>
 
 
 	<?php echo $form->errorSummary($model); ?>
@@ -30,43 +55,54 @@
 						<div class="col-sm-4">
 							<div class="mb-3">
 								<label class="form-label">Advertiser</label>
+								<!-- <?php echo $form->textField($model, 'advertiser', ['list' => 'list-advertiser', 'size' => 60,
+                                'maxlength' => 255, 'class' => 'form-control', 'autocomplete' => 'off', ]); ?>
+								<datalist id="list-advertiser">
+									<?php ?>
+								<option value="Brackets" label="by Adobe" />
+									<option value="Coda" label="by Panic" />
+									<option value="Dreamweaver" />
+									<option value="Espresso" />
+									<option value="jEdit" />
+									<option value="Komodo Edit" />
+								</datalist> -->
 								<?php
-								echo $form->dropDownList(
-									$model,
-									'advertiser',
-									CHtml::listData(TvcMgmtAdvertiser::model()->findAll(), 'name', 'name'),
-									array(
-										'class' => 'js-example-basic-single form-select', 'empty' => '-Select-',
-										// 'options' => array('3' => array('selected' => true))
-									)
-								);
-								?>
+                                echo $form->dropDownList(
+                                    $model,
+                                    'advertiser',
+                                    CHtml::listData(TvcMgmtAdvertiser::model()->findAll(), 'name', 'name'),
+                                    [
+                                        'class' => 'js-example-basic-single form-select', 'empty' => '-Select-',
+                                        // 'options' => array('3' => array('selected' => true))
+                                    ]
+                                );
+                                ?>
 							</div>
 						</div><!-- Col -->
 						<div class="col-sm-4">
 							<div class="mb-3">
 								<label class="form-label">ASC Brand</label>
 								<?php
-								echo $form->dropDownList(
-									$model,
-									'asc_brand',
-									CHtml::listData(TvcMgmtAscBrand::model()->findAll(), 'name', 'name'),
-									array('class' => 'js-example-basic-single form-select', 'empty' => '-Select-')
-								);
-								?>
+                                echo $form->dropDownList(
+                                    $model,
+                                    'asc_brand',
+                                    CHtml::listData(TvcMgmtAscBrand::model()->findAll(), 'name', 'name'),
+                                    ['class' => 'js-example-basic-single form-select', 'empty' => '-Select-']
+                                );
+                                ?>
 							</div>
 						</div><!-- Col -->
 						<div class="col-sm-4">
 							<div class="mb-3">
 								<label class="form-label">Product Category</label>
 								<?php
-								echo $form->dropDownList(
-									$model,
-									'product_category',
-									CHtml::listData(TvcMgmtProductCat::model()->findAll(), 'name', 'name'),
-									array('class' => 'js-example-basic-single form-select', 'empty' => '-Select-')
-								);
-								?>
+                                echo $form->dropDownList(
+                                    $model,
+                                    'product_category',
+                                    CHtml::listData(TvcMgmtProductCat::model()->findAll(), 'name', 'name'),
+                                    ['class' => 'js-example-basic-single form-select', 'empty' => '-Select-']
+                                );
+                                ?>
 							</div>
 						</div><!-- Col -->
 					</div><!-- Row -->
@@ -75,28 +111,28 @@
 						<div class="col-sm-4">
 							<div class="mb-3">
 								<label class="form-label">ASC Project Title</label>
-								<?php echo $form->textField($model, 'asc_project_title', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
+								<?php echo $form->textField($model, 'asc_project_title', ['size' => 60, 'maxlength' => 255, 'class' => 'form-control']); ?>
 							</div>
 						</div><!-- Col -->
 						<div class="col-sm-4">
 							<div class="mb-3">
 								<label class="form-label">Length (Seconds)</label>
 								<?php echo $form->dropDownList(
-									$model,
-									'length',
-									array(
-										'5' => '5 Sec',
-										'15' => '15 Sec',
-										'30' => '30 Sec',
-										'60' => '60 Sec',
-										'300' => '5 Min',
-										'600' => '10 Min',
-										'900' => '15 Min',
-										'1200' => '20 Min',
-										'1800' => '30 Min',
-									),
-									array('class' => 'form-control')
-								); ?>
+                                    $model,
+                                    'length',
+                                    [
+                                        '5' => '5 Sec',
+                                        '15' => '15 Sec',
+                                        '30' => '30 Sec',
+                                        '60' => '60 Sec',
+                                        '300' => '5 Min',
+                                        '600' => '10 Min',
+                                        '900' => '15 Min',
+                                        '1200' => '20 Min',
+                                        '1800' => '30 Min',
+                                    ],
+                                    ['class' => 'form-control']
+                                ); ?>
 							</div>
 						</div><!-- Col -->
 						<div class="col-sm-2">
@@ -108,7 +144,7 @@
 						<div class="col-sm-2">
 							<div class="mb-3">
 								<label class="form-label">Break Time</label>
-								<?php echo $form->textField($model, 'break_time_hh', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control', 'data-inputmask' => "'alias': 'datetime'", 'data-inputmask-inputformat' => 'hh:mm')); ?>
+								<?php echo $form->textField($model, 'break_time_hh', ['size' => 60, 'maxlength' => 255, 'class' => 'form-control', 'data-inputmask' => "'alias': 'datetime'", 'data-inputmask-inputformat' => 'hh:mm']); ?>
 							</div>
 						</div>
 					</div>
@@ -118,25 +154,25 @@
 							<div class="mb-3">
 								<label class="form-label">Producer Name</label>
 								<?php
-								echo $form->dropDownList(
-									$model,
-									'producer',
-									CHtml::listData(TvcMgmtProducer::model()->findAll(), 'name', 'name'),
-									array('class' => 'js-example-basic-single form-select', 'empty' => '-Select-')
-								);
-								?>
+                                echo $form->dropDownList(
+                                    $model,
+                                    'producer',
+                                    CHtml::listData(TvcMgmtProducer::model()->findAll(), 'name', 'name'),
+                                    ['class' => 'js-example-basic-single form-select', 'empty' => '-Select-']
+                                );
+                                ?>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="mb-3">
 								<label class="form-label">Producer Contact Number</label>
-								<?php echo $form->textField($model, 'producer_contact', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
+								<?php echo $form->textField($model, 'producer_contact', ['size' => 60, 'maxlength' => 255, 'class' => 'form-control']); ?>
 							</div>
 						</div><!-- Col -->
 						<div class="col-sm-4">
 							<div class="mb-3">
 								<label class="form-label">Producer Email Address</label>
-								<?php echo $form->textField($model, 'producer_email', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
+								<?php echo $form->textField($model, 'producer_email', ['size' => 60, 'maxlength' => 255, 'class' => 'form-control']); ?>
 							</div>
 						</div><!-- Col -->
 					</div>
@@ -145,25 +181,25 @@
 						<div class="col-sm-3">
 							<div class="mb-3">
 								<label class="form-label">Agency Company Name</label>
-								<?php echo $form->textField($model, 'agency_company', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
+								<?php echo $form->textField($model, 'agency_company', ['size' => 60, 'maxlength' => 255, 'class' => 'form-control']); ?>
 							</div>
 						</div>
 						<div class="col-sm-3">
 							<div class="mb-3">
 								<label class="form-label">Agency Contact Person</label>
-								<?php echo $form->textField($model, 'agency_contact_person', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
+								<?php echo $form->textField($model, 'agency_contact_person', ['size' => 60, 'maxlength' => 255, 'class' => 'form-control']); ?>
 							</div>
 						</div><!-- Col -->
 						<div class="col-sm-3">
 							<div class="mb-3">
 								<label class="form-label">Agency Contact No.</label>
-								<?php echo $form->textField($model, 'agency_contact_no', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
+								<?php echo $form->textField($model, 'agency_contact_no', ['size' => 60, 'maxlength' => 255, 'class' => 'form-control']); ?>
 							</div>
 						</div><!-- Col -->
 						<div class="col-sm-3">
 							<div class="mb-3">
 								<label class="form-label">Agency Contact Email</label>
-								<?php echo $form->textField($model, 'agency_email', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
+								<?php echo $form->textField($model, 'agency_email', ['size' => 60, 'maxlength' => 255, 'class' => 'form-control']); ?>
 							</div>
 						</div><!-- Col -->
 					</div>
@@ -183,19 +219,19 @@
 						<div class="col-sm-4">
 							<div class="mb-3">
 								<label class="form-label">CE Number</label>
-								<?php echo $form->textField($model, 'billing_ce', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
+								<?php echo $form->textField($model, 'billing_ce', ['size' => 60, 'maxlength' => 255, 'class' => 'form-control']); ?>
 							</div>
 						</div><!-- Col -->
 						<div class="col-sm-4">
 							<div class="mb-3">
 								<label class="form-label">Company</label>
-								<?php echo $form->textField($model, 'billing_company', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
+								<?php echo $form->textField($model, 'billing_company', ['size' => 60, 'maxlength' => 255, 'class' => 'form-control']); ?>
 							</div>
 						</div><!-- Col -->
 						<div class="col-sm-4">
 							<div class="mb-3">
 								<label class="form-label">Address</label>
-								<?php echo $form->textField($model, 'billing_address', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
+								<?php echo $form->textField($model, 'billing_address', ['size' => 60, 'maxlength' => 255, 'class' => 'form-control']); ?>
 							</div>
 						</div><!-- Col -->
 					</div>
@@ -204,19 +240,19 @@
 						<div class="col-sm-4">
 							<div class="mb-3">
 								<label class="form-label">Contact Person</label>
-								<?php echo $form->textField($model, 'billing_contact_person', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
+								<?php echo $form->textField($model, 'billing_contact_person', ['size' => 60, 'maxlength' => 255, 'class' => 'form-control']); ?>
 							</div>
 						</div><!-- Col -->
 						<div class="col-sm-4">
 							<div class="mb-3">
 								<label class="form-label">Contact Number</label>
-								<?php echo $form->textField($model, 'billing_contact_no', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
+								<?php echo $form->textField($model, 'billing_contact_no', ['size' => 60, 'maxlength' => 255, 'class' => 'form-control']); ?>
 							</div>
 						</div><!-- Col -->
 						<div class="col-sm-4">
 							<div class="mb-3">
 								<label class="form-label">Email</label>
-								<?php echo $form->textField($model, 'billing_contact_email', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
+								<?php echo $form->textField($model, 'billing_contact_email', ['size' => 60, 'maxlength' => 255, 'class' => 'form-control']); ?>
 							</div>
 						</div><!-- Col -->
 					</div>
@@ -225,13 +261,13 @@
 						<div class="col-sm-4">
 							<div class="mb-3">
 								<label class="form-label">TIN</label>
-								<?php echo $form->textField($model, 'billing_tin', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
+								<?php echo $form->textField($model, 'billing_tin', ['size' => 60, 'maxlength' => 255, 'class' => 'form-control']); ?>
 							</div>
 						</div><!-- Col -->
 						<div class="col-sm-4">
 							<div class="mb-3">
 								<label class="form-label">Business Style</label>
-								<?php echo $form->textField($model, 'billing_business_type', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
+								<?php echo $form->textField($model, 'billing_business_type', ['size' => 60, 'maxlength' => 255, 'class' => 'form-control']); ?>
 							</div>
 						</div><!-- Col -->
 						<div class="col-sm-4">
@@ -262,7 +298,7 @@
 				<div class="card-body">
 					<h6 class="card-title">Payment</h6>
 					<div class="row">
-						<div class="col-sm-4">
+						<div class="col-sm-8">
 							<div class="row mb-3">
 								<label class="form-label">Terms</label>
 								<div>
@@ -450,24 +486,26 @@
 					<div class="row mb-3" id="tv_platform">
 						<div class="row col-lg-12">
 							<?php
-							$cluster_data = TvcMgmtChannelCluster::model()->search()->getData();
-							foreach ($cluster_data as $val) {
-							?>
+                            $cluster_data = TvcMgmtChannelCluster::model()->search()->getData();
+                            foreach ($cluster_data as $val) {
+                                ?>
 								<div class="col">
-									<label class="custom-control-label" for="<?php echo $val['name'] ?>"><strong><?php echo $val['name'] ?></strong>
+									<label class="custom-control-label" for="<?php echo $val['name']; ?>"><strong><?php echo $val['name']; ?></strong>
 									</label><br>
 									<?php
-									$channel_data = TvcMgmtChannel::model()->get_channels($val['id'])->getData();
-									foreach ($channel_data as $val2) {
-									?>
-										<input type="checkbox" class="form-check-input" id="channel" name="channel[]" value="<?php echo $val2['id'] ?>">
+                                    $channel_data = TvcMgmtChannel::model()->get_channels($val['id'])->getData();
+                                foreach ($channel_data as $val2) {
+                                    ?>
+										<input type="checkbox" class="form-check-input" id="channel" name="channel[]" value="<?php echo $val2['id']; ?>">
 										<label class="form-check-label" for="channel">
-											<?php echo $val2['name'] ?>
+											<?php echo $val2['name']; ?>
 										</label><br>
 
-									<?php } ?>
+									<?php
+                                } ?>
 								</div>
-							<?php } ?>
+							<?php
+                            } ?>
 						</div>
 					</div>
 
@@ -488,26 +526,28 @@
 					<div class="row mb-3">
 						<div class="row col-lg-12">
 							<?php
-							$non_tran_data = TvcMgmtExtraServices::model()->search()->getData();
-							foreach ($non_tran_data as $val) {
-							?>
+                            $non_tran_data = TvcMgmtExtraServices::model()->search()->getData();
+                            foreach ($non_tran_data as $val) {
+                                ?>
 								<div class="col-sm-2 mb-3">
-									<label class="custom-control-label" for="<?php echo $val['name'] ?>"><strong><?php echo $val['name'] ?></strong>
+									<label class="custom-control-label" for="<?php echo $val['name']; ?>"><strong><?php echo $val['name']; ?></strong>
 									</label><br>
 									<?php
-									$non_tran_subcat_data = TvcMgmtExtraServicesSub::model()->get_subcat($val['id'])->getData();
-									foreach ($non_tran_subcat_data as $val2) {
-									?>
-										<input type="checkbox" class="form-check-input" id="non_tran" name="non_tran[id][]" value="<?php echo $val2['id'] ?>">
+                                    $non_tran_subcat_data = TvcMgmtExtraServicesSub::model()->get_subcat($val['id'])->getData();
+                                foreach ($non_tran_subcat_data as $val2) {
+                                    ?>
+										<input type="checkbox" class="form-check-input" id="non_tran" name="non_tran[id][]" value="<?php echo $val2['id']; ?>">
 										<label class="form-check-label" for="non_tran">
-											<?php echo $val2['sub_category'] ?>
+											<?php echo $val2['sub_category']; ?>
 										</label>
 										<strong> | Qty : </strong><input type="text" name="non_tran[qty][]" class="col-sm-2">
 										<br>
-									<?php } ?>
+									<?php
+                                } ?>
 								</div>
 
-							<?php } ?>
+							<?php
+                            } ?>
 						</div>
 					</div>
 				</div>
@@ -528,30 +568,30 @@
 						<div class="col-sm-3">
 							<div class="mb-3">
 								<label class="form-label">Company</label>
-								<?php echo $form->textField($model, 'delivery_company', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
+								<?php echo $form->textField($model, 'delivery_company', ['size' => 60, 'maxlength' => 255, 'class' => 'form-control']); ?>
 							</div>
 						</div><!-- Col -->
 						<div class="col-sm-3">
 							<div class="mb-3">
 								<label class="form-label">Contact Name</label>
-								<?php echo $form->textField($model, 'delivery_contact_name', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
+								<?php echo $form->textField($model, 'delivery_contact_name', ['size' => 60, 'maxlength' => 255, 'class' => 'form-control']); ?>
 							</div>
 						</div><!-- Col -->
 						<div class="col-sm-3">
 							<div class="mb-3">
 								<label class="form-label">Contact Number</label>
-								<?php echo $form->textField($model, 'delivery_number', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
+								<?php echo $form->textField($model, 'delivery_number', ['size' => 60, 'maxlength' => 255, 'class' => 'form-control']); ?>
 							</div>
 						</div><!-- Col -->
 						<div class="col-sm-3">
 							<div class="mb-3">
 								<label class="form-label">Email</label>
-								<?php echo $form->textField($model, 'delivery_email', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
+								<?php echo $form->textField($model, 'delivery_email', ['size' => 60, 'maxlength' => 255, 'class' => 'form-control']); ?>
 							</div>
 						</div><!-- Col -->
 					</div>
 					<div class="row mb-3">
-						<div class="col-sm-4">
+						<div class="col-sm-8">
 							<div class="row mb-3">
 								<div>
 									<div class="form-check form-check-inline">
@@ -627,7 +667,7 @@
 							</div>
 							<div class="col-sm-6 mb-3">
 								<label class="form-label">Share Time</label>
-								<?php echo $form->textField($model, 'share_time_hh', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control', 'data-inputmask' => "'alias': 'datetime'", 'data-inputmask-inputformat' => 'hh:mm')); ?>
+								<?php echo $form->textField($model, 'share_time_hh', ['size' => 60, 'maxlength' => 255, 'class' => 'form-control', 'data-inputmask' => "'alias': 'datetime'", 'data-inputmask-inputformat' => 'hh:mm']); ?>
 							</div>
 						</div>
 					</div>
@@ -678,7 +718,7 @@
 							</div>
 							<div class="col-sm-6 mb-3">
 								<label class="form-label">Upload Time</label>
-								<?php echo $form->textField($model, 'share_time_hh', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control', 'data-inputmask' => "'alias': 'datetime'", 'data-inputmask-inputformat' => 'hh:mm')); ?>
+								<?php echo $form->textField($model, 'share_time_hh', ['size' => 60, 'maxlength' => 255, 'class' => 'form-control', 'data-inputmask' => "'alias': 'datetime'", 'data-inputmask-inputformat' => 'hh:mm']); ?>
 
 							</div>
 						</div>
@@ -722,7 +762,7 @@
 								<div class="col-sm-4">
 									<div class="mb-3">
 										<label class="form-label">Reference Code</label>
-										<?php echo $form->textField($model, 'asc_reference_code', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control')); ?>
+										<?php echo $form->textField($model, 'asc_reference_code', ['size' => 60, 'maxlength' => 255, 'class' => 'form-control']); ?>
 									</div>
 								</div>
 								<div class="col-sm-4">
@@ -748,7 +788,7 @@
 							</div>
 							<div class="col-sm-6 mb-3">
 								<label class="form-label">Upload ASC Time</label>
-								<?php echo $form->textField($model, 'asc_time_hh', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control', 'data-inputmask' => "'alias': 'datetime'", 'data-inputmask-inputformat' => 'hh:mm')); ?>
+								<?php echo $form->textField($model, 'asc_time_hh', ['size' => 60, 'maxlength' => 255, 'class' => 'form-control', 'data-inputmask' => "'alias': 'datetime'", 'data-inputmask-inputformat' => 'hh:mm']); ?>
 							</div>
 						</div>
 					</div>
@@ -758,10 +798,15 @@
 	</div>
 
 
-
-	<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array('class' => 'btn btn-primary me-2')); ?>
-
+	<div class="col-lg-12">
+			<div class="row ms-2  d-grid gap-2">
+				<button type="button" class="btn btn-primary me-2" onclick="saveform()">SAVE</button>
+			<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', ['class' => 'btn btn-primary me-2']); ?>
+			</div>
+			</div>
 	<?php $this->endWidget(); ?>
+
+
 
 </div><!-- form -->
 
@@ -904,72 +949,46 @@
 
 	})
 
-	// $(document).ready(function() {
 
-	// 	advertiser()
+	$(function(){
+  $('#TvcOrder_advertiser').autocomplete();
+});
 
-	// 	function advertiser() {
-	// 		$.ajax({
-	// 			url: '<?php echo $this->createUrl('TvcOrder/advertiser'); ?>',
-	// 			type: 'POST',
-	// 			dataType: 'html',
-	// 			data: {
-	// 				'YII_CSRF_TOKEN': '<?php echo Yii::app()->request->csrfToken; ?>',
-	// 			},
-	// 			success: function(response, status, data) {
-
-	// 				var advertiser = response;
-
-	// 				var advertiser = new Bloodhound({
-	// 					datumTokenizer: Bloodhound.tokenizers.whitespace,
-	// 					queryTokenizer: Bloodhound.tokenizers.whitespace,
-	// 					local: advertiser
-	// 				});
-
-	// 				$('.aaa').typeahead({
-	// 					hint: true,
-	// 					highlight: true,
-	// 					/* Enable substring highlighting */
-	// 					minLength: 1 /* Specify minimum characters required for showing result */
-	// 				}, {
-	// 					name: 'cars',
-	// 					source: cars
-	// 				});
-
-	// 				console.log("response" + response)
-	// 			},
-	// 			error: function(xhr, status, error) {
-	// 				alert("Error Update")
-	// 			}
-	// 		});
-	// 	}
+function saveform(){
 
 
 
-	// 	// Defining the local dataset
+alert("insert")
+	
+	$.ajax({
+        url: '<?php echo $this->createUrl('TvcOrder/Save'); ?>',
+        type: 'POST',
+        data: new FormData(document.getElementById("tvc-order-form")),
+		contentType: false,
+            cache: false,
+            processData:false,
+        success: function(response, status, data){
 
-	// 	var cars2 = ['Audi', 'BMW', 'Bugatti', 'Ferraris', 'Ford', 'Lamborghini', 'Mercedes Benz', 'Porsche', 'Rolls-Royce', 'Volkswagen'];
-
-	// 	// Constructing the suggestion engine
-	// 	var cars = new Bloodhound({
-	// 		datumTokenizer: Bloodhound.tokenizers.whitespace,
-	// 		queryTokenizer: Bloodhound.tokenizers.whitespace,
-	// 		local: cars
-	// 	});
-
-
-
-	// 	// Initializing the typeahead
-	// 	$('.aaa').typeahead({
-	// 		hint: true,
-	// 		highlight: true,
-	// 		/* Enable substring highlighting */
-	// 		minLength: 1 /* Specify minimum characters required for showing result */
-	// 	}, {
-	// 		name: 'cars',
-	// 		source: cars
-	// 	});
+			var url = "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/view&id=" + response;
+location.href = url;
+console.log("response" + response)
+		},
+            error: function(xhr, status, error){
+					console.log(xhr.responseText);
+                    console.log(xhr.responseText.Message);
+                    console.log(status);
+                    console.log(error);
+                    var jsonResponse = JSON.parse(xhr.responseText);
+                    console.log(jsonResponse);
+					//$("#errorDialog").dialog("open");
 
 
-	// });
+
+            }
+    });
+
+
+}
+
+
 </script>
