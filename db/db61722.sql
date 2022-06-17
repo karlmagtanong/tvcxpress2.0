@@ -618,7 +618,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Dumping data for table tvcxpress_db.users: ~1 rows (approximately)
+-- Dumping data for table tvcxpress_db.users: ~0 rows (approximately)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `name`, `username`, `password`, `password_hash`, `user_role`, `created_at`) VALUES
 	(1, 'Admin', 'admin', '123456', 'e10adc3949ba59abbe56e057f20f883e', 1, '2022-06-08');
