@@ -38,7 +38,7 @@
 	<link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/images/favicon.png" />
 
 	<link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/vendors/select2/select2.min.css">
-	
+
 	<link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/vendors/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css">
 
 
@@ -174,7 +174,7 @@
 							</div>
 						</li>
 						<li class="nav-item">
-							<a href="dashboard.html" class="nav-link">
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/costestimate" class="nav-link">
 								<i class="link-icon" data-feather="map-pin"></i>
 								<span class="link-title">Cost Estimate</span>
 							</a>
@@ -207,7 +207,7 @@
 								<ul class="nav sub-menu">
 
 									<li class="nav-item">
-										<!-- <?php $controllers = Yii::app()->controller->id.'/'.Yii::app()->controller->action->id; ?> -->
+										<!-- <?php $controllers = Yii::app()->controller->id . '/' . Yii::app()->controller->action->id; ?> -->
 										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcMgmtProductCat/admin" class="nav-link " id="test">Product Category</a>
 									</li>
 									<li class="nav-item">
@@ -541,10 +541,10 @@
 
 
 	<?php } else {
-    echo $content;
-}
+		echo $content;
+	}
 
-    ?>
+	?>
 
 
 	<!-- core:js -->
@@ -586,7 +586,6 @@
 
 	<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 	<script>
-	
 		$(document).on('click', '.nav-link.active', function() {
 			$('.nav .nav-item').removeClass('active');
 			var $this = $(this);

@@ -32,10 +32,11 @@ class Users extends CActiveRecord
 		return array(
 			array('user_role', 'numerical', 'integerOnly'=>true),
 			array('name, username, password, password_hash', 'length', 'max'=>50),
+			array('agency_name, agency_contact, agency_contact_no, agency_email', 'length', 'max'=>255),
 			array('created_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, username, password, password_hash, user_role, created_at', 'safe', 'on'=>'search'),
+			array('id, name, username, password, password_hash, user_role, created_at,agency_name, agency_contact, agency_contact_no, agency_email', 'safe', 'on'=>'search'),
 		);
 	}
 

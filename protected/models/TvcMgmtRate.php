@@ -112,10 +112,9 @@ class TvcMgmtRate extends CActiveRecord
 
 	public function get_rate($adv, $agen, $len)
 	{
-		$advname = TvcMgmtAdvertiser::model()->get_name($adv);
-
-		if ($this->get_advertiser($advname) != "") {
-			$sql = $this->model()->findBySql('SELECT amount from tvc_mgmt_rate where length_from <= "' . $len . '" and length_to >= "' . $len . '" and type = 2 and name = "' . $advname . '"');
+// echo $adv;
+		if ($this->get_advertiser($adv) != "") {
+			$sql = $this->model()->findBySql('SELECT amount from tvc_mgmt_rate where length_from <= "' . $len . '" and length_to >= "' . $len . '" and type = 2 and name = "' . $adv . '"');
 			return $sql->amount;
 		} else if ($this->get_agency($agen) != "") {
 			$sql = $this->model()->findBySql('SELECT amount from tvc_mgmt_rate where length_from <= "' . $len . '" and length_to >= "' . $len . '" and type = 3 and name = "' . $agen . '"');

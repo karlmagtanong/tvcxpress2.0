@@ -40,7 +40,7 @@ class TvcOrderController extends Controller
             ],
             [
                 'allow', // allow admin user to perform 'admin' and 'delete' actions
-                'actions' => ['admin', 'admin_save', 'delete'],
+                'actions' => ['admin', 'admin_save', 'delete', 'costestimate', 'Compute_estimate'],
                 'users' => ['@'],
             ],
             [
@@ -106,6 +106,107 @@ class TvcOrderController extends Controller
         ]);
     }
 
+    public function actionCostestimate()
+    {
+        $model = new TvcOrder();
+
+        $this->render('costestimate', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionCompute_estimate()
+    {
+        $servicetype = $_POST['TvcOrder']['service_type'];
+        $result = array();
+        $result['servicetype'] = $servicetype;
+
+
+        if ($servicetype == 1) {
+            echo "<h3>TRANSMISSION - TV</h3>";
+            echo '<table class="table align-items-center" style="font-size:10px;padding:1px;border-spacing: 5px;">
+            <thead class="thead-light">
+                <tr style="background-color: ##8898aa;">
+                    <th>PARTICULARS</th>
+                    <th>LENGTH</th>
+                    <th>AMOUNT</th>
+                </tr>
+            </thead>
+            <br>
+            <tbody>';
+            $total = 0.0;
+            foreach (array_unique($_POST['channel']) as $val) {
+                $total += TvcMgmtRate::model()->get_rate($_POST['TvcOrder']['advertiser'], $_POST['TvcOrder']['agency_company'], $_POST['TvcOrder']['length']);
+                $c = 0;
+                echo '<tr>
+                <td class="text-start"><b>' . TvcMgmtChannelCluster::model()->get_name($val) . '</b></td>
+                <td>' . $_POST['TvcOrder']['length'] . '</td>
+                <td>' . TvcMgmtRate::model()->get_rate($_POST['TvcOrder']['advertiser'], $_POST['TvcOrder']['agency_company'], $_POST['TvcOrder']['length']) . '</td></tr>';
+
+                ++$c;
+            }
+            echo '</tbody>
+            <tfoot>
+									<tr>
+										<td class="text-end"><b>SUB-TOTAL</b></td>
+										<td></td>
+										<td style="font-size:18px;color:green"><b>' . number_format($total, 2) . '</b></td>
+									</tr>
+                                    <tr>
+                                    <td></td>
+                                    <td></td>
+                                        <td ><span style="color:red;text-align:right">*NOTE: Subject to 12% VAT</span></td>
+                                    </tr>
+								</tfoot>
+             </table>';
+        }
+
+        if ($servicetype == 2) {
+            echo "<h3>NON-TRANSMISSION</h3>";
+            echo '<table class="table align-items-center" style="font-size:10px;padding:1px;border-spacing: 5px;">
+            <thead class="thead-light">
+                <tr style="background-color: ##8898aa;">
+                    <th>PARTICULARS</th>
+                    <th>QTY</th>
+					<th>UNIT PRICE</th>
+					<th>AMOUNT</th>
+                </tr>
+            </thead>
+            <br>
+            <tbody>';
+            $n = 0;
+            $total = 0.0;
+            foreach ($_POST['non_tran']['id'] as $val) {
+                $total += (TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]) * $_POST['non_tran']['qty'][$n]);
+                echo '<tr>
+                <td class="text-start"><b>' . TvcMgmtExtraServicesSub::model()->get_name($_POST['non_tran']['id'][$n]) . '</b></td>
+                <td>' . $_POST['non_tran']['qty'][$n] . '</td>
+                <td>' . number_format(TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]),2 ) . '</td>
+                <td>' . number_format(TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]) * $_POST['non_tran']['qty'][$n] ,2 ). '</td></tr>';
+                ++$n;
+            }
+            echo '</tbody>
+            <tfoot>
+            <tr>
+            <td></td>
+                <td class="text-end"><b>SUB-TOTAL</b></td>
+                <td></td>
+                <td style="font-size:18px;color:green"><b>' . number_format($total, 2) . '</b></td>
+            </tr>
+            <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+                <td ><span style="color:red;text-align:right">*NOTE: Subject to 12% VAT</span></td>
+            </tr>
+        </tfoot>
+             </table>';
+        }
+
+        // echo json_encode($result);
+
+    }
+
     /**
      * Creates a new model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -121,7 +222,7 @@ class TvcOrderController extends Controller
             $uniqid = uniqid();
 
             $model->attributes = $_POST['TvcOrder'];
-            $model->order_code = 'ORDER-'.strtoupper(uniqid());
+            $model->order_code = 'ORDER-' . strtoupper(uniqid());
             $model->break_date = $_POST['TvcOrder']['break_date'] == '' ? null : $_POST['TvcOrder']['break_date'];
             $model->share_date = $_POST['TvcOrder']['share_date'] == '' ? null : $_POST['TvcOrder']['share_date'];
             $model->asc_date = $_POST['TvcOrder']['asc_date'] == '' ? null : $_POST['TvcOrder']['asc_date'];
@@ -177,7 +278,7 @@ class TvcOrderController extends Controller
                 foreach ($_FILES['po_file']['name'] as $val) {
                     $targetDir = 'attachments/upload_pdf/';
                     $fileName = basename($_FILES['po_file']['name'][$po]);
-                    $targetFilePath = $targetDir.$fileName;
+                    $targetFilePath = $targetDir . $fileName;
                     $size = filesize($_FILES['po_file']['tmp_name']); // bytes
                     $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
 
@@ -205,7 +306,7 @@ class TvcOrderController extends Controller
                 foreach ($_FILES['material_file']['name'] as $val) {
                     $targetDir = 'attachments/materials/';
                     $fileName = basename($_FILES['material_file']['name'][$po]);
-                    $targetFilePath = $targetDir.$fileName;
+                    $targetFilePath = $targetDir . $fileName;
                     $size = filesize($_FILES['material_file']['tmp_name']); // bytes
                     $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
 
@@ -233,7 +334,7 @@ class TvcOrderController extends Controller
                 foreach ($_FILES['asc_file']['name'] as $val) {
                     $targetDir = 'attachments/asc_clearance/';
                     $fileName = basename($_FILES['asc_file']['name'][$po]);
-                    $targetFilePath = $targetDir.$fileName;
+                    $targetFilePath = $targetDir . $fileName;
                     $size = filesize($_FILES['asc_file']['tmp_name']); // bytes
                     $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
 
@@ -283,7 +384,7 @@ class TvcOrderController extends Controller
             $uniqid = uniqid();
 
             $model->attributes = $_POST['TvcOrder'];
-            $model->order_code = 'ORDER-'.strtoupper(uniqid());
+            $model->order_code = 'ORDER-' . strtoupper(uniqid());
             $model->break_date = $_POST['TvcOrder']['break_date'] == '' ? null : $_POST['TvcOrder']['break_date'];
             $model->share_date = $_POST['TvcOrder']['share_date'] == '' ? null : $_POST['TvcOrder']['share_date'];
             $model->asc_date = $_POST['TvcOrder']['asc_date'] == '' ? null : $_POST['TvcOrder']['asc_date'];
@@ -339,7 +440,7 @@ class TvcOrderController extends Controller
                 foreach ($_FILES['po_file']['name'] as $val) {
                     $targetDir = 'attachments/upload_pdf/';
                     $fileName = basename($_FILES['po_file']['name'][$po]);
-                    $targetFilePath = $targetDir.$fileName;
+                    $targetFilePath = $targetDir . $fileName;
                     $size = filesize($_FILES['po_file']['tmp_name']); // bytes
                     $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
 
@@ -353,7 +454,7 @@ class TvcOrderController extends Controller
                         $attachment->type = 1;
                         $attachment->save();
 
-                    // echo 'success';
+                        // echo 'success';
                     } else {
                         // echo 'error asdasd';
                     }
@@ -367,7 +468,7 @@ class TvcOrderController extends Controller
                 foreach ($_FILES['material_file']['name'] as $val) {
                     $targetDir = 'attachments/materials/';
                     $fileName = basename($_FILES['material_file']['name'][$po]);
-                    $targetFilePath = $targetDir.$fileName;
+                    $targetFilePath = $targetDir . $fileName;
                     $size = filesize($_FILES['material_file']['tmp_name']); // bytes
                     $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
 
@@ -381,7 +482,7 @@ class TvcOrderController extends Controller
                         $attachment->type = 2;
                         $attachment->save();
 
-                    // echo 'success';
+                        // echo 'success';
                     } else {
                         // echo 'error asdasd';
                     }
@@ -395,7 +496,7 @@ class TvcOrderController extends Controller
                 foreach ($_FILES['asc_file']['name'] as $val) {
                     $targetDir = 'attachments/asc_clearance/';
                     $fileName = basename($_FILES['asc_file']['name'][$po]);
-                    $targetFilePath = $targetDir.$fileName;
+                    $targetFilePath = $targetDir . $fileName;
                     $size = filesize($_FILES['asc_file']['tmp_name']); // bytes
                     $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
 
@@ -409,7 +510,7 @@ class TvcOrderController extends Controller
                         $attachment->type = 3;
                         $attachment->save();
 
-                    // echo 'success';
+                        // echo 'success';
                     } else {
                         // echo 'error asdasd';
                     }
@@ -518,7 +619,7 @@ class TvcOrderController extends Controller
                 foreach ($_FILES['po_file']['name'] as $val) {
                     $targetDir = 'attachments/upload_pdf/';
                     $fileName = basename($_FILES['po_file']['name'][$po]);
-                    $targetFilePath = $targetDir.$fileName;
+                    $targetFilePath = $targetDir . $fileName;
                     $size = filesize($_FILES['po_file']['tmp_name']); // bytes
                     $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
 
@@ -546,7 +647,7 @@ class TvcOrderController extends Controller
                 foreach ($_FILES['material_file']['name'] as $val) {
                     $targetDir = 'attachments/materials/';
                     $fileName = basename($_FILES['material_file']['name'][$po]);
-                    $targetFilePath = $targetDir.$fileName;
+                    $targetFilePath = $targetDir . $fileName;
                     $size = filesize($_FILES['material_file']['tmp_name']); // bytes
                     $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
 
@@ -574,7 +675,7 @@ class TvcOrderController extends Controller
                 foreach ($_FILES['asc_file']['name'] as $val) {
                     $targetDir = 'attachments/asc_clearance/';
                     $fileName = basename($_FILES['asc_file']['name'][$po]);
-                    $targetFilePath = $targetDir.$fileName;
+                    $targetFilePath = $targetDir . $fileName;
                     $size = filesize($_FILES['asc_file']['tmp_name']); // bytes
                     $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
 
