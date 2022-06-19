@@ -1,4 +1,4 @@
-<h4 class="card-title text-center">SUMMARY OF ORDER</h4>
+<h4 class="card-title text-center">VIEW ORDER</h4>
 
 
 <div class="row">

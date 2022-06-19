@@ -43,9 +43,6 @@ $('.search-form form').submit(function(){
 								<th>ASC PROJECT TITLE</th>
 								<th>LENGTH</th>
 								<th>SERVICE</th>
-								<th>MATERIAL</th>
-								<th>MATERIAL STATUS</th>
-								<th>ASC CLEARANCE STATUS</th>
 								<th>DATE</th>
 								<th>ACTION</th>
 							</tr>
@@ -60,17 +57,14 @@ $('.search-form form').submit(function(){
 									<td><?php echo strtoupper($val['advertiser']); ?></td>
 									<td><?php echo strtoupper($val['asc_brand']); ?></td>
 									<td><?php echo strtoupper($val['asc_project_title']); ?></td>
-									<td><?php echo strtoupper($val['length']); ?></td>
-									<td><?php echo strtoupper($val['service_type']); ?></td>
-									<td><?php echo strtoupper($val['share_type']); ?></td>
-									<td><?php echo strtoupper($val['share_type']); ?></td>
-									<td><?php echo strtoupper($val['asc_upload']); ?></td>
+									<td><?php echo strtoupper($val['length']); ?> sec</td>
+									<td><?php echo strtoupper($val['service_type'] == 1 ? "Transmission" : "Non-Transmission"); ?></td>
 									<td><?php echo strtoupper($val['created_at']); ?></td>
 									<td>
-										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/update&id=<?php echo $val['id']; ?>" type="button" class="btn btn-primary btn-icon btn-xs">
+										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/updatesaved&id=<?php echo $val['id']; ?>" type="button" class="btn btn-primary btn-icon btn-xs">
 											<i data-feather="edit"></i>
 										</a>
-										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/view&id=<?php echo $val['id']; ?>" type="button" class="btn btn-primary btn-icon btn-xs">
+										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/viewsaved&id=<?php echo $val['id']; ?>" type="button" class="btn btn-primary btn-icon btn-xs">
 											<i data-feather="eye"></i>
 										</a>
 									</td>

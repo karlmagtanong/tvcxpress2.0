@@ -366,7 +366,7 @@
 		</div>
 		<div class="col-lg-12">
 			<div class="row ms-2  d-grid gap-2">
-				<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/admin" type="button" class="btn btn-primary" >PROCEED TO MY ORDERS</a>
+				<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/admin_save" type="button" class="btn btn-primary" >GO BACK TO SAVED ORDERS</a>
 			</div>
 		</div>
 	</div>

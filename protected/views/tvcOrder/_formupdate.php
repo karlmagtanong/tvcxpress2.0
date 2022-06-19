@@ -476,7 +476,8 @@
                                     $channel_data = TvcMgmtChannel::model()->get_channels($val['id'])->getData();
                                 foreach ($channel_data as $val2) {
                                     ?>
-										<input type="checkbox" class="form-check-input" id="channel" name="channel[]" value="<?php echo $val2['id']; ?>" <?php echo TvcOrderChannel::model()->get_channel_selected($val2['id'], $model->order_id) != '' ? 'checked' : ''; ?>>
+										<input type="checkbox" class="form-check-input" id="channel" name="channel[]" value="<?php echo $val2['id']; ?>" 
+										<?php echo TvcOrderChannel::model()->get_channel_selected($val2['id'], $model->order_id) != '' ? 'checked' : ''; ?>>
 										<label class="form-check-label" for="channel">
 											<!-- <?php echo TvcOrderChannel::model()->get_channel_selected($val2['id'], $model->order_id); ?> -->
 											<?php echo $val2['name']; ?>
@@ -517,11 +518,12 @@
                                     $non_tran_subcat_data = TvcMgmtExtraServicesSub::model()->get_subcat($val['id'])->getData();
                                 foreach ($non_tran_subcat_data as $val2) {
                                     ?>
-										<input type="checkbox" class="form-check-input" id="non_tran" name="non_tran[id][]" value="<?php echo $val2['id']; ?>">
+										<input type="checkbox" class="form-check-input" id="non_tran" name="non_tran[id][]" value="<?php echo $val2['id']; ?>"
+										<?php echo TvcOrderServices::model()->get_service_selected($val2['id'], $model->order_id) != '' ? 'checked' : ''; ?>>
 										<label class="form-check-label" for="non_tran">
 											<?php echo $val2['sub_category']; ?>
 										</label>
-										<strong> | Qty : </strong><input type="text" name="non_tran[qty][]" class="col-sm-2">
+										<strong> | Qty : </strong><input type="text" name="non_tran[qty][]" class="col-sm-2" value="<?php echo TvcOrderServices::model()->get_service_selected_qty($val2['id'], $model->order_id) ?>">
 										<br>
 									<?php
                                 } ?>
@@ -835,7 +837,7 @@
 		</div>
 		<div class="col-lg-12">
 			<div class="row ms-2  d-grid gap-2">
-			<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', ['class' => 'btn btn-primary me-2']); ?>
+			<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'UPDATE ORDER', ['class' => 'btn btn-primary me-2']); ?>
 			</div>
 		</div>
 	</div>

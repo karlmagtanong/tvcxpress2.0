@@ -18,37 +18,54 @@ $this->breadcrumbs = array(
 
 	}
 
-	.main-wrapper {
+	/* .main-wrapper {
 		display: flex;
 		background-color: #fb6340 !important;
-	}
+	} */
 
 	.errorMessage {
 		color: red !important;
-		font-size:12px;
+		font-size: 12px;
+	}
+
+	/* 
+	.bg-gradient-warning {
+		background: linear-gradient(87deg, #fb6340 0, #fbb140 100%) !important;
+	} */
+
+	#example1 {
+
+		background: url("http://tvcxpress2.0_yii.test/images/bg3.jpg") no-repeat center center fixed !important;
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+
 	}
 </style>
 
-
 <div class="main-wrapper">
 	<div class="page-wrapper full-page">
-		<div class="page-content d-flex align-items-center justify-content-center">
-
+		<div class="page-content d-flex align-items-center ">
 			<div class="row w-100 mx-0 auth-page">
-				<div class="col-md-8 col-xl-6 mx-auto">
+				<div class="col-md-8 col-lg-6 mx-auto">
+
 					<div class="card">
 						<div class="row">
 							<div class="col-md-4 pe-md-0">
-								<div class="auth-side-wrapper">
-								<!-- <img src="<?php echo Yii::app()->request->baseUrl; ?>/images/bg2.jpg" width="100%"> -->
-
-								</div>
 							</div>
 							<div class="col-md-8 ps-md-0">
 								<div class="auth-form-wrapper px-4 py-5">
-									<img src="<?php echo Yii::app()->request->baseUrl; ?>/images/Capture.png" width="30%">
-									<br><br>
-									<h5 class="text-muted fw-normal mb-4">Welcome back! Log in to your account.</h5>
+									<img src="<?php echo Yii::app()->request->baseUrl; ?>/images/Capture.png" width="50%">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+
+							<div class="col-md-12 ps-md-0">
+								<div class="auth-form-wrapper px-4 py-10">
+									<h2 class="text-muted fw-normal mb-4"><strong>WELCOME BACK!</strong></h2>
+									<p class="text-muted fw-normal mb-4">Log in to your account.</p>
 
 
 									<div class="form">

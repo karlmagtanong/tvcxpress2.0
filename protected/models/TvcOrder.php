@@ -405,6 +405,12 @@ class TvcOrder extends CActiveRecord
         }
     }
 
+    public function count()
+    {
+        $sql = $this->model()->findBySql('SELECT COUNT(*) as order_id FROM tvc_order a WHERE a.`type` = 1');
+
+        return sprintf('%04d',$sql['order_id']);
+    }
     /**
      * Returns the static model of the specified AR class.
      * Please note that you should have this exact method in all your CActiveRecord descendants!

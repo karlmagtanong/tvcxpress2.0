@@ -182,11 +182,16 @@
 								</a>
 							<?php } ?>
 						</li>
-						<li class="nav-item">
-							<a href="dashboard.html" class="nav-link">
-								<i class="link-icon" data-feather="trending-up"></i>
-								<span class="link-title">Traffic Dashboard</span>
-							</a>
+						<li class="nav-item" onclick="js:routes('tvcTraffic/admin')">
+							<?php if ($paths == "tvcTraffic/admin") { ?>
+								<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcTraffic/admin" class="nav-link">
+									<i class="link-icon" data-feather="trending-up"></i> <span class="link-title">Traffic Dashboard</span></a>
+							<?php } else { ?>
+								<a href="#" class="nav-link">
+									<i class="link-icon" data-feather="trending-up"></i>
+									<span class="link-title">Traffic Dashboard</span>
+								</a>
+							<?php } ?>
 						</li>
 						<li class="nav-item">
 							<a href="dashboard.html" class="nav-link">

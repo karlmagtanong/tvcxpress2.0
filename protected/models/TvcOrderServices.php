@@ -116,6 +116,20 @@ class TvcOrderServices extends CActiveRecord
 			'criteria' => $criteria,
 		));
 	}
+
+	public function get_service_selected($id, $orderid)
+	{
+		$sql = $this::model()->findByAttributes(['sub_cat_id' => $id, 'order_id' => $orderid]);
+
+		return $sql->id;
+	}
+
+	public function get_service_selected_qty($id, $orderid)
+	{
+		$sql = $this::model()->findByAttributes(['sub_cat_id' => $id, 'order_id' => $orderid]);
+
+		return $sql->qty;
+	}
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
