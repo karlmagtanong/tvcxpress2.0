@@ -39,7 +39,7 @@ class TvcTrafficController extends Controller
 			),
 			array(
 				'allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions' => array('admin', 'delete', 'updateSched', 'updateStatus'),
+				'actions' => array('admin', 'delete', 'updateSched', 'updateStatus', 'updateStatuss'),
 				'users' => array('@'),
 			),
 			array(
@@ -49,6 +49,121 @@ class TvcTrafficController extends Controller
 		);
 	}
 
+	public function actionUpdateStatuss()
+	{
+		$code = TvcOrder::model()->get_code($_POST['code']);
+
+		// echo $code;
+		Yii::app()->db
+			->createCommand('UPDATE tvc_traffic SET status = "' . $_POST['statset'] . '" WHERE order_code=:order_code')
+			->bindValues([':order_code' => $code])
+			->execute();
+
+		if ($_POST['statset'] == 3) {
+			$this->emailtrafficrt($code);
+		}
+	}
+
+
+	public function emailtrafficissue($code, $form)
+	{
+
+		$datas = TvcOrder::model()->findByAttributes(array('order_code' => $code, 'type' => 1));
+		$service = ($datas['service_type'] == 1 ? "Transmission" : "Non-Transmission");
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, 'https://api.sendgrid.com/v3/mail/send');
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, '{
+          "from" :{
+            "email": "karl.magtanong@solutiontechnologist.com",
+            "name": "TvcXpress Manila"
+            },
+            "personalizations": [{
+              "to" : [{
+                "email" : "' . $datas['agency_email'] . '"
+                }],
+                "content" : "text/html" ,
+                "dynamic_template_data":{
+
+                    "subject" : "TRAFFIC NOTIFICATION #' . $datas['order_code'] . '",
+                      "order" : "' . $datas['order_code'] . '",
+                      "asc_brand" : "' . $datas['asc_brand'] . '",
+                      "title" : "' . $datas['asc_project_title'] . '",
+                      "len" : "' . $datas['length'] . '",
+                      "service" : "' . $service . '",
+					  "orderissue":"' . $form . '"
+
+                   }
+                }],
+                "template_id":"d-f17b0231c333472b8ee156fdeab91a60"
+            }');
+
+
+		$headers = array();
+		$headers[] = 'Authorization: Bearer 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';
+		$headers[] = 'Content-Type: application/json';
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+		$result = curl_exec($ch);
+		if (curl_errno($ch)) {
+			echo 'Error:' . curl_error($ch);
+		}
+
+		echo 'Error:' . curl_error($ch);
+		curl_close($ch);
+	}
+
+	public function emailtrafficrt($code)
+	{
+
+		$datas = TvcOrder::model()->findByAttributes(array('order_code' => $code, 'type' => 1));
+		$service = ($datas['service_type'] == 1 ? "Transmission" : "Non-Transmission");
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, 'https://api.sendgrid.com/v3/mail/send');
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, '{
+          "from" :{
+            "email": "karl.magtanong@solutiontechnologist.com",
+            "name": "TvcXpress Manila"
+            },
+            "personalizations": [{
+              "to" : [{
+                "email" : "' . $datas['agency_email'] . '"
+                }],
+                "content" : "text/html" ,
+                "dynamic_template_data":{
+
+                    "subject" : "TRAFFIC NOTIFICATION #' . $datas['order_code'] . '",
+                      "order" : "' . $datas['order_code'] . '",
+                      "asc_brand" : "' . $datas['asc_brand'] . '",
+                      "title" : "' . $datas['asc_project_title'] . '",
+                      "len" : "' . $datas['length'] . '",
+                      "service" : "' . $service . '"
+
+                   }
+                }],
+                "template_id":"d-ade7162434064728ab0af237cfb311f9"
+            }');
+
+
+		$headers = array();
+		$headers[] = 'Authorization: Bearer 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';
+		$headers[] = 'Content-Type: application/json';
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+		$result = curl_exec($ch);
+		if (curl_errno($ch)) {
+			echo 'Error:' . curl_error($ch);
+		}
+
+		echo 'Error:' . curl_error($ch);
+		curl_close($ch);
+	}
+
 	public function actionUpdateStatus()
 	{
 		if ($_POST['statset'] == 1) {
@@ -56,18 +171,33 @@ class TvcTrafficController extends Controller
 				->createCommand('UPDATE tvc_traffic SET order_form = "' . $_POST['stat'] . '" WHERE order_code=:order_code')
 				->bindValues([':order_code' => $_POST['code']])
 				->execute();
+
+			if ($_POST['stat'] == 3) {
+				$form = "ORDER FORM";
+				$this->emailtrafficissue($_POST['code'], $form);
+			}
 		}
 		if ($_POST['statset'] == 2) {
 			Yii::app()->db
 				->createCommand('UPDATE tvc_traffic SET material = "' . $_POST['stat'] . '" WHERE order_code=:order_code')
 				->bindValues([':order_code' => $_POST['code']])
 				->execute();
+
+			if ($_POST['stat'] == 5) {
+				$form = "MATERIAL";
+				$this->emailtrafficissue($_POST['code'], $form);
+			}
 		}
 		if ($_POST['statset'] == 3) {
 			Yii::app()->db
 				->createCommand('UPDATE tvc_traffic SET asc_clearance = "' . $_POST['stat'] . '" WHERE order_code=:order_code')
 				->bindValues([':order_code' => $_POST['code']])
 				->execute();
+
+			if ($_POST['stat'] == 3) {
+				$form = "ASC CLEARANCE";
+				$this->emailtrafficissue($_POST['code'], $form);
+			}
 		}
 		if ($_POST['statset'] == 4) {
 			Yii::app()->db
@@ -80,6 +210,10 @@ class TvcTrafficController extends Controller
 				->createCommand('UPDATE tvc_traffic SET status = "' . $_POST['stat'] . '" WHERE order_code=:order_code')
 				->bindValues([':order_code' => $_POST['code']])
 				->execute();
+
+			if ($_POST['stat'] == 3) {
+				$this->emailtrafficrt($_POST['code']);
+			}
 		}
 	}
 

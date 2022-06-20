@@ -499,8 +499,8 @@
 									$channel_data = TvcMgmtChannel::model()->get_channels($val['id'])->getData();
 									foreach ($channel_data as $val2) {
 									?>
-										<input type="checkbox" class="form-check-input" id="channel" name="channel[]" value="<?php echo $val2['id']; ?>">
-										<label class="form-check-label" for="channel">
+										<input type="checkbox" class="form-check-input" id="<?php echo $val2['id']; ?>" name="channel[]" value="<?php echo $val2['id']; ?>">
+										<label class="form-check-label" for="<?php echo $val2['id']; ?>">
 											<?php echo $val2['name']; ?>
 										</label><br>
 

@@ -1,5 +1,6 @@
 <h4 class="card-title text-center">VIEW ORDER</h4>
 
+<?php $stat = TvcTraffic::model()->get_final_stat(TvcOrder::model()->get_code($_GET['id'])); ?>
 
 <div class="row">
 	<div class="col-md-1">
@@ -86,12 +87,12 @@
 					<div class="row mb-3">
 						<div class="col-lg-2 ps-0"><b>Uploaded File:</b></div>
 						<div class="col-lg-5 pe-0">
-						<?php $po = TvcOrderAttachment::model()->get_po($model->order_id)->getData();
+							<?php $po = TvcOrderAttachment::model()->get_po($model->order_id)->getData();
 
-                        foreach ($po as $val) { ?>
-						<a href="<?php echo $val['path']; ?>" target="_blank"><?php echo $val['filename']; ?></a><br>
+							foreach ($po as $val) { ?>
+								<a href="<?php echo $val['path']; ?>" target="_blank"><?php echo $val['filename']; ?></a><br>
 
-						<?php } ?>
+							<?php } ?>
 
 						</div>
 					</div>
@@ -145,9 +146,9 @@
 								<br>
 								<tbody>
 									<?php $channel_sel = TvcOrderChannel::model()->get_order_channel($model->order_id)->getData();
-                                    $price_total = 0.0;
-                                    foreach ($channel_sel as $val) {
-                                        $price_total += $val['price']; ?>
+									$price_total = 0.0;
+									foreach ($channel_sel as $val) {
+										$price_total += $val['price']; ?>
 
 										<tr>
 											<td class="text-start"><b><?php echo TvcMgmtChannelCluster::model()->get_name($val['cluster_id']); ?></b></td>
@@ -155,7 +156,7 @@
 											<td><?php echo number_format($val['price'], 2); ?></td>
 											<?php $channel_sel2 = TvcOrderChannel::model()->get_order_channel_per_cluster($model->order_id, $val['cluster_id'])->getData();
 
-                                        foreach ($channel_sel2 as $val2) { ?>
+											foreach ($channel_sel2 as $val2) { ?>
 										<tr>
 											<td> &nbsp;&nbsp;- <?php echo TvcMgmtChannel::model()->get_name($val2['channel_id']); ?></td>
 										</tr>
@@ -164,7 +165,7 @@
 									</tr>
 
 								<?php
-                                    } ?>
+									} ?>
 								</tbody>
 								<tfoot>
 									<tr>
@@ -193,16 +194,16 @@
 								<br>
 								<tbody>
 									<?php $services_sel = TvcOrderServices::model()->get_order_service($model->order_id)->getData();
-                                    $serv_price_total = 0.0;
-                                    foreach ($services_sel as $val) {
-                                        ?>
+									$serv_price_total = 0.0;
+									foreach ($services_sel as $val) {
+									?>
 
 										<tr>
 											<td class="text-start"><b><?php echo TvcMgmtExtraServices::model()->get_name($val['cat_id']); ?></b></td>
 											<?php $services_sel2 = TvcOrderServices::model()->get_order_service_per_cat($model->order_id, $val['cat_id'])->getData();
 
-                                        foreach ($services_sel2 as $val2) {
-                                            $serv_price_total += $val2['price']; ?>
+											foreach ($services_sel2 as $val2) {
+												$serv_price_total += $val2['price']; ?>
 										<tr>
 											<td> &nbsp;&nbsp;- <?php echo TvcMgmtExtraServicesSub::model()->get_name($val2['sub_cat_id']); ?></td>
 											<td><?php echo $val2['qty']; ?></td>
@@ -210,11 +211,11 @@
 											<td><?php echo $val2['price']; ?></td>
 										</tr>
 									<?php
-                                        } ?>
+											} ?>
 									</tr>
 
 								<?php
-                                    } ?>
+									} ?>
 								</tbody>
 								<tfoot>
 									<tr>
@@ -266,14 +267,14 @@
 							<div class="row mb-3">
 								<table class="table align-items-center" style="font-size:10px;padding:1px;border-spacing: 5px;">
 									<?php $linkdata = TvcOrderShareLink::model()->get_link($model->order_id)->getData();
-                                    $no = 1;
-                                    foreach ($linkdata as $val) { ?>
+									$no = 1;
+									foreach ($linkdata as $val) { ?>
 										<tr>
 											<td class="col-1"><?php echo $no; ?></td>
 											<td><?php echo $val['share_link']; ?></td>
 										</tr>
 									<?php ++$no;
-                                    } ?>
+									} ?>
 								</table>
 							</div>
 						<?php } ?>
@@ -296,8 +297,8 @@
 								<div class="col-lg-1 ps-0"><b>Materials :</b></div>
 								<div class="col-lg-2 pe-0"><?php $mat = TvcOrderAttachment::model()->get_materials($model->order_id)->getData();
 
-                                    foreach ($mat as $val) { ?>
-									<a href="<?php echo $val['path']; ?>" target="_blank"><?php echo $val['filename']; ?></a><br>
+															foreach ($mat as $val) { ?>
+										<a href="<?php echo $val['path']; ?>" target="_blank"><?php echo $val['filename']; ?></a><br>
 
 									<?php } ?>
 								</div>
@@ -331,14 +332,14 @@
 					</div>
 					<?php if ($model->asc_upload == 1) { ?>
 						<div class="row mb-3">
-						<div class="col-lg-2 ps-0"><b>Attachment :</b></div>
+							<div class="col-lg-2 ps-0"><b>Attachment :</b></div>
 							<div class="col-lg-2 pe-0">
-							<?php $mat = TvcOrderAttachment::model()->get_attachment($model->order_id)->getData();
+								<?php $mat = TvcOrderAttachment::model()->get_attachment($model->order_id)->getData();
 
-                            foreach ($mat as $val) { ?>
-							<a href="<?php echo $val['path']; ?>" target="_blank"><?php echo $val['filename']; ?></a>
+								foreach ($mat as $val) { ?>
+									<a href="<?php echo $val['path']; ?>" target="_blank"><?php echo $val['filename']; ?></a>
 
-							<?php } ?>
+								<?php } ?>
 							</div>
 
 						</div>
@@ -364,9 +365,118 @@
 
 			</div>
 		</div>
-		<div class="col-lg-12">
-			<div class="row ms-2  d-grid gap-2">
-				<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/admin" type="button" class="btn btn-primary" >PROCEED TO MY ORDERS</a>
+		<div class="row mb-3">
+			<div class="col-md-12 stretch-card">
+				<div class="card">
+					<div class="card-body">
+						<h4 class="mb-3 mt-4 ">SET ORDER STATUS</h4>
+						<br>
+						<div class="row">
+							<div class="col-lg-4">
+								<div class="form-check form-check-inline">
+									<input type="radio" class="form-check-input" name="statustraffic" id="statustraffic1" value="1" <?php echo $stat == 1 ? "checked" : "" ?>>
+									<label class="form-check-label" for="statustraffic1">
+										Processing
+									</label>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="form-check form-check-inline">
+									<input type="radio" class="form-check-input" name="statustraffic" id="statustraffic2" value="2" <?php echo $stat == 2 ? "checked" : "" ?>>
+									<label class="form-check-label" for="statustraffic2">
+										Incomplete
+									</label>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="form-check form-check-inline">
+									<input type="radio" class="form-check-input" name="statustraffic" id="statustraffic3" value="3" <?php echo $stat == 3 ? "checked" : "" ?>>
+									<label class="form-check-label" for="statustraffic3">
+										Ready to Transmit
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row col-lg-12">
+			<div class="col-lg-6  d-grid gap-2">
+				<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcTraffic/admin" type="button" class="btn btn-primary">BACK TO TRAFFIC DASHBOARD</a>
+			</div>
+			<div class="col-lg-6  d-grid gap-2">
+				<button type="button" class="btn btn-primary" onclick="save_stat()">SAVE ORDER STATUS</button>
 			</div>
 		</div>
 	</div>
+
+
+	<script>
+		function save_stat() {
+
+			sched = '<?php echo TvcTraffic::model()->get_sched(TvcOrder::model()->get_code($_GET['id'])); ?>'
+			code = '<?php echo $_GET['id'] ?>';
+			statset = $("input[name='statustraffic']:checked").val();
+
+			if (sched == "") {
+
+				Swal.fire('Error!',
+					'You need to create <b>SCHEDULE</b> first to set status',
+					'error').
+				then((result) => {
+
+				})
+
+			} else {
+
+				Swal.fire({
+					title: 'Are you sure?',
+					text: 'You want to change this status?',
+					type: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: 'green',
+					cancelButtonColor: 'gray',
+					confirmButtonText: 'Yes, change it!'
+
+				}).
+				then((result) => {
+
+					if (result.isConfirmed) {
+						$.ajax({
+							url: '<?php echo $this->createUrl('tvcTraffic/updateStatuss'); ?>',
+							type: 'POST',
+							dataType: 'html',
+							data: {
+								'code': code,
+								'statset': statset,
+								'YII_CSRF_TOKEN': '<?php echo Yii::app()->request->csrfToken; ?>',
+							},
+							success: function(response, status, data) {
+
+								Swal.fire('Success',
+									'Status successfully saved',
+									'success').
+								then((result) => {
+									var url = "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcTraffic/admin";
+									location.href = url;
+								})
+
+								console.log(response)
+							},
+							error: function(xhr, status, error) {
+								alert("Error Update")
+							}
+						});
+					} else if (result.isDenied) {
+
+					}
+
+
+				});
+
+			}
+
+
+		}
+	</script>

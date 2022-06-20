@@ -40,7 +40,12 @@ class TvcOrderController extends Controller
             ],
             [
                 'allow', // allow admin user to perform 'admin' and 'delete' actions
-                'actions' => ['admin', 'admin_save', 'delete', 'costestimate', 'Compute_estimate', 'viewsaved', 'updatesaved', 'SaveHistory', 'viewsummary','viewtraffic'],
+                'actions' => ['admin', 'admin_save', 'delete', 'costestimate', 'Compute_estimate', 'viewsaved', 'updatesaved', 'SaveHistory', 'viewsummary', 'viewtraffic'],
+                'users' => ['@'],
+            ],
+            [
+                'allow',
+                'actions' => ['email_order'],
                 'users' => ['@'],
             ],
             [
@@ -53,6 +58,56 @@ class TvcOrderController extends Controller
                 'users' => ['*'],
             ],
         ];
+    }
+    public function emailorder($code)
+    {
+
+        $datas = TvcOrder::model()->findByAttributes(array('order_code' => $code, 'type' => 1));
+        $userdata = Users::model()->findByAttributes(array('username' => Yii::app()->user->name));
+        $service = ($datas['service_type'] == 1 ? "Transmission" : "Non-Transmission");
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'https://api.sendgrid.com/v3/mail/send');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, '{
+          "from" :{
+            "email": "karl.magtanong@solutiontechnologist.com",
+            "name": "TvcXpress Manila"
+            },
+            "personalizations": [{
+              "to" : [{
+                "email" : "' . $datas['agency_email'] . '"
+                }],
+                "content" : "text/html" ,
+                "dynamic_template_data":{
+
+                    "subject" : "ORDER CONFIRMATION #' . $datas['order_code'] . '",
+                    "name" : "' . $userdata['name'] . '",
+                      "order" : "' . $datas['order_code'] . '",
+                      "asc_brand" : "' . $datas['asc_brand'] . '",
+                      "title" : "' . $datas['asc_project_title'] . '",
+                      "len" : "' . $datas['length'] . '",
+                      "service" : "' . $service . '",
+
+                   }
+                }],
+                "template_id":"d-1057a51751bf44a18caee0825d106e39"
+            }');
+
+
+        $headers = array();
+        $headers[] = 'Authorization: Bearer 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';
+        $headers[] = 'Content-Type: application/json';
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        $result = curl_exec($ch);
+        if (curl_errno($ch)) {
+            echo 'Error:' . curl_error($ch);
+        }
+
+        echo 'Error:' . curl_error($ch);
+        curl_close($ch);
     }
 
     public function actionSaveHistory()
@@ -714,6 +769,8 @@ class TvcOrderController extends Controller
             $model->created_at = date('Y-m-d');
             $model->save();
 
+
+
             if ($_POST['share_link'] != '') {
                 $s = 0;
                 foreach ($_POST['share_link'] as $val) {
@@ -857,6 +914,8 @@ class TvcOrderController extends Controller
             // $model->attributes=$_POST['TvcOrder'];
             // if($model->save())
             // 	$this->redirect(array('view','id'=>$model->id));
+
+            $this->emailorder($model->order_code);
 
             $this->redirect(['view', 'id' => $model->id]);
         }

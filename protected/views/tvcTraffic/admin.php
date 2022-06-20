@@ -21,7 +21,7 @@ $('.search-form form').submit(function(){
 	<div class="col-12 col-xl-12 stretch-card">
 		<div class="row flex-grow-1">
 			<div class="col-md-3 grid-margin stretch-card ">
-				<div class="card <?php echo $_GET['idstat'] == 1 ? "border border-warning" : "" ?>" >
+				<div class="card <?php echo $_GET['idstat'] == 1 ? "border border-warning" : "" ?>">
 					<div class="card-body">
 						<div class="d-flex justify-content-between align-items-baseline">
 							<h6 class="card-title mb-0">PENDING ORDER</h6>
@@ -40,7 +40,7 @@ $('.search-form form').submit(function(){
 				</div>
 			</div>
 			<div class="col-md-3 grid-margin stretch-card">
-				<div class="card <?php echo $_GET['idstat'] == 2 ? "border border-warning" : "" ?>" >
+				<div class="card <?php echo $_GET['idstat'] == 2 ? "border border-warning" : "" ?>">
 					<div class="card-body">
 						<div class="d-flex justify-content-between align-items-baseline">
 							<h6 class="card-title mb-0">SCHEDULED TODAY</h6>
@@ -57,7 +57,7 @@ $('.search-form form').submit(function(){
 				</div>
 			</div>
 			<div class="col-md-3 grid-margin stretch-card">
-				<div class="card <?php echo $_GET['idstat'] == 3 ? "border border-warning" : "" ?>" >
+				<div class="card <?php echo $_GET['idstat'] == 3 ? "border border-warning" : "" ?>">
 					<div class="card-body">
 						<div class="d-flex justify-content-between align-items-baseline">
 							<h6 class="card-title mb-0">SCHEDULED ORDERS</h6>
@@ -73,7 +73,7 @@ $('.search-form form').submit(function(){
 				</div>
 			</div>
 			<div class="col-md-3 grid-margin stretch-card">
-				<div class="card <?php echo $_GET['idstat'] == 4 ? "border border-warning" : "" ?>" >
+				<div class="card <?php echo $_GET['idstat'] == 4 ? "border border-warning" : "" ?>">
 					<div class="card-body">
 						<div class="d-flex justify-content-between align-items-baseline">
 							<h6 class="card-title mb-0">COMPLETED ORDERS</h6>
@@ -166,9 +166,13 @@ $('.search-form form').submit(function(){
 									</td>
 									<td style="cursor:pointer;<?php echo TvcTraffic::model()->get_status($val['trafficstat'], 5) == "Not Set" ? "color:red" : "" ?>" onclick="opensetstatus('<?php echo $val['sched'] ?>','<?php echo $val['order_code'] ?>',5)"><?php echo TvcTraffic::model()->get_status($val['trafficstat'], 5) ?></td>
 									<td style="<?php echo $val['sched'] == "" ? "color:red" : "" ?>"><?php echo $val['sched'] == "" ? "Not Set" : $val['sched'] ?></td>
-									<td><a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/update&id=<?php echo $val['id']; ?>" type="button" class="btn btn-primary btn-icon btn-xs">
-											<i data-feather="edit"></i>
-										</a>
+									<td>
+										<?php if ($val['trafficstat'] != 3) { ?>
+											<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/update&id=<?php echo $val['id']; ?>" type="button" class="btn btn-primary btn-icon btn-xs">
+												<i data-feather="edit"></i>
+											</a>
+										<?php } ?>
+
 										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/viewtraffic&id=<?php echo $val['id']; ?>" type="button" class="btn btn-primary btn-icon btn-xs">
 											<i data-feather="eye"></i>
 										</a>
@@ -241,7 +245,7 @@ $('.search-form form').submit(function(){
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary" onclick="setstatus()">Save Schedule</button>
+				<button type="button" class="btn btn-primary" onclick="setstatus()">Save Status</button>
 			</div>
 		</div>
 	</div>

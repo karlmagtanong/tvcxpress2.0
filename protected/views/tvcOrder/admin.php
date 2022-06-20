@@ -61,10 +61,10 @@ $('.search-form form').submit(function(){
 									<td><?php echo strtoupper($val['service_type'] == 1 ? "Transmission" : "Non-Transmission"); ?></td>
 									<td><?php echo strtoupper($val['created_at']); ?></td>
 									<td>
-										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/update&id=<?php echo $val['orderid']; ?>" type="button" class="btn btn-primary btn-icon btn-xs">
+										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/update&id=<?php echo $val['id']; ?>" type="button" class="btn btn-primary btn-icon btn-xs">
 											<i data-feather="edit"></i>
 										</a>
-										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/viewsummary&id=<?php echo $val['orderid']; ?>" type="button" class="btn btn-primary btn-icon btn-xs">
+										<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/viewsummary&id=<?php echo $val['id']; ?>" type="button" class="btn btn-primary btn-icon btn-xs">
 											<i data-feather="eye"></i>
 										</a>
 										

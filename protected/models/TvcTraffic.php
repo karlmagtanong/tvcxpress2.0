@@ -253,6 +253,20 @@ class TvcTraffic extends CActiveRecord
 		return $sql->order_code;
 	}
 
+	public function get_sched($id)
+	{
+		$sql = $this::model()->findByAttributes(['order_code' => $id]);
+
+		return $sql->sched;
+	}
+
+	public function get_final_stat($id)
+	{
+		$sql = $this::model()->findByAttributes(['order_code' => $id]);
+
+		return $sql->status;
+	}
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
