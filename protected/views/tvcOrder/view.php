@@ -84,16 +84,33 @@
 						<div class="col-lg-3 pe-0"><?php echo $model->billing_business_type; ?></div>
 					</div>
 					<div class="row mb-3">
-						<div class="col-lg-2 ps-0"><b>Uploaded File:</b></div>
-						<div class="col-lg-5 pe-0">
-						<?php $po = TvcOrderAttachment::model()->get_po($model->order_id)->getData();
+						<div class="col-lg-5 ps-0"><b>Upload PDF/JPEG (PO/MIO/DO/BO/CE/LOA/COC/BIR2303):</b></div>
+					</div>
 
-                        foreach ($po as $val) { ?>
-						<a href="<?php echo $val['path']; ?>" target="_blank"><?php echo $val['filename']; ?></a><br>
+					<div class="row mb-3">
+						<?php if ($model->billing_upload_type == 1) { ?>
+							<div class="col-lg-2 pe-0">
+								<strong>- <?php echo $model->billing_upload_type == 1 ? "Upload Now | " : ($model->billing_upload_type == 2 ? "Upload Later |" : "") ?></strong>
+							</div>
+							<div class="col-lg-5 pe-0">
+								<?php $po = TvcOrderAttachment::model()->get_po($model->order_id)->getData();
 
+								foreach ($po as $val) { ?>
+									<a href="<?php echo $val['path']; ?>" target="_blank"><?php echo $val['filename']; ?></a><br>
+
+								<?php } ?>
+
+							</div>
+						<?php } ?>
+						<?php if ($model->billing_upload_type == 2) { ?>
+							<div class="col-lg-2 pe-0">
+								<strong>- <?php echo $model->billing_upload_type == 1 ? "Upload Now | " : ($model->billing_upload_type == 2 ? "Upload Later |" : "") ?></strong>
+							</div>
+							<div class="col-lg-3 pe-0">
+								<strong><?php echo $model->billing_upload_date ?> | <?php echo $model->billing_upload_time ?></strong>
+							</div>
 						<?php } ?>
 
-						</div>
 					</div>
 				</div>
 			</div>
@@ -145,9 +162,9 @@
 								<br>
 								<tbody>
 									<?php $channel_sel = TvcOrderChannel::model()->get_order_channel($model->order_id)->getData();
-                                    $price_total = 0.0;
-                                    foreach ($channel_sel as $val) {
-                                        $price_total += $val['price']; ?>
+									$price_total = 0.0;
+									foreach ($channel_sel as $val) {
+										$price_total += $val['price']; ?>
 
 										<tr>
 											<td class="text-start"><b><?php echo TvcMgmtChannelCluster::model()->get_name($val['cluster_id']); ?></b></td>
@@ -155,7 +172,7 @@
 											<td><?php echo number_format($val['price'], 2); ?></td>
 											<?php $channel_sel2 = TvcOrderChannel::model()->get_order_channel_per_cluster($model->order_id, $val['cluster_id'])->getData();
 
-                                        foreach ($channel_sel2 as $val2) { ?>
+											foreach ($channel_sel2 as $val2) { ?>
 										<tr>
 											<td> &nbsp;&nbsp;- <?php echo TvcMgmtChannel::model()->get_name($val2['channel_id']); ?></td>
 										</tr>
@@ -164,7 +181,7 @@
 									</tr>
 
 								<?php
-                                    } ?>
+									} ?>
 								</tbody>
 								<tfoot>
 									<tr>
@@ -185,41 +202,36 @@
 								<thead class="thead-light">
 									<tr style="background-color: ##8898aa;">
 										<th>PARTICULARS</th>
-										<th>QTY</th>
-										<th>UNIT PRICE</th>
 										<th>AMOUNT</th>
 									</tr>
 								</thead>
 								<br>
 								<tbody>
 									<?php $services_sel = TvcOrderServices::model()->get_order_service($model->order_id)->getData();
-                                    $serv_price_total = 0.0;
-                                    foreach ($services_sel as $val) {
-                                        ?>
+									$serv_price_total = 0.0;
+									foreach ($services_sel as $val) {
+									?>
 
 										<tr>
 											<td class="text-start"><b><?php echo TvcMgmtExtraServices::model()->get_name($val['cat_id']); ?></b></td>
 											<?php $services_sel2 = TvcOrderServices::model()->get_order_service_per_cat($model->order_id, $val['cat_id'])->getData();
 
-                                        foreach ($services_sel2 as $val2) {
-                                            $serv_price_total += $val2['price']; ?>
+											foreach ($services_sel2 as $val2) {
+												$serv_price_total += $val2['price']; ?>
 										<tr>
 											<td> &nbsp;&nbsp;- <?php echo TvcMgmtExtraServicesSub::model()->get_name($val2['sub_cat_id']); ?></td>
-											<td><?php echo $val2['qty']; ?></td>
-											<td><?php echo $val2['price'] / $val2['qty']; ?></td>
 											<td><?php echo $val2['price']; ?></td>
 										</tr>
 									<?php
-                                        } ?>
+											} ?>
 									</tr>
 
 								<?php
-                                    } ?>
+									} ?>
 								</tbody>
 								<tfoot>
 									<tr>
-										<td class="text-end" colspan="2"><b>SUB-TOTAL</b></td>
-										<td></td>
+										<td class="text-end"><b>SUB-TOTAL</b></td>
 										<td><b><?php echo number_format($serv_price_total, 2); ?></b></td>
 									</tr>
 								</tfoot>
@@ -266,14 +278,14 @@
 							<div class="row mb-3">
 								<table class="table align-items-center" style="font-size:10px;padding:1px;border-spacing: 5px;">
 									<?php $linkdata = TvcOrderShareLink::model()->get_link($model->order_id)->getData();
-                                    $no = 1;
-                                    foreach ($linkdata as $val) { ?>
+									$no = 1;
+									foreach ($linkdata as $val) { ?>
 										<tr>
 											<td class="col-1"><?php echo $no; ?></td>
 											<td><?php echo $val['share_link']; ?></td>
 										</tr>
 									<?php ++$no;
-                                    } ?>
+									} ?>
 								</table>
 							</div>
 						<?php } ?>
@@ -296,8 +308,8 @@
 								<div class="col-lg-1 ps-0"><b>Materials :</b></div>
 								<div class="col-lg-2 pe-0"><?php $mat = TvcOrderAttachment::model()->get_materials($model->order_id)->getData();
 
-                                    foreach ($mat as $val) { ?>
-									<a href="<?php echo $val['path']; ?>" target="_blank"><?php echo $val['filename']; ?></a><br>
+															foreach ($mat as $val) { ?>
+										<a href="<?php echo $val['path']; ?>" target="_blank"><?php echo $val['filename']; ?></a><br>
 
 									<?php } ?>
 								</div>
@@ -331,14 +343,14 @@
 					</div>
 					<?php if ($model->asc_upload == 1) { ?>
 						<div class="row mb-3">
-						<div class="col-lg-2 ps-0"><b>Attachment :</b></div>
+							<div class="col-lg-2 ps-0"><b>Attachment :</b></div>
 							<div class="col-lg-2 pe-0">
-							<?php $mat = TvcOrderAttachment::model()->get_attachment($model->order_id)->getData();
+								<?php $mat = TvcOrderAttachment::model()->get_attachment($model->order_id)->getData();
 
-                            foreach ($mat as $val) { ?>
-							<a href="<?php echo $val['path']; ?>" target="_blank"><?php echo $val['filename']; ?></a>
+								foreach ($mat as $val) { ?>
+									<a href="<?php echo $val['path']; ?>" target="_blank"><?php echo $val['filename']; ?></a>
 
-							<?php } ?>
+								<?php } ?>
 							</div>
 
 						</div>
@@ -366,7 +378,7 @@
 		</div>
 		<div class="col-lg-12">
 			<div class="row ms-2  d-grid gap-2">
-				<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/admin" type="button" class="btn btn-primary" >PROCEED TO MY ORDERS</a>
+				<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/admin" type="button" class="btn btn-primary">PROCEED TO MY ORDERS</a>
 			</div>
 		</div>
 	</div>

@@ -35,12 +35,12 @@ class TvcOrderController extends Controller
             ],
             [
                 'allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => ['create', 'save', 'update'],
+                'actions' => ['create', 'save', 'update', 'updateTran', 'createTran'],
                 'users' => ['@'],
             ],
             [
                 'allow', // allow admin user to perform 'admin' and 'delete' actions
-                'actions' => ['admin', 'admin_save', 'delete', 'costestimate', 'Compute_estimate', 'viewsaved', 'updatesaved', 'SaveHistory', 'viewsummary', 'viewtraffic'],
+                'actions' => ['admin', 'admin_save', 'delete', 'costestimate', 'Compute_estimate', 'viewsaved', 'updatesaved', 'updatesavedTran', 'SaveHistory', 'viewsummary', 'viewtraffic'],
                 'users' => ['@'],
             ],
             [
@@ -61,7 +61,7 @@ class TvcOrderController extends Controller
     }
     public function emailorder($code)
     {
-		$token = Token::model()->get_code();
+        $token = Token::model()->get_code();
 
         $datas = TvcOrder::model()->findByAttributes(array('order_code' => $code, 'type' => 1));
         $userdata = Users::model()->findByAttributes(array('username' => Yii::app()->user->name));
@@ -98,7 +98,7 @@ class TvcOrderController extends Controller
 
 
         $headers = array();
-		$headers[] = '"' . $token . '"';
+        $headers[] = '"' . $token . '"';
         $headers[] = 'Content-Type: application/json';
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
@@ -107,7 +107,7 @@ class TvcOrderController extends Controller
             echo 'Error:' . curl_error($ch);
         }
 
-        echo 'Error:' . curl_error($ch);
+        // echo 'Error:' . curl_error($ch);
         curl_close($ch);
     }
 
@@ -174,12 +174,12 @@ class TvcOrderController extends Controller
                 $n = 0;
                 $total = 0.0;
                 foreach ($_POST['non_tran']['id'] as $val) {
-                    $total += TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]) * $_POST['non_tran']['qty'][$n];
+                    $total += TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]);
                     $channelnontran = new TvcOrderServices();
                     $channelnontran->order_id = $uniqid;
                     $channelnontran->sub_cat_id = $_POST['non_tran']['id'][$n];
                     $channelnontran->qty = $_POST['non_tran']['qty'][$n];
-                    $channelnontran->price = TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]) * $_POST['non_tran']['qty'][$n];
+                    $channelnontran->price = TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]);
                     $channelnontran->cat_id = TvcMgmtExtraServicesSub::model()->get_cat_id($_POST['non_tran']['id'][$n]);
                     $channelnontran->save();
                     ++$n;
@@ -344,6 +344,16 @@ class TvcOrderController extends Controller
     {
         $model = $this->loadModel($id);
 
+
+        $this->render('updatesaved', [
+            'model' => $model
+        ]);
+    }
+
+
+    public function actionUpdatesavedTran()
+    {
+
         Yii::app()->db
             ->createCommand('UPDATE tvc_order SET type = 4 WHERE order_id=:order_id')
             ->bindValues([':order_id' => $_POST['TvcOrder']['order_id']])
@@ -441,9 +451,9 @@ class TvcOrderController extends Controller
                         $attachment->type = 1;
                         $attachment->save();
 
-                        echo 'success';
+                        #  echo 'success';
                     } else {
-                        echo 'error asdasd';
+                        # echo 'error asdasd';
                     }
 
                     ++$po;
@@ -469,9 +479,9 @@ class TvcOrderController extends Controller
                         $attachment->type = 2;
                         $attachment->save();
 
-                        echo 'success';
+                        #  echo 'success';
                     } else {
-                        echo 'error asdasd';
+                        # echo 'error asdasd';
                     }
 
                     ++$po;
@@ -497,9 +507,9 @@ class TvcOrderController extends Controller
                         $attachment->type = 3;
                         $attachment->save();
 
-                        echo 'success';
+                       # echo 'success';
                     } else {
-                        echo 'error asdasd';
+                     #   echo 'error asdasd';
                     }
 
                     ++$po;
@@ -560,14 +570,9 @@ class TvcOrderController extends Controller
             // $model->attributes=$_POST['TvcOrder'];
             // if($model->save())
             // 	$this->redirect(array('view','id'=>$model->id));
-
-            $this->redirect(['view', 'id' => $models->id]);
+            $this->emailorder($models->order_code);
+            echo $models->id;
         }
-
-        $this->render('updatesaved', [
-            'model' => $model,
-            'models' => $models,
-        ]);
     }
 
 
@@ -713,12 +718,12 @@ class TvcOrderController extends Controller
             $n = 0;
             $total = 0.0;
             foreach ($_POST['non_tran']['id'] as $val) {
-                $total += (TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]) * $_POST['non_tran']['qty'][$n]);
+                $total += (TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]));
                 echo '<tr>
                 <td class="text-start"><b>' . TvcMgmtExtraServicesSub::model()->get_name($_POST['non_tran']['id'][$n]) . '</b></td>
                 <td>' . $_POST['non_tran']['qty'][$n] . '</td>
                 <td>' . number_format(TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]), 2) . '</td>
-                <td>' . number_format(TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]) * $_POST['non_tran']['qty'][$n], 2) . '</td></tr>';
+                <td>' . number_format(TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]), 2) . '</td></tr>';
                 ++$n;
             }
             echo '</tbody>
@@ -748,6 +753,18 @@ class TvcOrderController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
     public function actionCreate()
+    {
+        $model = new TvcOrder();
+
+
+        $this->render('create', [
+            'model' => $model,
+        ]);
+    }
+
+
+
+    public function actionCreateTran()
     {
         $model = new TvcOrder();
 
@@ -808,11 +825,11 @@ class TvcOrderController extends Controller
                 $total = 0.0;
                 foreach ($_POST['non_tran']['id'] as $val) {
                     $channelnontran = new TvcOrderServices();
-                    $total += TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]) * $_POST['non_tran']['qty'][$n];
+                    $total += TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]);
                     $channelnontran->order_id = $uniqid;
                     $channelnontran->sub_cat_id = $_POST['non_tran']['id'][$n];
                     $channelnontran->qty = $_POST['non_tran']['qty'][$n];
-                    $channelnontran->price = TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]) * $_POST['non_tran']['qty'][$n];
+                    $channelnontran->price = TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]);
                     $channelnontran->cat_id = TvcMgmtExtraServicesSub::model()->get_cat_id($_POST['non_tran']['id'][$n]);
                     $channelnontran->save();
                     ++$n;
@@ -843,9 +860,9 @@ class TvcOrderController extends Controller
                         $attachment->type = 1;
                         $attachment->save();
 
-                        echo 'success';
+                        #    echo 'success';
                     } else {
-                        echo 'error asdasd';
+                        # echo 'error asdasd';
                     }
 
                     ++$po;
@@ -871,9 +888,9 @@ class TvcOrderController extends Controller
                         $attachment->type = 2;
                         $attachment->save();
 
-                        echo 'success';
+                        # echo 'success';
                     } else {
-                        echo 'error asdasd';
+                        # echo 'error asdasd';
                     }
 
                     ++$po;
@@ -899,9 +916,9 @@ class TvcOrderController extends Controller
                         $attachment->type = 3;
                         $attachment->save();
 
-                        echo 'success';
+                        # echo 'success';
                     } else {
-                        echo 'error asdasd';
+                        #  echo 'error asdasd';
                     }
 
                     ++$po;
@@ -918,13 +935,12 @@ class TvcOrderController extends Controller
 
             $this->emailorder($model->order_code);
 
-            $this->redirect(['view', 'id' => $model->id]);
+            echo $model->id;
+            // $this->redirect(['view', 'id' => $model->id]);
         }
-
-        $this->render('create', [
-            'model' => $model,
-        ]);
     }
+
+
 
     public function actionSave()
     {
@@ -937,7 +953,8 @@ class TvcOrderController extends Controller
             $uniqid = uniqid();
 
             $model->attributes = $_POST['TvcOrder'];
-            $model->order_code = 'ORDER-' . strtoupper(uniqid());
+            // $model->order_code = 'ORDER-' . strtoupper(uniqid());
+            $model->order_code = 'O' . date("Ymd") . TvcOrder::model()->count();
             $model->break_date = $_POST['TvcOrder']['break_date'] == '' ? null : $_POST['TvcOrder']['break_date'];
             $model->share_date = $_POST['TvcOrder']['share_date'] == '' ? null : $_POST['TvcOrder']['share_date'];
             $model->asc_date = $_POST['TvcOrder']['asc_date'] == '' ? null : $_POST['TvcOrder']['asc_date'];
@@ -1160,6 +1177,17 @@ class TvcOrderController extends Controller
     {
         $model = $this->loadModel($id);
 
+
+        $this->render('update', [
+            'model' => $model,
+            'models' => $models,
+        ]);
+    }
+
+
+    public function actionUpdateTran()
+    {
+
         Yii::app()->db
             ->createCommand('UPDATE tvc_order SET type = 4 WHERE order_id=:order_id')
             ->bindValues([':order_id' => $_POST['TvcOrder']['order_id']])
@@ -1222,12 +1250,12 @@ class TvcOrderController extends Controller
                 $n = 0;
                 $total = 0.0;
                 foreach ($_POST['non_tran']['id'] as $val) {
-                    $total += TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]) * $_POST['non_tran']['qty'][$n];
+                    $total += TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]);
                     $channelnontran = new TvcOrderServices();
                     $channelnontran->order_id = $uniqid;
                     $channelnontran->sub_cat_id = $_POST['non_tran']['id'][$n];
                     $channelnontran->qty = $_POST['non_tran']['qty'][$n];
-                    $channelnontran->price = TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]) * $_POST['non_tran']['qty'][$n];
+                    $channelnontran->price = TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]);
                     $channelnontran->cat_id = TvcMgmtExtraServicesSub::model()->get_cat_id($_POST['non_tran']['id'][$n]);
                     $channelnontran->save();
                     ++$n;
@@ -1257,9 +1285,9 @@ class TvcOrderController extends Controller
                         $attachment->type = 1;
                         $attachment->save();
 
-                        echo 'success';
+                        #echo 'success';
                     } else {
-                        echo 'error asdasd';
+                        # echo 'error asdasd';
                     }
 
                     ++$po;
@@ -1285,9 +1313,9 @@ class TvcOrderController extends Controller
                         $attachment->type = 2;
                         $attachment->save();
 
-                        echo 'success';
+                        #echo 'success';
                     } else {
-                        echo 'error asdasd';
+                        #  echo 'error asdasd';
                     }
 
                     ++$po;
@@ -1313,9 +1341,9 @@ class TvcOrderController extends Controller
                         $attachment->type = 3;
                         $attachment->save();
 
-                        echo 'success';
+                        #echo 'success';
                     } else {
-                        echo 'error asdasd';
+                        #  echo 'error asdasd';
                     }
 
                     ++$po;
@@ -1377,14 +1405,12 @@ class TvcOrderController extends Controller
             // if($model->save())
             // 	$this->redirect(array('view','id'=>$model->id));
 
-            $this->redirect(['view', 'id' => $models->id]);
-        }
+            // $this->redirect(['view', 'id' => $models->id]);
 
-        $this->render('update', [
-            'model' => $model,
-            'models' => $models,
-        ]);
+            echo $models->id;
+        }
     }
+
 
     /**
      * Deletes a particular model.

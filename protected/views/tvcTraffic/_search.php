@@ -4,7 +4,6 @@
 /* @var $form CActiveForm */
 ?>
 
-<div class="wide form">
 
 	<?php $form = $this->beginWidget('CActiveForm', array(
 		'action' => Yii::app()->createUrl($this->route),
@@ -91,8 +90,5 @@
 
 
 
-</div>
 
 <?php $this->endWidget(); ?>
-
-</div><!-- search-form -->

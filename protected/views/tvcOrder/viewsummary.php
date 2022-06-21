@@ -84,16 +84,33 @@
 						<div class="col-lg-3 pe-0"><?php echo $model->billing_business_type; ?></div>
 					</div>
 					<div class="row mb-3">
-						<div class="col-lg-2 ps-0"><b>Uploaded File:</b></div>
-						<div class="col-lg-5 pe-0">
-						<?php $po = TvcOrderAttachment::model()->get_po($model->order_id)->getData();
+						<div class="col-lg-5 ps-0"><b>Upload PDF/JPEG (PO/MIO/DO/BO/CE/LOA/COC/BIR2303):</b></div>
+					</div>
 
-                        foreach ($po as $val) { ?>
-						<a href="<?php echo $val['path']; ?>" target="_blank"><?php echo $val['filename']; ?></a><br>
+					<div class="row mb-3">
+						<?php if ($model->billing_upload_type == 1) { ?>
+							<div class="col-lg-2 pe-0">
+								<strong>- <?php echo $model->billing_upload_type == 1 ? "Upload Now | " : ($model->billing_upload_type == 2 ? "Upload Later |" : "") ?></strong>
+							</div>
+							<div class="col-lg-5 pe-0">
+								<?php $po = TvcOrderAttachment::model()->get_po($model->order_id)->getData();
 
+								foreach ($po as $val) { ?>
+									<a href="<?php echo $val['path']; ?>" target="_blank"><?php echo $val['filename']; ?></a><br>
+
+								<?php } ?>
+
+							</div>
+						<?php } ?>
+						<?php if ($model->billing_upload_type == 2) { ?>
+							<div class="col-lg-2 pe-0">
+								<strong>- <?php echo $model->billing_upload_type == 1 ? "Upload Now | " : ($model->billing_upload_type == 2 ? "Upload Later |" : "") ?></strong>
+							</div>
+							<div class="col-lg-3 pe-0">
+								<strong><?php echo $model->billing_upload_date ?> | <?php echo $model->billing_upload_time ?></strong>
+							</div>
 						<?php } ?>
 
-						</div>
 					</div>
 				</div>
 			</div>
@@ -185,8 +202,6 @@
 								<thead class="thead-light">
 									<tr style="background-color: ##8898aa;">
 										<th>PARTICULARS</th>
-										<th>QTY</th>
-										<th>UNIT PRICE</th>
 										<th>AMOUNT</th>
 									</tr>
 								</thead>
@@ -205,8 +220,6 @@
                                             $serv_price_total += $val2['price']; ?>
 										<tr>
 											<td> &nbsp;&nbsp;- <?php echo TvcMgmtExtraServicesSub::model()->get_name($val2['sub_cat_id']); ?></td>
-											<td><?php echo $val2['qty']; ?></td>
-											<td><?php echo $val2['price'] / $val2['qty']; ?></td>
 											<td><?php echo $val2['price']; ?></td>
 										</tr>
 									<?php
@@ -218,8 +231,7 @@
 								</tbody>
 								<tfoot>
 									<tr>
-										<td class="text-end" colspan="2"><b>SUB-TOTAL</b></td>
-										<td></td>
+									<td class="text-end" ><b>SUB-TOTAL</b></td>
 										<td><b><?php echo number_format($serv_price_total, 2); ?></b></td>
 									</tr>
 								</tfoot>

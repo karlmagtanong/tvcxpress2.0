@@ -160,26 +160,19 @@
 									<div class="form-check form-check-inline">
 										<input type="radio" class="form-check-input" name="TvcOrder[platform]" id="platform_type1" value="1">
 										<label class="form-check-label" for="platform_type1">
-											TV
+										Network Category
 										</label>
 									</div>
 									<div class="form-check form-check-inline">
 										<input type="radio" class="form-check-input" name="TvcOrder[platform]" id="platform_type2" value="2">
 										<label class="form-check-label" for="platform_type2">
-											Radio
+										Channel Category
 										</label>
 									</div>
 									<div class="form-check form-check-inline">
 										<input type="radio" class="form-check-input" name="TvcOrder[platform]" id="platform_type3" value="2">
 										<label class="form-check-label" for="platform_type3">
-											Online
-										</label>
-									</div>
-									<div class="form-check form-check-inline">
-										<input type="radio" class="form-check-input" name="TvcOrder[platform]" id="platform_type4" value="2">
-										<label class="form-check-label" for="platform_type4">
-											Print
-										</label>
+										Sub Channel Category
 									</div>
 								</div>
 							</div>
@@ -199,8 +192,8 @@
 									$channel_data = TvcMgmtChannel::model()->get_channels($val['id'])->getData();
 									foreach ($channel_data as $val2) {
 									?>
-										<input type="checkbox" class="form-check-input" id="channel" name="channel[]" value="<?php echo $val['id'] ?>">
-										<label class="form-check-label" for="channel">
+										<input type="checkbox" class="form-check-input" id="nantra<?php echo $val2['id'] ?>" name="channel[]" value="<?php echo $val['id'] ?>">
+										<label class="form-check-label" for="nantra<?php echo $val2['id'] ?>">
 											<?php echo $val2['name']; ?>
 										</label><br>
 
@@ -239,11 +232,11 @@
 									$non_tran_subcat_data = TvcMgmtExtraServicesSub::model()->get_subcat($val['id'])->getData();
 									foreach ($non_tran_subcat_data as $val2) {
 									?>
-										<input type="checkbox" class="form-check-input" id="non_tran" name="non_tran[id][]" value="<?php echo $val2['id']; ?>">
-										<label class="form-check-label" for="non_tran">
+										<input type="checkbox" class="form-check-input" id="<?php echo $val2['id']; ?>" name="non_tran[id][]" value="<?php echo $val2['id']; ?>">
+										<label class="form-check-label" for="<?php echo $val2['id']; ?>">
 											<?php echo $val2['sub_category']; ?>
 										</label>
-										<strong> | Qty : </strong><input type="text" name="non_tran[qty][]" class="col-sm-2">
+										<!-- <strong> | Qty : </strong><input type="text" name="non_tran[qty][]" class="col-sm-2"> -->
 										<br>
 									<?php
 									} ?>
