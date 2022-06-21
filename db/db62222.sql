@@ -17,6 +17,17 @@
 CREATE DATABASE IF NOT EXISTS `tvcxpress_db` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `tvcxpress_db`;
 
+-- Dumping structure for table tvcxpress_db.token
+CREATE TABLE IF NOT EXISTS `token` (
+  `token` longtext
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table tvcxpress_db.token: ~1 rows (approximately)
+/*!40000 ALTER TABLE `token` DISABLE KEYS */;
+INSERT INTO `token` (`token`) VALUES
+	('Authorization: Bearer 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');
+/*!40000 ALTER TABLE `token` ENABLE KEYS */;
+
 -- Dumping structure for table tvcxpress_db.tvc_mgmt_advertiser
 CREATE TABLE IF NOT EXISTS `tvc_mgmt_advertiser` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -298,10 +309,12 @@ CREATE TABLE IF NOT EXISTS `tvc_order` (
   `break_time_aa` varchar(255) DEFAULT NULL,
   `producer` varchar(255) DEFAULT NULL,
   `producer_contact` varchar(255) DEFAULT NULL,
+  `producer_landline` varchar(255) DEFAULT NULL,
   `producer_email` varchar(255) DEFAULT NULL,
   `agency_company` varchar(255) DEFAULT NULL,
   `agency_contact_person` varchar(255) DEFAULT NULL,
   `agency_contact_no` varchar(255) DEFAULT NULL,
+  `agency_landline` varchar(255) DEFAULT NULL,
   `agency_email` varchar(255) DEFAULT NULL,
   `billing_ce` varchar(255) DEFAULT NULL,
   `billing_company` varchar(255) DEFAULT NULL,
@@ -311,6 +324,9 @@ CREATE TABLE IF NOT EXISTS `tvc_order` (
   `billing_contact_email` varchar(255) DEFAULT NULL,
   `billing_tin` varchar(255) DEFAULT NULL,
   `billing_business_type` varchar(255) DEFAULT NULL,
+  `billing_upload_type` varchar(255) DEFAULT NULL,
+  `billing_upload_date` varchar(255) DEFAULT NULL,
+  `billing_upload_time` varchar(255) DEFAULT NULL,
   `payment_terms` int(11) DEFAULT NULL,
   `currency` int(11) DEFAULT NULL,
   `mode_payment` int(11) DEFAULT NULL,
@@ -323,6 +339,7 @@ CREATE TABLE IF NOT EXISTS `tvc_order` (
   `delivery_company` varchar(255) DEFAULT NULL,
   `delivery_contact_name` varchar(255) DEFAULT NULL,
   `delivery_number` varchar(255) DEFAULT NULL,
+  `delivery_landline` varchar(255) DEFAULT NULL,
   `delivery_email` varchar(255) DEFAULT NULL,
   `share_type` int(11) DEFAULT NULL,
   `share_link` varchar(255) DEFAULT NULL,
@@ -342,29 +359,14 @@ CREATE TABLE IF NOT EXISTS `tvc_order` (
   `created_by` int(11) NOT NULL,
   `created_at` date DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=utf8;
 
--- Dumping data for table tvcxpress_db.tvc_order: ~11 rows (approximately)
+-- Dumping data for table tvcxpress_db.tvc_order: ~47 rows (approximately)
 /*!40000 ALTER TABLE `tvc_order` DISABLE KEYS */;
-INSERT INTO `tvc_order` (`id`, `order_id`, `order_code`, `advertiser`, `asc_brand`, `product_category`, `asc_project_title`, `length`, `break_date`, `break_time_hh`, `break_time_mm`, `break_time_aa`, `producer`, `producer_contact`, `producer_email`, `agency_company`, `agency_contact_person`, `agency_contact_no`, `agency_email`, `billing_ce`, `billing_company`, `billing_address`, `billing_contact_person`, `billing_contact_no`, `billing_contact_email`, `billing_tin`, `billing_business_type`, `payment_terms`, `currency`, `mode_payment`, `gcash_name`, `gcash_email`, `gcash_number`, `service_type`, `platform`, `delivery_method`, `delivery_company`, `delivery_contact_name`, `delivery_number`, `delivery_email`, `share_type`, `share_link`, `share_date`, `share_time_hh`, `share_time_mm`, `share_aa`, `asc_upload`, `asc_date`, `asc_time_hh`, `asc_time_mm`, `asc_time_aa`, `asc_reference_code`, `asc_valid_from`, `asc_valid_to`, `type`, `created_by`, `created_at`) VALUES
-	(42, '62af4db003bf9', 'ORDER-62AF4DB00A840', 'JOLLIBEE FOODS CORPORATION', 'Brand 33', 'Alcoholic Beverages', 'project title', '15', '2022-06-20', '01:03', NULL, NULL, 'Producer 1', '09176233252', 'prod@gmail.com', 'company agency', 'agency contact', '09176233255', 'agency@gmail.com', '01222', 'company billing', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', 30, 1, 1, NULL, NULL, NULL, 1, 1, 1, 'company delivery', 'name delivery', 'number delivery', 'email@gmail.com', NULL, NULL, NULL, '', NULL, NULL, 2, '2022-06-20', '01:03', NULL, NULL, '', NULL, NULL, 5, 1, '2022-06-19'),
-	(43, '62af50fe47530', 'ORDER-62AF50FE479A7', 'JOLLIBEE FOODS CORPORATION', 'Brand 33', 'Alcoholic Beverages', 'project title', '15', '2022-06-20', '02:02', NULL, NULL, 'Producer 1', '09176233252', 'prod@gmail.com', 'company agency', 'agency contact', '09176233255', 'agency@gmail.com', '01222', 'company billing', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', 30, 1, 1, NULL, NULL, NULL, 1, 1, 3, 'company delivery', 'name delivery', 'number delivery', 'email@gmail.com', 3, NULL, NULL, '', NULL, NULL, 2, '2022-06-20', '01:03', NULL, NULL, '', NULL, NULL, 5, 1, '2022-06-19'),
-	(44, '62af51f02831c', 'ORDER-62AF51F0287C3', 'JOLLIBEE FOODS CORPORATION', 'Brand 33', 'Alcoholic Beverages', 'project title', '15', '2022-06-20', '02:02', NULL, NULL, 'Producer 1', '09176233252', 'prod@gmail.com', 'company agency', 'agency contact', '09176233255', 'agency@gmail.com', '01222', 'company billing', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', 30, 1, 1, NULL, NULL, NULL, 1, 1, 3, 'company delivery', 'name delivery', 'number delivery', 'email@gmail.com', 3, NULL, NULL, '', NULL, NULL, 2, '2022-06-20', '01:03', NULL, NULL, '', NULL, NULL, 5, 1, '2022-06-19'),
-	(45, '62af5245e151c', 'ORDER-62AF5245E19D6', 'JOLLIBEE FOODS CORPORATION', 'Brand 33', 'Alcoholic Beverages', 'project title', '15', '2022-06-20', '02:02', NULL, NULL, 'Producer 1', '09176233252', 'prod@gmail.com', 'company agency', 'agency contact', '09176233255', 'agency@gmail.com', '01222', 'company billing', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', 30, 1, 1, NULL, NULL, NULL, 1, 1, 3, 'company delivery', 'name delivery', 'number delivery', 'email@gmail.com', 3, NULL, NULL, '', NULL, NULL, 2, '2022-06-20', '01:03', NULL, NULL, '', NULL, NULL, 5, 1, '2022-06-19'),
-	(46, '62af530fc67b2', 'ORDER-62AF530FC6CB3', 'JOLLIBEE FOODS CORPORATION', 'Brand 33', 'Alcoholic Beverages', 'project title', '15', '2022-06-20', '02:02', NULL, NULL, 'Producer 1', '09176233252', 'prod@gmail.com', 'company agency', 'agency contact', '09176233255', 'agency@gmail.com', '01222', 'company billing', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', 30, 1, 1, NULL, NULL, NULL, 1, 1, 3, 'company delivery', 'name delivery', 'number delivery', 'email@gmail.com', 3, NULL, NULL, '', NULL, NULL, 2, '2022-06-20', '01:03', NULL, NULL, '', NULL, NULL, 4, 1, '2022-06-19'),
-	(47, '62af5329c5a2a', 'ORDER-62AF530FC6CB3', 'JOLLIBEE FOODS CORPORATION', 'Brand 33', 'Alcoholic Beverages', 'project title', '15', '2022-06-20', '02:02', NULL, NULL, 'Producer 1', '09176233252', 'prod@gmail.com', 'company agency', 'agency contact', '09176233255', 'agency@gmail.com', '01222', 'company billing', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', 30, 1, 1, NULL, NULL, NULL, 1, 1, 3, 'company delivery', 'name delivery', 'number delivery', 'email@gmail.com', 3, NULL, NULL, '', NULL, NULL, 1, '2022-06-20', '01:03', NULL, NULL, '', NULL, NULL, 4, 1, '2022-06-19'),
-	(48, '62af537185554', 'ORDER-62AF530FC6CB3', 'JOLLIBEE FOODS CORPORATION', 'Brand 33', 'Alcoholic Beverages', 'project title', '15', '2022-06-20', '02:02', NULL, NULL, 'Producer 1', '09176233252', 'prod@gmail.com', 'company agency', 'agency contact', '09176233255', 'agency@gmail.com', '01222', 'company billing', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', 30, 1, 1, NULL, NULL, NULL, 1, 1, 3, 'company delivery', 'name delivery', 'number delivery', 'email@gmail.com', 3, NULL, NULL, '', NULL, NULL, 1, '2022-06-20', '01:03', NULL, NULL, '', NULL, NULL, 4, 1, '2022-06-19'),
-	(49, '62af53b02af50', 'ORDER-62AF53B02B366', 'TEST ADVERTISER', 'Brand 1', 'Alcoholic Beverages', 'project title 2', '30', '2022-06-15', '10:03', NULL, NULL, '', '09176233252', '123', 'PUBLICIS JIMENEZBASIC, INC.', 'agency contact', '09176233255', 'agency@gmail.com', '01222', '123', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', '', '', '', NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, '', NULL, NULL, '', NULL, NULL, 5, 1, '2022-06-19'),
-	(50, '62af549e80415', 'ORDER-62AF549E808C1', 'TEST ADVERTISER', 'Brand 1', 'Alcoholic Beverages', 'project title 2', '30', '2022-06-15', '02:02', NULL, NULL, '', '09176233252', '123', 'PUBLICIS JIMENEZBASIC, INC.', 'agency contact', '09176233255', 'agency@gmail.com', '01222', '123', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', 30, 1, 1, NULL, NULL, NULL, 2, NULL, NULL, '', '', '', '', NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, '', NULL, NULL, '', NULL, NULL, 5, 1, '2022-06-19'),
-	(51, '62af54d872666', 'ORDER-62AF54D8729F1', 'TEST ADVERTISER', 'Brand 1', 'Alcoholic Beverages', 'project title 2', '30', '2022-06-15', '02:02', NULL, NULL, '', '09176233252', '123', 'PUBLICIS JIMENEZBASIC, INC.', 'agency contact', '09176233255', 'agency@gmail.com', '01222', '123', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', 30, 1, 1, NULL, NULL, NULL, 2, NULL, NULL, '', '', '', '', NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, '', NULL, NULL, '', NULL, NULL, 5, 1, '2022-06-19'),
-	(52, '62af552c4acaa', 'ORDER-62AF530FC6CB3', 'JOLLIBEE FOODS CORPORATION', 'Brand 33', 'Alcoholic Beverages', 'project title', '15', '2022-06-20', '02:02', NULL, NULL, 'Producer 1', '09176233252', 'prod@gmail.com', 'company agency', 'agency contact', '09176233255', 'agency@gmail.com', '01222', 'company billing', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', 30, 1, 1, NULL, NULL, NULL, 2, 1, 3, 'company delivery', 'name delivery', 'number delivery', 'email@gmail.com', 3, NULL, NULL, '', NULL, NULL, 1, '2022-06-20', '01:03', NULL, NULL, '', NULL, NULL, 4, 1, '2022-06-19'),
-	(53, '62af56789549c', 'ORDER-62AF567895A06', 'TEST ADVERTISER', 'Brand 1', 'Alcoholic Beverages', 'project title 2', '30', '2022-06-15', '02:02', NULL, NULL, '', '09176233252', '123', 'PUBLICIS JIMENEZBASIC, INC.', 'agency contact', '09176233255', 'agency@gmail.com', '01222', '123', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', 30, 1, 1, NULL, NULL, NULL, 2, NULL, NULL, '', '', '', '', NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, '', NULL, NULL, '', NULL, NULL, 5, 1, '2022-06-19'),
-	(54, '62af5683b3cbd', 'ORDER-62AF5683B409C', 'TEST ADVERTISER', 'Brand 1', 'Alcoholic Beverages', 'project title 2', '30', '2022-06-15', '02:02', NULL, NULL, '', '09176233252', '123', 'PUBLICIS JIMENEZBASIC, INC.', 'agency contact', '09176233255', 'agency@gmail.com', '01222', '123', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', 30, 1, 1, NULL, NULL, NULL, 2, NULL, NULL, '', '', '', '', NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, '', NULL, NULL, '', NULL, NULL, 4, 1, '2022-06-19'),
-	(55, '62af56ada80a8', 'O2022062000002', 'JOLLIBEE FOODS CORPORATION', 'Brand 33', 'Alcoholic Beverages', 'project title', '15', '2022-06-20', '02:02', NULL, NULL, 'Producer 1', '09176233252', 'prod@gmail.com', 'company agency', 'agency contact', '09176233255', 'agency@gmail.com', '01222', 'company billing', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', 30, 1, 1, NULL, NULL, NULL, 2, 1, 3, 'company delivery', 'name delivery', 'number delivery', 'email@gmail.com', 3, NULL, NULL, '', NULL, NULL, 1, '2022-06-20', '01:03', NULL, NULL, '', NULL, NULL, 1, 1, '2022-06-19'),
-	(56, '62af575e90f8a', 'ORDER-62AF5683B409C', 'TEST ADVERTISER', 'Brand 1', 'Alcoholic Beverages', 'project title 2', '30', '2022-06-15', '02:02', NULL, NULL, '', '09176233252', '123', 'PUBLICIS JIMENEZBASIC, INC.', 'agency contact', '09176233255', 'agency@gmail.com', '01222', '123', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', 30, 1, 1, NULL, NULL, NULL, 1, 1, 3, '', '', '', '', 3, NULL, NULL, '', NULL, NULL, 1, NULL, '', NULL, NULL, 'reference', '2022-06-22', '2022-06-15', 4, 1, '2022-06-19'),
-	(57, '62af5773f4036', 'ORDER-62AF5683B409C', 'TEST ADVERTISER', 'Brand 1', 'Alcoholic Beverages', 'project title 2', '30', '2022-06-15', '02:02', NULL, NULL, '', '09176233252', '123', 'PUBLICIS JIMENEZBASIC, INC.', 'agency contact', '09176233255', 'agency@gmail.com', '01222', '123', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', 30, 1, 1, NULL, NULL, NULL, 1, 1, 3, 'company delivery', 'name delivery', 'number delivery', 'email@gmail.com', 3, NULL, NULL, '', NULL, NULL, 1, NULL, '', NULL, NULL, 'reference', '2022-06-22', '2022-06-15', 4, 1, '2022-06-19'),
-	(60, '62af5abdd3fa2', 'O2022062000001', 'TEST ADVERTISER', 'Brand 2', 'Alcoholic Beverages', 'project title 2', '30', '2022-06-15', '02:02', NULL, NULL, '', '09176233252', '123', 'PUBLICIS JIMENEZBASIC, INC.', 'agency contact', '09176233255', 'agency@gmail.com', '01222', '123', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', 30, 1, 1, NULL, NULL, NULL, 1, 1, 3, 'company delivery', 'name delivery', 'number delivery', 'email@gmail.com', 3, NULL, NULL, '', NULL, NULL, 1, NULL, '', NULL, NULL, 'reference', '2022-06-22', '2022-06-15', 4, 1, '2022-06-19'),
-	(61, '62af5adb61ca3', 'O2022062000001', 'TEST ADVERTISER', 'Brand 2', 'Appliances', 'project title 2', '30', '2022-06-15', '02:02', NULL, NULL, '', '09176233252', '123', 'PUBLICIS JIMENEZBASIC, INC.', 'agency contact', '09176233255', 'agency@gmail.com', '01222', '123', 'address billing', 'billing contact', '09171112222', 'email@billing', '012-256-2584', 'style', 30, 1, 1, NULL, NULL, NULL, 1, 1, 3, 'company delivery', 'name delivery', 'number delivery', 'email@gmail.com', 3, NULL, NULL, '', NULL, NULL, 1, NULL, '', NULL, NULL, 'reference', '2022-06-22', '2022-06-15', 1, 1, '2022-06-19');
+INSERT INTO `tvc_order` (`id`, `order_id`, `order_code`, `advertiser`, `asc_brand`, `product_category`, `asc_project_title`, `length`, `break_date`, `break_time_hh`, `break_time_mm`, `break_time_aa`, `producer`, `producer_contact`, `producer_landline`, `producer_email`, `agency_company`, `agency_contact_person`, `agency_contact_no`, `agency_landline`, `agency_email`, `billing_ce`, `billing_company`, `billing_address`, `billing_contact_person`, `billing_contact_no`, `billing_contact_email`, `billing_tin`, `billing_business_type`, `billing_upload_type`, `billing_upload_date`, `billing_upload_time`, `payment_terms`, `currency`, `mode_payment`, `gcash_name`, `gcash_email`, `gcash_number`, `service_type`, `platform`, `delivery_method`, `delivery_company`, `delivery_contact_name`, `delivery_number`, `delivery_landline`, `delivery_email`, `share_type`, `share_link`, `share_date`, `share_time_hh`, `share_time_mm`, `share_aa`, `asc_upload`, `asc_date`, `asc_time_hh`, `asc_time_mm`, `asc_time_aa`, `asc_reference_code`, `asc_valid_from`, `asc_valid_to`, `type`, `created_by`, `created_at`) VALUES
+	(101, '62b2126fba4e6', 'O202206210001', 'JOLLIBEE FOODS CORPORATION', 'Brand 1', 'Alcoholic Beverages', 'Test title', '300', '2022-06-23', '08:30 pm', NULL, NULL, 'Producer 1', '09176233252', '523-25124', 'prod@gmail.com', 'PUBLICIS JIMENEZBASIC, INC.', 'John Doe', '09172521345', '521-5558', 'karl.magtanong@gmail.com', '01222', 'Billing Company', 'Address Test', 'Melba', '09178521345', 'email@gmail.com', '000-258-563', 'Style', '1', '', '', 30, 1, 3, NULL, NULL, NULL, 1, 1, 3, 'Ads', 'Juan De', '09178523697', '5214856', 'juan@gmail.com', 3, NULL, NULL, '', NULL, NULL, 2, '2022-06-23', '10:30 am', NULL, NULL, '', NULL, NULL, 4, 1, '2022-06-21'),
+	(102, '62b212b20d83e', 'O202206210001', 'JOLLIBEE FOODS CORPORATION', 'Brand 1', 'Alcoholic Beverages', 'Test title', '30', '2022-06-23', '20:22 tm', NULL, NULL, 'Producer 1', '09176233252', '523-25124', 'prod@gmail.com', 'PUBLICIS JIMENEZBASIC, INC.', 'John Doe', '09172521345', '521-5558', 'karl.magtanong@gmail.com', '01222', 'Billing Company', 'Address Test', 'Melba', '09178521345', 'email@gmail.com', '000-258-563', 'Style', '1', '', '', 30, 1, 3, NULL, NULL, NULL, 1, 1, 3, 'Ads', 'Juan De', '09178523697', '5214856', 'juan@gmail.com', 3, NULL, NULL, '', NULL, NULL, 1, '2022-06-23', '10:30 am', NULL, NULL, '', NULL, NULL, 4, 1, '2022-06-21'),
+	(103, '62b212cf85cfa', 'O202206210001', 'JOLLIBEE FOODS CORPORATION', 'Brand 1', 'Alcoholic Beverages', 'Test title', '30', '2022-06-23', '20:22 tm', NULL, NULL, 'Producer 1', '09176233252', '523-25124', 'prod@gmail.com', 'PUBLICIS JIMENEZBASIC, INC.', 'John Doe', '09172521345', '521-5558', 'karl.magtanong@gmail.com', '01222', 'Billing Company', 'Address Test', 'Melba', '09178521345', 'email@gmail.com', '000-258-563', 'Style', '1', '', '', 30, 1, 3, NULL, NULL, NULL, 1, 1, 3, 'Ads', 'Juan De', '09178523697', '5214856', 'juan@gmail.com', 3, NULL, NULL, '', NULL, NULL, 1, '2022-06-23', '10:30 am', NULL, NULL, '123123', '2022-06-21', '2022-06-30', 1, 1, '2022-06-21');
 /*!40000 ALTER TABLE `tvc_order` ENABLE KEYS */;
 
 -- Dumping structure for table tvcxpress_db.tvc_order_attachment
@@ -377,58 +379,22 @@ CREATE TABLE IF NOT EXISTS `tvc_order_attachment` (
   `format` varchar(255) DEFAULT NULL,
   `type` int(11) DEFAULT NULL COMMENT '1 = pdf 2 = materials 3 = asc',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=136 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=217 DEFAULT CHARSET=utf8;
 
--- Dumping data for table tvcxpress_db.tvc_order_attachment: ~22 rows (approximately)
+-- Dumping data for table tvcxpress_db.tvc_order_attachment: ~102 rows (approximately)
 /*!40000 ALTER TABLE `tvc_order_attachment` DISABLE KEYS */;
 INSERT INTO `tvc_order_attachment` (`id`, `order_id`, `filename`, `path`, `filesize`, `format`, `type`) VALUES
-	(89, '62af4db003bf9', 'bg.jpg', 'attachments/upload_pdf/bg.jpg', NULL, 'jpg', 1),
-	(90, '62af50fe47530', 'positive_pr_23.jpg', 'attachments/materials/positive_pr_23.jpg', NULL, 'jpg', 2),
-	(91, '62af50fe47530', 'positive_pr_234.jpg', 'attachments/materials/positive_pr_234.jpg', NULL, 'jpg', 2),
-	(92, '62af51f02831c', 'Capture.PNG', 'attachments/upload_pdf/Capture.PNG', NULL, 'PNG', 1),
-	(93, '62af5245e151c', 'positive_pr_23.jpg', 'attachments/materials/positive_pr_23.jpg', NULL, 'jpg', 2),
-	(94, '62af5245e151c', 'positive_pr_234.jpg', 'attachments/materials/positive_pr_234.jpg', NULL, 'jpg', 2),
-	(95, '62af530fc67b2', 'Capture.PNG', 'attachments/upload_pdf/Capture.PNG', NULL, 'PNG', 1),
-	(96, '62af530fc67b2', 'positive_pr_23.jpg', 'attachments/materials/positive_pr_23.jpg', NULL, 'jpg', 2),
-	(97, '62af530fc67b2', 'positive_pr_234.jpg', 'attachments/materials/positive_pr_234.jpg', NULL, 'jpg', 2),
-	(98, '62af5329c5a2a', 'tvcfavicon.png', 'attachments/materials/tvcfavicon.png', NULL, 'png', 2),
-	(99, '62af5329c5a2a', 'bg.jpg', 'attachments/asc_clearance/bg.jpg', NULL, 'jpg', 3),
-	(100, '62af5329c5a2a', 'positive_pr_23.jpg', 'attachments/materials/positive_pr_23.jpg', NULL, 'jpg', 2),
-	(101, '62af5329c5a2a', 'Capture.PNG', 'attachments/upload_pdf/Capture.PNG', NULL, 'PNG', 1),
-	(102, '62af537185554', 'favicon.png', 'attachments/materials/favicon.png', NULL, 'png', 2),
-	(103, '62af537185554', 'tvcfavicon.png', 'attachments/materials/tvcfavicon.png', NULL, 'png', 2),
-	(104, '62af537185554', 'bg.jpg', 'attachments/asc_clearance/bg.jpg', NULL, 'jpg', 3),
-	(105, '62af53b02af50', 'Capture.PNG', 'attachments/upload_pdf/Capture.PNG', NULL, 'PNG', 1),
-	(106, '62af549e80415', 'Capture.PNG', 'attachments/upload_pdf/Capture.PNG', NULL, 'PNG', 1),
-	(107, '62af54d872666', 'Capture.PNG', 'attachments/upload_pdf/Capture.PNG', NULL, 'PNG', 1),
-	(108, '62af552c4acaa', 'favicon.png', 'attachments/materials/favicon.png', NULL, 'png', 2),
-	(109, '62af552c4acaa', 'tvcfavicon.png', 'attachments/materials/tvcfavicon.png', NULL, 'png', 2),
-	(110, '62af552c4acaa', 'bg.jpg', 'attachments/asc_clearance/bg.jpg', NULL, 'jpg', 3),
-	(111, '62af56789549c', 'Capture.PNG', 'attachments/upload_pdf/Capture.PNG', NULL, 'PNG', 1),
-	(112, '62af5683b3cbd', 'Capture.PNG', 'attachments/upload_pdf/Capture.PNG', NULL, 'PNG', 1),
-	(113, '62af56ada80a8', 'favicon.png', 'attachments/materials/favicon.png', NULL, 'png', 2),
-	(114, '62af56ada80a8', 'tvcfavicon.png', 'attachments/materials/tvcfavicon.png', NULL, 'png', 2),
-	(115, '62af56ada80a8', 'bg.jpg', 'attachments/asc_clearance/bg.jpg', NULL, 'jpg', 3),
-	(116, '62af575e90f8a', 'Capture.PNG', 'attachments/materials/Capture.PNG', NULL, 'PNG', 2),
-	(117, '62af575e90f8a', 'tvcfavicon.png', 'attachments/materials/tvcfavicon.png', NULL, 'png', 2),
-	(118, '62af575e90f8a', 'favicon.png', 'attachments/materials/favicon.png', NULL, 'png', 2),
-	(119, '62af575e90f8a', 'bg2.jpg', 'attachments/asc_clearance/bg2.jpg', NULL, 'jpg', 3),
-	(120, '62af575e90f8a', 'Capture.PNG', 'attachments/upload_pdf/Capture.PNG', NULL, 'PNG', 1),
-	(121, '62af5773f4036', 'Capture.PNG', 'attachments/materials/Capture.PNG', NULL, 'PNG', 2),
-	(122, '62af5773f4036', 'tvcfavicon.png', 'attachments/materials/tvcfavicon.png', NULL, 'png', 2),
-	(123, '62af5773f4036', 'favicon.png', 'attachments/materials/favicon.png', NULL, 'png', 2),
-	(124, '62af5773f4036', 'Capture.PNG', 'attachments/upload_pdf/Capture.PNG', NULL, 'PNG', 1),
-	(125, '62af5773f4036', 'bg2.jpg', 'attachments/asc_clearance/bg2.jpg', NULL, 'jpg', 3),
-	(126, '62af5abdd3fa2', 'Capture.PNG', 'attachments/materials/Capture.PNG', NULL, 'PNG', 2),
-	(127, '62af5abdd3fa2', 'tvcfavicon.png', 'attachments/materials/tvcfavicon.png', NULL, 'png', 2),
-	(128, '62af5abdd3fa2', 'favicon.png', 'attachments/materials/favicon.png', NULL, 'png', 2),
-	(129, '62af5abdd3fa2', 'Capture.PNG', 'attachments/upload_pdf/Capture.PNG', NULL, 'PNG', 1),
-	(130, '62af5abdd3fa2', 'bg2.jpg', 'attachments/asc_clearance/bg2.jpg', NULL, 'jpg', 3),
-	(131, '62af5adb61ca3', 'Capture.PNG', 'attachments/materials/Capture.PNG', NULL, 'PNG', 2),
-	(132, '62af5adb61ca3', 'tvcfavicon.png', 'attachments/materials/tvcfavicon.png', NULL, 'png', 2),
-	(133, '62af5adb61ca3', 'favicon.png', 'attachments/materials/favicon.png', NULL, 'png', 2),
-	(134, '62af5adb61ca3', 'Capture.PNG', 'attachments/upload_pdf/Capture.PNG', NULL, 'PNG', 1),
-	(135, '62af5adb61ca3', 'bg2.jpg', 'attachments/asc_clearance/bg2.jpg', NULL, 'jpg', 3);
+	(206, '62b2126fba4e6', 'bg3.jpg', 'attachments/upload_pdf/bg3.jpg', NULL, 'jpg', 1),
+	(207, '62b2126fba4e6', 'bg2.jpg', 'attachments/upload_pdf/bg2.jpg', NULL, 'jpg', 1),
+	(208, '62b2126fba4e6', 'positive_pr_2.jpg', 'attachments/materials/positive_pr_2.jpg', NULL, 'jpg', 2),
+	(209, '62b212b20d83e', 'bg.jpg', 'attachments/asc_clearance/bg.jpg', NULL, 'jpg', 3),
+	(210, '62b212b20d83e', 'positive_pr_2.jpg', 'attachments/materials/positive_pr_2.jpg', NULL, 'jpg', 2),
+	(211, '62b212b20d83e', 'bg3.jpg', 'attachments/upload_pdf/bg3.jpg', NULL, 'jpg', 1),
+	(212, '62b212b20d83e', 'bg2.jpg', 'attachments/upload_pdf/bg2.jpg', NULL, 'jpg', 1),
+	(213, '62b212cf85cfa', 'positive_pr_2.jpg', 'attachments/materials/positive_pr_2.jpg', NULL, 'jpg', 2),
+	(214, '62b212cf85cfa', 'bg3.jpg', 'attachments/upload_pdf/bg3.jpg', NULL, 'jpg', 1),
+	(215, '62b212cf85cfa', 'bg2.jpg', 'attachments/upload_pdf/bg2.jpg', NULL, 'jpg', 1),
+	(216, '62b212cf85cfa', 'bg.jpg', 'attachments/asc_clearance/bg.jpg', NULL, 'jpg', 3);
 /*!40000 ALTER TABLE `tvc_order_attachment` ENABLE KEYS */;
 
 -- Dumping structure for table tvcxpress_db.tvc_order_channel
@@ -439,55 +405,29 @@ CREATE TABLE IF NOT EXISTS `tvc_order_channel` (
   `cluster_id` int(11) DEFAULT NULL,
   `price` float(11,2) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=189 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=272 DEFAULT CHARSET=utf8;
 
--- Dumping data for table tvcxpress_db.tvc_order_channel: ~28 rows (approximately)
+-- Dumping data for table tvcxpress_db.tvc_order_channel: ~109 rows (approximately)
 /*!40000 ALTER TABLE `tvc_order_channel` DISABLE KEYS */;
 INSERT INTO `tvc_order_channel` (`id`, `order_id`, `channel_id`, `cluster_id`, `price`) VALUES
-	(145, '62af4db003bf9', 289, 1, 2000.00),
-	(146, '62af4db003bf9', 290, 1, 2000.00),
-	(147, '62af4db003bf9', 306, 2, 2000.00),
-	(148, '62af4db003bf9', 312, 3, 2000.00),
-	(149, '62af50fe47530', 289, 1, 2000.00),
-	(150, '62af50fe47530', 290, 1, 2000.00),
-	(151, '62af50fe47530', 306, 2, 2000.00),
-	(152, '62af50fe47530', 312, 3, 2000.00),
-	(153, '62af51f02831c', 289, 1, 2000.00),
-	(154, '62af51f02831c', 290, 1, 2000.00),
-	(155, '62af51f02831c', 306, 2, 2000.00),
-	(156, '62af51f02831c', 312, 3, 2000.00),
-	(157, '62af5245e151c', 289, 1, 2000.00),
-	(158, '62af5245e151c', 290, 1, 2000.00),
-	(159, '62af5245e151c', 306, 2, 2000.00),
-	(160, '62af5245e151c', 312, 3, 2000.00),
-	(161, '62af530fc67b2', 289, 1, 2000.00),
-	(162, '62af530fc67b2', 290, 1, 2000.00),
-	(163, '62af530fc67b2', 306, 2, 2000.00),
-	(164, '62af530fc67b2', 312, 3, 2000.00),
-	(165, '62af5329c5a2a', 289, 1, 2000.00),
-	(166, '62af5329c5a2a', 290, 1, 2000.00),
-	(167, '62af5329c5a2a', 306, 2, 2000.00),
-	(168, '62af5329c5a2a', 312, 3, 2000.00),
-	(169, '62af537185554', 289, 1, 2000.00),
-	(170, '62af537185554', 290, 1, 2000.00),
-	(171, '62af537185554', 306, 2, 2000.00),
-	(172, '62af537185554', 312, 3, 2000.00),
-	(173, '62af575e90f8a', 290, 1, 2400.00),
-	(174, '62af575e90f8a', 291, 1, 2400.00),
-	(175, '62af575e90f8a', 306, 2, 2400.00),
-	(176, '62af575e90f8a', 307, 2, 2400.00),
-	(177, '62af5773f4036', 290, 1, 2400.00),
-	(178, '62af5773f4036', 291, 1, 2400.00),
-	(179, '62af5773f4036', 306, 2, 2400.00),
-	(180, '62af5773f4036', 307, 2, 2400.00),
-	(181, '62af5abdd3fa2', 290, 1, 2400.00),
-	(182, '62af5abdd3fa2', 291, 1, 2400.00),
-	(183, '62af5abdd3fa2', 306, 2, 2400.00),
-	(184, '62af5abdd3fa2', 307, 2, 2400.00),
-	(185, '62af5adb61ca3', 290, 1, 2400.00),
-	(186, '62af5adb61ca3', 291, 1, 2400.00),
-	(187, '62af5adb61ca3', 306, 2, 2400.00),
-	(188, '62af5adb61ca3', 307, 2, 2400.00);
+	(254, '62b2126fba4e6', 289, 1, 5500.00),
+	(255, '62b2126fba4e6', 290, 1, 5500.00),
+	(256, '62b2126fba4e6', 291, 1, 5500.00),
+	(257, '62b2126fba4e6', 308, 2, 5500.00),
+	(258, '62b2126fba4e6', 312, 3, 5500.00),
+	(259, '62b2126fba4e6', 278, 5, 5500.00),
+	(260, '62b212b20d83e', 289, 1, 2000.00),
+	(261, '62b212b20d83e', 290, 1, 2000.00),
+	(262, '62b212b20d83e', 291, 1, 2000.00),
+	(263, '62b212b20d83e', 308, 2, 2000.00),
+	(264, '62b212b20d83e', 312, 3, 2000.00),
+	(265, '62b212b20d83e', 278, 5, 2000.00),
+	(266, '62b212cf85cfa', 289, 1, 2000.00),
+	(267, '62b212cf85cfa', 290, 1, 2000.00),
+	(268, '62b212cf85cfa', 291, 1, 2000.00),
+	(269, '62b212cf85cfa', 308, 2, 2000.00),
+	(270, '62b212cf85cfa', 312, 3, 2000.00),
+	(271, '62b212cf85cfa', 278, 5, 2000.00);
 /*!40000 ALTER TABLE `tvc_order_channel` ENABLE KEYS */;
 
 -- Dumping structure for table tvcxpress_db.tvc_order_charges
@@ -496,28 +436,14 @@ CREATE TABLE IF NOT EXISTS `tvc_order_charges` (
   `order_id` varchar(255) DEFAULT NULL,
   `grand_total` float(11,2) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 
--- Dumping data for table tvcxpress_db.tvc_order_charges: ~10 rows (approximately)
+-- Dumping data for table tvcxpress_db.tvc_order_charges: ~33 rows (approximately)
 /*!40000 ALTER TABLE `tvc_order_charges` DISABLE KEYS */;
 INSERT INTO `tvc_order_charges` (`id`, `order_id`, `grand_total`) VALUES
-	(1, '62af4db003bf9', 8000.00),
-	(2, '62af50fe47530', 8000.00),
-	(3, '62af51f02831c', 8000.00),
-	(4, '62af5245e151c', 8000.00),
-	(5, '62af530fc67b2', 8000.00),
-	(6, '62af5329c5a2a', 8000.00),
-	(7, '62af537185554', 8000.00),
-	(8, '62af549e80415', 3000.00),
-	(9, '62af54d872666', 0.00),
-	(10, '62af552c4acaa', 5000.00),
-	(11, '62af56789549c', 0.00),
-	(12, '62af5683b3cbd', 3000.00),
-	(13, '62af56ada80a8', 7000.00),
-	(14, '62af575e90f8a', 9600.00),
-	(15, '62af5773f4036', 9600.00),
-	(16, '62af5abdd3fa2', 9600.00),
-	(17, '62af5adb61ca3', 9600.00);
+	(34, '62b2126fba4e6', 33000.00),
+	(35, '62b212b20d83e', 12000.00),
+	(36, '62b212cf85cfa', 12000.00);
 /*!40000 ALTER TABLE `tvc_order_charges` ENABLE KEYS */;
 
 -- Dumping structure for table tvcxpress_db.tvc_order_services
@@ -529,21 +455,10 @@ CREATE TABLE IF NOT EXISTS `tvc_order_services` (
   `price` float(11,2) DEFAULT NULL,
   `qty` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
--- Dumping data for table tvcxpress_db.tvc_order_services: ~4 rows (approximately)
+-- Dumping data for table tvcxpress_db.tvc_order_services: ~13 rows (approximately)
 /*!40000 ALTER TABLE `tvc_order_services` DISABLE KEYS */;
-INSERT INTO `tvc_order_services` (`id`, `order_id`, `sub_cat_id`, `cat_id`, `price`, `qty`) VALUES
-	(3, '62af549e80415', 4, 1, 1000.00, 1),
-	(4, '62af549e80415', 5, 1, 2000.00, 1),
-	(5, '62af552c4acaa', 4, 1, 1000.00, 1),
-	(6, '62af552c4acaa', 5, 1, 4000.00, 2),
-	(7, '62af56789549c', 4, 1, 0.00, NULL),
-	(8, '62af56789549c', 5, 1, 0.00, NULL),
-	(9, '62af5683b3cbd', 4, 1, 1000.00, 1),
-	(10, '62af5683b3cbd', 5, 1, 2000.00, 1),
-	(11, '62af56ada80a8', 4, 1, 1000.00, 1),
-	(12, '62af56ada80a8', 5, 1, 6000.00, 3);
 /*!40000 ALTER TABLE `tvc_order_services` ENABLE KEYS */;
 
 -- Dumping structure for table tvcxpress_db.tvc_order_share_link
@@ -552,31 +467,14 @@ CREATE TABLE IF NOT EXISTS `tvc_order_share_link` (
   `order_id` varchar(255) DEFAULT NULL,
   `share_link` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=110 DEFAULT CHARSET=utf8;
 
--- Dumping data for table tvcxpress_db.tvc_order_share_link: ~11 rows (approximately)
+-- Dumping data for table tvcxpress_db.tvc_order_share_link: ~49 rows (approximately)
 /*!40000 ALTER TABLE `tvc_order_share_link` DISABLE KEYS */;
 INSERT INTO `tvc_order_share_link` (`id`, `order_id`, `share_link`) VALUES
-	(48, '62af4db003bf9', ''),
-	(49, '62af50fe47530', ''),
-	(50, '62af51f02831c', ''),
-	(51, '62af5245e151c', ''),
-	(52, '62af530fc67b2', ''),
-	(53, '62af5329c5a2a', ''),
-	(54, '62af537185554', ''),
-	(55, '62af53b02af50', ''),
-	(56, '62af549e80415', ''),
-	(57, '62af54d872666', ''),
-	(58, '62af552c4acaa', ''),
-	(59, '62af56789549c', ''),
-	(60, '62af5683b3cbd', ''),
-	(61, '62af56ada80a8', ''),
-	(62, '62af575e90f8a', ''),
-	(63, '62af5773f4036', ''),
-	(64, '62af59abbf38e', ''),
-	(65, '62af5a57a92c4', ''),
-	(66, '62af5abdd3fa2', ''),
-	(67, '62af5adb61ca3', '');
+	(107, '62b2126fba4e6', ''),
+	(108, '62b212b20d83e', ''),
+	(109, '62b212cf85cfa', '');
 /*!40000 ALTER TABLE `tvc_order_share_link` ENABLE KEYS */;
 
 -- Dumping structure for table tvcxpress_db.tvc_traffic
@@ -592,13 +490,12 @@ CREATE TABLE IF NOT EXISTS `tvc_traffic` (
   `created_by` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
--- Dumping data for table tvcxpress_db.tvc_traffic: ~0 rows (approximately)
+-- Dumping data for table tvcxpress_db.tvc_traffic: ~2 rows (approximately)
 /*!40000 ALTER TABLE `tvc_traffic` DISABLE KEYS */;
 INSERT INTO `tvc_traffic` (`id`, `order_code`, `sched`, `order_form`, `material`, `asc_clearance`, `billing`, `status`, `created_by`, `created_at`) VALUES
-	(1, 'O2022062000002', '2022-06-21', 2, 2, 2, 1, 3, NULL, NULL),
-	(2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+	(3, 'O202206210001', '2022-06-23', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 /*!40000 ALTER TABLE `tvc_traffic` ENABLE KEYS */;
 
 -- Dumping structure for table tvcxpress_db.tvc_traffic_log

@@ -152,7 +152,7 @@ $('.search-form form').submit(function(){
 									<td><?php echo $val['asc_project_title'] ?></td>
 									<td><?php echo $val['length'] ?></td>
 									<td><?php echo strtoupper($val['service_type'] == 1 ? "Transmission" : "Non-Transmission"); ?></td>
-									<td style="cursor:pointer;<?php echo TvcTraffic::model()->get_status($val['ordrstat'], 1) == "Not Set" ? "color:red" : "" ?>" onclick="opensetstatus('<?php echo $val['sched'] ?>','<?php echo $val['order_code'] ?>',1,<?php echo TvcTraffic::model()->get_status($val['ordrstat'], 1) ?>)">
+									<td style="cursor:pointer;<?php echo TvcTraffic::model()->get_status($val['ordrstat'], 1) == "Not Set" ? "color:red" : "" ?>" onclick="opensetstatus('<?php echo $val['sched'] ?>','<?php echo $val['order_code'] ?>',1)">
 										<?php echo TvcTraffic::model()->get_status($val['ordrstat'], 1) ?>
 									</td>
 									<td style="cursor:pointer;<?php echo TvcTraffic::model()->get_status($val['matstat'], 2) == "Not Set" ? "color:red" : "" ?>" onclick="opensetstatus('<?php echo $val['sched'] ?>','<?php echo $val['order_code'] ?>',2)">
@@ -290,7 +290,7 @@ $('.search-form form').submit(function(){
 
 	}
 
-	function opensetstatus(sched, ordercode, stat,statname) {
+	function opensetstatus(sched, ordercode, stat) {
 
 		if (sched == "") {
 
