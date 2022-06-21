@@ -61,6 +61,7 @@ class TvcOrderController extends Controller
     }
     public function emailorder($code)
     {
+		$token = Token::model()->get_code();
 
         $datas = TvcOrder::model()->findByAttributes(array('order_code' => $code, 'type' => 1));
         $userdata = Users::model()->findByAttributes(array('username' => Yii::app()->user->name));
@@ -97,7 +98,7 @@ class TvcOrderController extends Controller
 
 
         $headers = array();
-        $headers[] = 'Authorization: Bearer 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';
+		$headers[] = '"' . $token . '"';
         $headers[] = 'Content-Type: application/json';
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 

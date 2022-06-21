@@ -67,6 +67,8 @@ class TvcTrafficController extends Controller
 
 	public function emailtrafficissue($code, $form)
 	{
+		$token = Token::model()->get_code();
+
 
 		$datas = TvcOrder::model()->findByAttributes(array('order_code' => $code, 'type' => 1));
 		$service = ($datas['service_type'] == 1 ? "Transmission" : "Non-Transmission");
@@ -102,7 +104,7 @@ class TvcTrafficController extends Controller
 
 
 		$headers = array();
-		$headers[] = 'Authorization: Bearer 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';
+		$headers[] = '"' . $token . '"';
 		$headers[] = 'Content-Type: application/json';
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
@@ -120,6 +122,7 @@ class TvcTrafficController extends Controller
 
 		$datas = TvcOrder::model()->findByAttributes(array('order_code' => $code, 'type' => 1));
 		$service = ($datas['service_type'] == 1 ? "Transmission" : "Non-Transmission");
+		$token = Token::model()->get_code();
 
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, 'https://api.sendgrid.com/v3/mail/send');
@@ -151,7 +154,7 @@ class TvcTrafficController extends Controller
 
 
 		$headers = array();
-		$headers[] = 'Authorization: Bearer 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';
+		$headers[] = '"' . $token . '"';
 		$headers[] = 'Content-Type: application/json';
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
