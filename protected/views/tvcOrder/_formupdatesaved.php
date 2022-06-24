@@ -435,13 +435,13 @@
 									<div class="form-check form-check-inline">
 										<input type="radio" class="form-check-input" name="TvcOrder[mode_payment]" id="mode_payment3" value="3" <?php echo $model->mode_payment == 3 ? 'checked' : ''; ?>>
 										<label class="form-check-label" for="mode_payment3">
-											Bank Deposit/Transfer
+											Bank Deposit(Cash/Check)
 										</label>
 									</div>
 									<div class="form-check form-check-inline">
 										<input type="radio" class="form-check-input" name="TvcOrder[mode_payment]" id="mode_payment8" value="8" <?php echo $model->mode_payment == 8 ? 'checked' : ''; ?>>
 										<label class="form-check-label" for="mode_payment8">
-											Bank Deposit(Cash/Check)
+											Online Bank Transfer
 										</label>
 									</div>
 									<div class="form-check form-check-inline">
@@ -1298,8 +1298,42 @@
 			processData: false,
 			success: function(response, status, data) {
 
-				var url = "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/view&id=" + response;
-				location.href = url;
+				res = JSON.parse(response)
+
+
+
+				if (res.val == 1) {
+					var url = "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=tvcOrder/view&id=" + res.id;
+					location.href = url;
+
+				} else {
+
+					var arrays = res.field_id;
+					var array = arrays.split(",");
+
+					var i;
+					for (i = 0; i < array.length; ++i) {
+						// do something with `substr[i]`
+						var d = array[i]
+						$("[id$='" + $("[id$='" + d + "']").addClass('is-invalid') + "']")
+
+						// alert(array[i])
+
+					}
+
+
+					Swal.fire({
+						'title': "Error",
+						'html': res.val,
+						'icon': 'error'
+
+					}).
+					then((result) => {
+
+					})
+
+
+				}
 				console.log("response" + response)
 			},
 			error: function(xhr, status, error) {

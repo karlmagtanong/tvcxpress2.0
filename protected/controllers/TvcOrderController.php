@@ -354,225 +354,278 @@ class TvcOrderController extends Controller
     public function actionUpdatesavedTran()
     {
 
-        Yii::app()->db
-            ->createCommand('UPDATE tvc_order SET type = 4 WHERE order_id=:order_id')
-            ->bindValues([':order_id' => $_POST['TvcOrder']['order_id']])
-            ->execute();
-        // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
+        $res = array();
 
-        $models = new TvcOrder();
-
-        // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
-
-        if (isset($_POST['TvcOrder'])) {
-            $uniqid = uniqid();
-
-            $models->attributes = $_POST['TvcOrder'];
-
-            $models->break_date = $_POST['TvcOrder']['break_date'] == '' ? null : $_POST['TvcOrder']['break_date'];
-            $models->share_date = $_POST['TvcOrder']['share_date'] == '' ? null : $_POST['TvcOrder']['share_date'];
-            $models->asc_date = $_POST['TvcOrder']['asc_date'] == '' ? null : $_POST['TvcOrder']['asc_date'];
-            $models->asc_valid_from = $_POST['TvcOrder']['asc_valid_from'] == '' ? null : $_POST['TvcOrder']['asc_valid_from'];
-            $models->asc_valid_to = $_POST['TvcOrder']['asc_valid_to'] == '' ? null : $_POST['TvcOrder']['asc_valid_to'];
-            $models->order_id = $uniqid;
-            $models->type = 1;
-            $models->created_by = 1;
-            $models->created_at = date('Y-m-d');
-            $models->save();
-
-            if ($_POST['share_link'] != '') {
-                $s = 0;
-                foreach ($_POST['share_link'] as $val) {
-                    $sharelink = new TvcOrderShareLink();
-                    $sharelink->order_id = $uniqid;
-                    $sharelink->share_link = $_POST['share_link'][$s];
-                    $sharelink->save();
-                    ++$s;
-                }
-            }
-
-            $grandtotal = 0.0;
-            if ($_POST['TvcOrder']['service_type'] == 1) {
-                $c = 0;
-                $total = 0.0;
-                foreach ($_POST['channel'] as $val) {
-                    $total += TvcMgmtRate::model()->get_rate($_POST['TvcOrder']['advertiser'], $_POST['TvcOrder']['agency_company'], $_POST['TvcOrder']['length']);
-                    $channelorder = new TvcOrderChannel();
-                    $channelorder->order_id = $uniqid;
-                    $channelorder->channel_id = $_POST['channel'][$c];
-                    $channelorder->cluster_id = TvcMgmtChannel::model()->get_cluster_id($_POST['channel'][$c]);
-                    $channelorder->price = TvcMgmtRate::model()->get_rate($_POST['TvcOrder']['advertiser'], $_POST['TvcOrder']['agency_company'], $_POST['TvcOrder']['length']);
-                    $channelorder->save();
-                    ++$c;
-                }
-                $ordercharge = new TvcOrderCharges();
-                $ordercharge->order_id = $uniqid;
-                $ordercharge->grand_total = $total;
-                $ordercharge->save();
-            }
-            if ($_POST['TvcOrder']['service_type'] == 2) {
-                $n = 0;
-                $total = 0.0;
-                foreach ($_POST['non_tran']['id'] as $val) {
-                    $total += TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]) * $_POST['non_tran']['qty'][$n];
-                    $channelnontran = new TvcOrderServices();
-                    $channelnontran->order_id = $uniqid;
-                    $channelnontran->sub_cat_id = $_POST['non_tran']['id'][$n];
-                    $channelnontran->qty = $_POST['non_tran']['qty'][$n];
-                    $channelnontran->price = TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]) * $_POST['non_tran']['qty'][$n];
-                    $channelnontran->cat_id = TvcMgmtExtraServicesSub::model()->get_cat_id($_POST['non_tran']['id'][$n]);
-                    $channelnontran->save();
-                    ++$n;
-                }
-                $ordercharge = new TvcOrderCharges();
-                $ordercharge->order_id = $uniqid;
-                $ordercharge->grand_total = $total;
-                $ordercharge->save();
-            }
-
-            if (!empty($_FILES['po_file']['name'])) {
-                $po = 0;
-                foreach ($_FILES['po_file']['name'] as $val) {
-                    $targetDir = 'attachments/upload_pdf/';
-                    $fileName = basename($_FILES['po_file']['name'][$po]);
-                    $targetFilePath = $targetDir . $fileName;
-                    $size = filesize($_FILES['po_file']['tmp_name']); // bytes
-                    $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
-
-                    if (move_uploaded_file($_FILES['po_file']['tmp_name'][$po], $targetFilePath)) {
-                        $attachment = new TvcOrderAttachment();
-                        $attachment->order_id = $uniqid;
-                        $attachment->filename = $fileName;
-                        $attachment->path = $targetFilePath;
-                        $attachment->filesize = $size;
-                        $attachment->format = $fileType;
-                        $attachment->type = 1;
-                        $attachment->save();
-
-                        #  echo 'success';
-                    } else {
-                        # echo 'error asdasd';
-                    }
-
-                    ++$po;
-                }
-            }
-
-            if (!empty($_FILES['material_file']['name'])) {
-                $po = 0;
-                foreach ($_FILES['material_file']['name'] as $val) {
-                    $targetDir = 'attachments/materials/';
-                    $fileName = basename($_FILES['material_file']['name'][$po]);
-                    $targetFilePath = $targetDir . $fileName;
-                    $size = filesize($_FILES['material_file']['tmp_name']); // bytes
-                    $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
-
-                    if (move_uploaded_file($_FILES['material_file']['tmp_name'][$po], $targetFilePath)) {
-                        $attachment = new TvcOrderAttachment();
-                        $attachment->order_id = $uniqid;
-                        $attachment->filename = $fileName;
-                        $attachment->path = $targetFilePath;
-                        $attachment->filesize = $size;
-                        $attachment->format = $fileType;
-                        $attachment->type = 2;
-                        $attachment->save();
-
-                        #  echo 'success';
-                    } else {
-                        # echo 'error asdasd';
-                    }
-
-                    ++$po;
-                }
-            }
-
-            if (!empty($_FILES['asc_file']['name'])) {
-                $po = 0;
-                foreach ($_FILES['asc_file']['name'] as $val) {
-                    $targetDir = 'attachments/asc_clearance/';
-                    $fileName = basename($_FILES['asc_file']['name'][$po]);
-                    $targetFilePath = $targetDir . $fileName;
-                    $size = filesize($_FILES['asc_file']['tmp_name']); // bytes
-                    $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
-
-                    if (move_uploaded_file($_FILES['asc_file']['tmp_name'][$po], $targetFilePath)) {
-                        $attachment = new TvcOrderAttachment();
-                        $attachment->order_id = $uniqid;
-                        $attachment->filename = $fileName;
-                        $attachment->path = $targetFilePath;
-                        $attachment->filesize = $size;
-                        $attachment->format = $fileType;
-                        $attachment->type = 3;
-                        $attachment->save();
-
-                       # echo 'success';
-                    } else {
-                     #   echo 'error asdasd';
-                    }
-
-                    ++$po;
-                }
-            }
-
-            if (isset($_POST['materialid'])) {
-                $m = 0;
-                foreach ($_POST['materialid'] as $val) {
-                    $attachments = new TvcOrderAttachment();
-
-                    $attachments->order_id = $uniqid;
-                    $attachments->filename = TvcOrderAttachment::model()->get_filename($_POST['materialid'][$m]);
-                    $attachments->path = TvcOrderAttachment::model()->get_path($_POST['materialid'][$m]);
-                    $attachments->filesize = TvcOrderAttachment::model()->get_filesize($_POST['materialid'][$m]);
-                    $attachments->format = TvcOrderAttachment::model()->get_format($_POST['materialid'][$m]);
-                    $attachments->type = TvcOrderAttachment::model()->get_type($_POST['materialid'][$m]);
-                    $attachments->save();
-                    ++$m;
-                }
-            }
-
-            if (isset($_POST['poid'])) {
-                $m = 0;
-                foreach ($_POST['poid'] as $val) {
-                    $attachments = new TvcOrderAttachment();
-
-                    $attachments->order_id = $uniqid;
-                    $attachments->filename = TvcOrderAttachment::model()->get_filename($_POST['poid'][$m]);
-                    $attachments->path = TvcOrderAttachment::model()->get_path($_POST['poid'][$m]);
-                    $attachments->filesize = TvcOrderAttachment::model()->get_filesize($_POST['poid'][$m]);
-                    $attachments->format = TvcOrderAttachment::model()->get_format($_POST['poid'][$m]);
-                    $attachments->type = TvcOrderAttachment::model()->get_type($_POST['poid'][$m]);
-                    $attachments->save();
-                    ++$m;
-                }
-            }
-
-            if (isset($_POST['ascclid'])) {
-                $m = 0;
-                foreach ($_POST['ascclid'] as $val) {
-                    $attachments = new TvcOrderAttachment();
-
-                    $attachments->order_id = $uniqid;
-                    $attachments->filename = TvcOrderAttachment::model()->get_filename($_POST['ascclid'][$m]);
-                    $attachments->path = TvcOrderAttachment::model()->get_path($_POST['ascclid'][$m]);
-                    $attachments->filesize = TvcOrderAttachment::model()->get_filesize($_POST['ascclid'][$m]);
-                    $attachments->format = TvcOrderAttachment::model()->get_format($_POST['ascclid'][$m]);
-                    $attachments->type = TvcOrderAttachment::model()->get_type($_POST['ascclid'][$m]);
-                    $attachments->save();
-                    ++$m;
-                }
-            }
-            // print_r($_FILES);
-            // print_r($_POST);
-
-            // print_r($_POST);
-            // $model->attributes=$_POST['TvcOrder'];
-            // if($model->save())
-            // 	$this->redirect(array('view','id'=>$model->id));
-            $this->emailorder($models->order_code);
-            echo $models->id;
+        if ($_POST['TvcOrder']['billing_ce'] == "") {
+            $res['val'] .= "<span style='color:red'>- <strong>CE/PO/MIO/DO/BO Number</strong> cannot be empty</span><br>";
+            $res['field_id'] .= "TvcOrder_billing_ce,";
         }
+        if ($_POST['TvcOrder']['billing_company'] == "") {
+            $res['val'] .= "<span style='color:red'>- <strong>Company Billing Name</strong> cannot be empty</span><br>";
+            $res['field_id'] .= "TvcOrder_billing_company,";
+        }
+        if ($_POST['TvcOrder']['billing_address'] == "") {
+            $res['val'] .= "<span style='color:red'>- <strong>Company Billing Address</strong> cannot be empty</span><br>";
+            $res['field_id'] .= "TvcOrder_billing_address,";
+        }
+        if ($_POST['TvcOrder']['billing_contact_person'] == "") {
+            $res['val'] .= "<span style='color:red'>- <strong>Company Finance Contact Person</strong> cannot be empty</span><br>";
+            $res['field_id'] .= "TvcOrder_billing_contact_person,";
+        }
+        if ($_POST['TvcOrder']['billing_contact_no'] == "") {
+            $res['val'] .= "<span style='color:red'>- <strong>Company Billing Contact No</strong> cannot be empty</span><br>";
+            $res['field_id'] .= "TvcOrder_billing_contact_no,";
+        }
+        if ($_POST['TvcOrder']['billing_contact_email'] == "") {
+            $res['val'] .= "<span style='color:red'>- <strong>Company Billing Email</strong> cannot be empty</span><br>";
+            $res['field_id'] .= "TvcOrder_billing_contact_email,";
+        }
+        if ($_POST['TvcOrder']['billing_tin'] == "") {
+            $res['val'] .= "<span style='color:red'>- <strong>Company Billing TIN</strong> cannot be empty</span><br>";
+            $res['field_id'] .= "TvcOrder_billing_tin,";
+        }
+        if ($_POST['TvcOrder']['billing_business_type'] == "") {
+            $res['val'] .= "<span style='color:red'>- <strong>Company Billing Style</strong> cannot be empty</span><br>";
+            $res['field_id'] .= "TvcOrder_billing_business_type,";
+        }
+        if ($_POST['TvcOrder']['billing_upload_type'] == "") {
+            $res['val'] .= "<span style='color:red'>- <strong>Company Billing Upload PDF</strong> cannot be empty</span><br>";
+            $res['field_id'] .= "TvcOrder_billing_upload_type,";
+        }
+
+        if (
+            $_POST['TvcOrder']['billing_ce'] != "" && $_POST['TvcOrder']['billing_company'] != "" && $_POST['TvcOrder']['billing_address'] != ""
+            && $_POST['TvcOrder']['billing_contact_person'] != "" && $_POST['TvcOrder']['billing_contact_no'] != "" && $_POST['TvcOrder']['billing_contact_email'] != ""
+            && $_POST['TvcOrder']['billing_tin'] != "" && $_POST['TvcOrder']['billing_business_type'] != "" && $_POST['TvcOrder']['billing_upload_type'] != ""
+        ) {
+
+
+
+
+
+            Yii::app()->db
+                ->createCommand('UPDATE tvc_order SET type = 4 WHERE order_id=:order_id')
+                ->bindValues([':order_id' => $_POST['TvcOrder']['order_id']])
+                ->execute();
+            // Uncomment the following line if AJAX validation is needed
+            // $this->performAjaxValidation($model);
+
+            $models = new TvcOrder();
+
+            // Uncomment the following line if AJAX validation is needed
+            // $this->performAjaxValidation($model);
+
+            if (isset($_POST['TvcOrder'])) {
+                $uniqid = uniqid();
+
+                $models->attributes = $_POST['TvcOrder'];
+
+                $models->break_date = $_POST['TvcOrder']['break_date'] == '' ? null : $_POST['TvcOrder']['break_date'];
+                $models->share_date = $_POST['TvcOrder']['share_date'] == '' ? null : $_POST['TvcOrder']['share_date'];
+                $models->asc_date = $_POST['TvcOrder']['asc_date'] == '' ? null : $_POST['TvcOrder']['asc_date'];
+                $models->asc_valid_from = $_POST['TvcOrder']['asc_valid_from'] == '' ? null : $_POST['TvcOrder']['asc_valid_from'];
+                $models->asc_valid_to = $_POST['TvcOrder']['asc_valid_to'] == '' ? null : $_POST['TvcOrder']['asc_valid_to'];
+                $models->order_id = $uniqid;
+                $models->type = 1;
+                $models->created_by = 1;
+                $models->created_at = date('Y-m-d');
+                $models->save();
+
+                if ($_POST['share_link'] != '') {
+                    $s = 0;
+                    foreach ($_POST['share_link'] as $val) {
+                        $sharelink = new TvcOrderShareLink();
+                        $sharelink->order_id = $uniqid;
+                        $sharelink->share_link = $_POST['share_link'][$s];
+                        $sharelink->save();
+                        ++$s;
+                    }
+                }
+
+                $grandtotal = 0.0;
+                if ($_POST['TvcOrder']['service_type'] == 1) {
+                    $c = 0;
+                    $total = 0.0;
+                    foreach ($_POST['channel'] as $val) {
+                        $total += TvcMgmtRate::model()->get_rate($_POST['TvcOrder']['advertiser'], $_POST['TvcOrder']['agency_company'], $_POST['TvcOrder']['length']);
+                        $channelorder = new TvcOrderChannel();
+                        $channelorder->order_id = $uniqid;
+                        $channelorder->channel_id = $_POST['channel'][$c];
+                        $channelorder->cluster_id = TvcMgmtChannel::model()->get_cluster_id($_POST['channel'][$c]);
+                        $channelorder->price = TvcMgmtRate::model()->get_rate($_POST['TvcOrder']['advertiser'], $_POST['TvcOrder']['agency_company'], $_POST['TvcOrder']['length']);
+                        $channelorder->save();
+                        ++$c;
+                    }
+                    $ordercharge = new TvcOrderCharges();
+                    $ordercharge->order_id = $uniqid;
+                    $ordercharge->grand_total = $total;
+                    $ordercharge->save();
+                }
+                if ($_POST['TvcOrder']['service_type'] == 2) {
+                    $n = 0;
+                    $total = 0.0;
+                    foreach ($_POST['non_tran']['id'] as $val) {
+                        $total += TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]) * $_POST['non_tran']['qty'][$n];
+                        $channelnontran = new TvcOrderServices();
+                        $channelnontran->order_id = $uniqid;
+                        $channelnontran->sub_cat_id = $_POST['non_tran']['id'][$n];
+                        $channelnontran->qty = $_POST['non_tran']['qty'][$n];
+                        $channelnontran->price = TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]) * $_POST['non_tran']['qty'][$n];
+                        $channelnontran->cat_id = TvcMgmtExtraServicesSub::model()->get_cat_id($_POST['non_tran']['id'][$n]);
+                        $channelnontran->save();
+                        ++$n;
+                    }
+                    $ordercharge = new TvcOrderCharges();
+                    $ordercharge->order_id = $uniqid;
+                    $ordercharge->grand_total = $total;
+                    $ordercharge->save();
+                }
+
+                if (!empty($_FILES['po_file']['name'])) {
+                    $po = 0;
+                    foreach ($_FILES['po_file']['name'] as $val) {
+                        $targetDir = 'attachments/upload_pdf/';
+                        $fileName = basename($_FILES['po_file']['name'][$po]);
+                        $targetFilePath = $targetDir . $fileName;
+                        $size = filesize($_FILES['po_file']['tmp_name']); // bytes
+                        $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
+
+                        if (move_uploaded_file($_FILES['po_file']['tmp_name'][$po], $targetFilePath)) {
+                            $attachment = new TvcOrderAttachment();
+                            $attachment->order_id = $uniqid;
+                            $attachment->filename = $fileName;
+                            $attachment->path = $targetFilePath;
+                            $attachment->filesize = $size;
+                            $attachment->format = $fileType;
+                            $attachment->type = 1;
+                            $attachment->save();
+
+                            #  echo 'success';
+                        } else {
+                            # echo 'error asdasd';
+                        }
+
+                        ++$po;
+                    }
+                }
+
+                if (!empty($_FILES['material_file']['name'])) {
+                    $po = 0;
+                    foreach ($_FILES['material_file']['name'] as $val) {
+                        $targetDir = 'attachments/materials/';
+                        $fileName = basename($_FILES['material_file']['name'][$po]);
+                        $targetFilePath = $targetDir . $fileName;
+                        $size = filesize($_FILES['material_file']['tmp_name']); // bytes
+                        $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
+
+                        if (move_uploaded_file($_FILES['material_file']['tmp_name'][$po], $targetFilePath)) {
+                            $attachment = new TvcOrderAttachment();
+                            $attachment->order_id = $uniqid;
+                            $attachment->filename = $fileName;
+                            $attachment->path = $targetFilePath;
+                            $attachment->filesize = $size;
+                            $attachment->format = $fileType;
+                            $attachment->type = 2;
+                            $attachment->save();
+
+                            #  echo 'success';
+                        } else {
+                            # echo 'error asdasd';
+                        }
+
+                        ++$po;
+                    }
+                }
+
+                if (!empty($_FILES['asc_file']['name'])) {
+                    $po = 0;
+                    foreach ($_FILES['asc_file']['name'] as $val) {
+                        $targetDir = 'attachments/asc_clearance/';
+                        $fileName = basename($_FILES['asc_file']['name'][$po]);
+                        $targetFilePath = $targetDir . $fileName;
+                        $size = filesize($_FILES['asc_file']['tmp_name']); // bytes
+                        $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
+
+                        if (move_uploaded_file($_FILES['asc_file']['tmp_name'][$po], $targetFilePath)) {
+                            $attachment = new TvcOrderAttachment();
+                            $attachment->order_id = $uniqid;
+                            $attachment->filename = $fileName;
+                            $attachment->path = $targetFilePath;
+                            $attachment->filesize = $size;
+                            $attachment->format = $fileType;
+                            $attachment->type = 3;
+                            $attachment->save();
+
+                            # echo 'success';
+                        } else {
+                            #   echo 'error asdasd';
+                        }
+
+                        ++$po;
+                    }
+                }
+
+                if (isset($_POST['materialid'])) {
+                    $m = 0;
+                    foreach ($_POST['materialid'] as $val) {
+                        $attachments = new TvcOrderAttachment();
+
+                        $attachments->order_id = $uniqid;
+                        $attachments->filename = TvcOrderAttachment::model()->get_filename($_POST['materialid'][$m]);
+                        $attachments->path = TvcOrderAttachment::model()->get_path($_POST['materialid'][$m]);
+                        $attachments->filesize = TvcOrderAttachment::model()->get_filesize($_POST['materialid'][$m]);
+                        $attachments->format = TvcOrderAttachment::model()->get_format($_POST['materialid'][$m]);
+                        $attachments->type = TvcOrderAttachment::model()->get_type($_POST['materialid'][$m]);
+                        $attachments->save();
+                        ++$m;
+                    }
+                }
+
+                if (isset($_POST['poid'])) {
+                    $m = 0;
+                    foreach ($_POST['poid'] as $val) {
+                        $attachments = new TvcOrderAttachment();
+
+                        $attachments->order_id = $uniqid;
+                        $attachments->filename = TvcOrderAttachment::model()->get_filename($_POST['poid'][$m]);
+                        $attachments->path = TvcOrderAttachment::model()->get_path($_POST['poid'][$m]);
+                        $attachments->filesize = TvcOrderAttachment::model()->get_filesize($_POST['poid'][$m]);
+                        $attachments->format = TvcOrderAttachment::model()->get_format($_POST['poid'][$m]);
+                        $attachments->type = TvcOrderAttachment::model()->get_type($_POST['poid'][$m]);
+                        $attachments->save();
+                        ++$m;
+                    }
+                }
+
+                if (isset($_POST['ascclid'])) {
+                    $m = 0;
+                    foreach ($_POST['ascclid'] as $val) {
+                        $attachments = new TvcOrderAttachment();
+
+                        $attachments->order_id = $uniqid;
+                        $attachments->filename = TvcOrderAttachment::model()->get_filename($_POST['ascclid'][$m]);
+                        $attachments->path = TvcOrderAttachment::model()->get_path($_POST['ascclid'][$m]);
+                        $attachments->filesize = TvcOrderAttachment::model()->get_filesize($_POST['ascclid'][$m]);
+                        $attachments->format = TvcOrderAttachment::model()->get_format($_POST['ascclid'][$m]);
+                        $attachments->type = TvcOrderAttachment::model()->get_type($_POST['ascclid'][$m]);
+                        $attachments->save();
+                        ++$m;
+                    }
+                }
+                // print_r($_FILES);
+                // print_r($_POST);
+
+                // print_r($_POST);
+                // $model->attributes=$_POST['TvcOrder'];
+                // if($model->save())
+                // 	$this->redirect(array('view','id'=>$model->id));
+                $this->emailorder($models->order_code);
+
+                $res['val'] = 1;
+                $res['id'] = $models->id;
+            }
+        }
+        echo json_encode($res);
     }
 
 
@@ -770,174 +823,221 @@ class TvcOrderController extends Controller
 
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
+        $res = array();
 
-        if (isset($_POST['TvcOrder'])) {
-            $uniqid = uniqid();
-
-            $model->attributes = $_POST['TvcOrder'];
-            $model->order_code = 'O' . date("Ymd") . TvcOrder::model()->count();
-            $model->break_date = $_POST['TvcOrder']['break_date'] == '' ? null : $_POST['TvcOrder']['break_date'];
-            $model->share_date = $_POST['TvcOrder']['share_date'] == '' ? null : $_POST['TvcOrder']['share_date'];
-            $model->asc_date = $_POST['TvcOrder']['asc_date'] == '' ? null : $_POST['TvcOrder']['asc_date'];
-            $model->asc_valid_from = $_POST['TvcOrder']['asc_valid_from'] == '' ? null : $_POST['TvcOrder']['asc_valid_from'];
-            $model->asc_valid_to = $_POST['TvcOrder']['asc_valid_to'] == '' ? null : $_POST['TvcOrder']['asc_valid_to'];
-            $model->order_id = $uniqid;
-            $model->type = 1;
-            $model->created_by = 1;
-            $model->created_at = date('Y-m-d');
-            $model->save();
-
-
-
-            if ($_POST['share_link'] != '') {
-                $s = 0;
-                foreach ($_POST['share_link'] as $val) {
-                    $sharelink = new TvcOrderShareLink();
-                    $sharelink->order_id = $uniqid;
-                    $sharelink->share_link = $_POST['share_link'][$s];
-                    $sharelink->save();
-                    ++$s;
-                }
-            }
-
-            $grandtotal = 0.0;
-            if ($_POST['TvcOrder']['service_type'] == 1) {
-                $c = 0;
-                $total = 0.0;
-                foreach ($_POST['channel'] as $val) {
-                    $total += TvcMgmtRate::model()->get_rate($_POST['TvcOrder']['advertiser'], $_POST['TvcOrder']['agency_company'], $_POST['TvcOrder']['length']);
-                    $channelorder = new TvcOrderChannel();
-                    $channelorder->order_id = $uniqid;
-                    $channelorder->channel_id = $_POST['channel'][$c];
-                    $channelorder->cluster_id = TvcMgmtChannel::model()->get_cluster_id($_POST['channel'][$c]);
-                    $channelorder->price = TvcMgmtRate::model()->get_rate($_POST['TvcOrder']['advertiser'], $_POST['TvcOrder']['agency_company'], $_POST['TvcOrder']['length']);
-                    $channelorder->save();
-                    ++$c;
-                }
-
-                $ordercharge = new TvcOrderCharges();
-                $ordercharge->order_id = $uniqid;
-                $ordercharge->grand_total = $total;
-                $ordercharge->save();
-            }
-            if ($_POST['TvcOrder']['service_type'] == 2) {
-                $n = 0;
-                $total = 0.0;
-                foreach ($_POST['non_tran']['id'] as $val) {
-                    $channelnontran = new TvcOrderServices();
-                    $total += TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]);
-                    $channelnontran->order_id = $uniqid;
-                    $channelnontran->sub_cat_id = $_POST['non_tran']['id'][$n];
-                    $channelnontran->qty = $_POST['non_tran']['qty'][$n];
-                    $channelnontran->price = TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]);
-                    $channelnontran->cat_id = TvcMgmtExtraServicesSub::model()->get_cat_id($_POST['non_tran']['id'][$n]);
-                    $channelnontran->save();
-                    ++$n;
-                }
-
-                $ordercharge = new TvcOrderCharges();
-                $ordercharge->order_id = $uniqid;
-                $ordercharge->grand_total = $total;
-                $ordercharge->save();
-            }
-
-            if (!empty($_FILES['po_file']['name'])) {
-                $po = 0;
-                foreach ($_FILES['po_file']['name'] as $val) {
-                    $targetDir = 'attachments/upload_pdf/';
-                    $fileName = basename($_FILES['po_file']['name'][$po]);
-                    $targetFilePath = $targetDir . $fileName;
-                    $size = filesize($_FILES['po_file']['tmp_name']); // bytes
-                    $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
-
-                    if (move_uploaded_file($_FILES['po_file']['tmp_name'][$po], $targetFilePath)) {
-                        $attachment = new TvcOrderAttachment();
-                        $attachment->order_id = $uniqid;
-                        $attachment->filename = $fileName;
-                        $attachment->path = $targetFilePath;
-                        $attachment->filesize = $size;
-                        $attachment->format = $fileType;
-                        $attachment->type = 1;
-                        $attachment->save();
-
-                        #    echo 'success';
-                    } else {
-                        # echo 'error asdasd';
-                    }
-
-                    ++$po;
-                }
-            }
-
-            if (!empty($_FILES['material_file']['name'])) {
-                $po = 0;
-                foreach ($_FILES['material_file']['name'] as $val) {
-                    $targetDir = 'attachments/materials/';
-                    $fileName = basename($_FILES['material_file']['name'][$po]);
-                    $targetFilePath = $targetDir . $fileName;
-                    $size = filesize($_FILES['material_file']['tmp_name']); // bytes
-                    $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
-
-                    if (move_uploaded_file($_FILES['material_file']['tmp_name'][$po], $targetFilePath)) {
-                        $attachment = new TvcOrderAttachment();
-                        $attachment->order_id = $uniqid;
-                        $attachment->filename = $fileName;
-                        $attachment->path = $targetFilePath;
-                        $attachment->filesize = $size;
-                        $attachment->format = $fileType;
-                        $attachment->type = 2;
-                        $attachment->save();
-
-                        # echo 'success';
-                    } else {
-                        # echo 'error asdasd';
-                    }
-
-                    ++$po;
-                }
-            }
-
-            if (!empty($_FILES['asc_file']['name'])) {
-                $po = 0;
-                foreach ($_FILES['asc_file']['name'] as $val) {
-                    $targetDir = 'attachments/asc_clearance/';
-                    $fileName = basename($_FILES['asc_file']['name'][$po]);
-                    $targetFilePath = $targetDir . $fileName;
-                    $size = filesize($_FILES['asc_file']['tmp_name']); // bytes
-                    $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
-
-                    if (move_uploaded_file($_FILES['asc_file']['tmp_name'][$po], $targetFilePath)) {
-                        $attachment = new TvcOrderAttachment();
-                        $attachment->order_id = $uniqid;
-                        $attachment->filename = $fileName;
-                        $attachment->path = $targetFilePath;
-                        $attachment->filesize = $size;
-                        $attachment->format = $fileType;
-                        $attachment->type = 3;
-                        $attachment->save();
-
-                        # echo 'success';
-                    } else {
-                        #  echo 'error asdasd';
-                    }
-
-                    ++$po;
-                }
-            }
-
-            // print_r($_FILES);
-            // print_r($_POST);
-
-            // print_r($_POST);
-            // $model->attributes=$_POST['TvcOrder'];
-            // if($model->save())
-            // 	$this->redirect(array('view','id'=>$model->id));
-
-            $this->emailorder($model->order_code);
-
-            echo $model->id;
-            // $this->redirect(['view', 'id' => $model->id]);
+        if ($_POST['TvcOrder']['billing_ce'] == "") {
+            $res['val'] .= "<span style='color:red'>- <strong>CE/PO/MIO/DO/BO Number</strong> cannot be empty</span><br>";
+            $res['field_id'] .= "TvcOrder_billing_ce,";
         }
+        if ($_POST['TvcOrder']['billing_company'] == "") {
+            $res['val'] .= "<span style='color:red'>- <strong>Company Billing Name</strong> cannot be empty</span><br>";
+            $res['field_id'] .= "TvcOrder_billing_company,";
+        }
+        if ($_POST['TvcOrder']['billing_address'] == "") {
+            $res['val'] .= "<span style='color:red'>- <strong>Company Billing Address</strong> cannot be empty</span><br>";
+            $res['field_id'] .= "TvcOrder_billing_address,";
+        }
+        if ($_POST['TvcOrder']['billing_contact_person'] == "") {
+            $res['val'] .= "<span style='color:red'>- <strong>Company Finance Contact Person</strong> cannot be empty</span><br>";
+            $res['field_id'] .= "TvcOrder_billing_contact_person,";
+        }
+        if ($_POST['TvcOrder']['billing_contact_no'] == "") {
+            $res['val'] .= "<span style='color:red'>- <strong>Company Billing Contact No</strong> cannot be empty</span><br>";
+            $res['field_id'] .= "TvcOrder_billing_contact_no,";
+        }
+        if ($_POST['TvcOrder']['billing_contact_email'] == "") {
+            $res['val'] .= "<span style='color:red'>- <strong>Company Billing Email</strong> cannot be empty</span><br>";
+            $res['field_id'] .= "TvcOrder_billing_contact_email,";
+        }
+        if ($_POST['TvcOrder']['billing_tin'] == "") {
+            $res['val'] .= "<span style='color:red'>- <strong>Company Billing TIN</strong> cannot be empty</span><br>";
+            $res['field_id'] .= "TvcOrder_billing_tin,";
+        }
+        if ($_POST['TvcOrder']['billing_business_type'] == "") {
+            $res['val'] .= "<span style='color:red'>- <strong>Company Billing Style</strong> cannot be empty</span><br>";
+            $res['field_id'] .= "TvcOrder_billing_business_type,";
+        }
+        if ($_POST['TvcOrder']['billing_upload_type'] == "") {
+            $res['val'] .= "<span style='color:red'>- <strong>Company Billing Upload PDF</strong> cannot be empty</span><br>";
+            $res['field_id'] .= "TvcOrder_billing_upload_type,";
+        }
+
+        if (
+            $_POST['TvcOrder']['billing_ce'] != "" && $_POST['TvcOrder']['billing_company'] != "" && $_POST['TvcOrder']['billing_address'] != ""
+            && $_POST['TvcOrder']['billing_contact_person'] != "" && $_POST['TvcOrder']['billing_contact_no'] != "" && $_POST['TvcOrder']['billing_contact_email'] != ""
+            && $_POST['TvcOrder']['billing_tin'] != "" && $_POST['TvcOrder']['billing_business_type'] != "" && $_POST['TvcOrder']['billing_upload_type'] != ""
+        ) {
+            if (isset($_POST['TvcOrder'])) {
+                $uniqid = uniqid();
+
+                $model->attributes = $_POST['TvcOrder'];
+                $model->order_code = 'O' . date("Ymd") . TvcOrder::model()->count();
+                $model->break_date = $_POST['TvcOrder']['break_date'] == '' ? null : $_POST['TvcOrder']['break_date'];
+                $model->share_date = $_POST['TvcOrder']['share_date'] == '' ? null : $_POST['TvcOrder']['share_date'];
+                $model->asc_date = $_POST['TvcOrder']['asc_date'] == '' ? null : $_POST['TvcOrder']['asc_date'];
+                $model->asc_valid_from = $_POST['TvcOrder']['asc_valid_from'] == '' ? null : $_POST['TvcOrder']['asc_valid_from'];
+                $model->asc_valid_to = $_POST['TvcOrder']['asc_valid_to'] == '' ? null : $_POST['TvcOrder']['asc_valid_to'];
+                $model->order_id = $uniqid;
+                $model->type = 1;
+                $model->created_by = 1;
+                $model->created_at = date('Y-m-d');
+                $model->save();
+
+
+
+                if ($_POST['share_link'] != '') {
+                    $s = 0;
+                    foreach ($_POST['share_link'] as $val) {
+                        $sharelink = new TvcOrderShareLink();
+                        $sharelink->order_id = $uniqid;
+                        $sharelink->share_link = $_POST['share_link'][$s];
+                        $sharelink->save();
+                        ++$s;
+                    }
+                }
+
+                $grandtotal = 0.0;
+                if ($_POST['TvcOrder']['service_type'] == 1) {
+                    $c = 0;
+                    $total = 0.0;
+                    foreach ($_POST['channel'] as $val) {
+                        $total += TvcMgmtRate::model()->get_rate($_POST['TvcOrder']['advertiser'], $_POST['TvcOrder']['agency_company'], $_POST['TvcOrder']['length']);
+                        $channelorder = new TvcOrderChannel();
+                        $channelorder->order_id = $uniqid;
+                        $channelorder->channel_id = $_POST['channel'][$c];
+                        $channelorder->cluster_id = TvcMgmtChannel::model()->get_cluster_id($_POST['channel'][$c]);
+                        $channelorder->price = TvcMgmtRate::model()->get_rate($_POST['TvcOrder']['advertiser'], $_POST['TvcOrder']['agency_company'], $_POST['TvcOrder']['length']);
+                        $channelorder->save();
+                        ++$c;
+                    }
+
+                    $ordercharge = new TvcOrderCharges();
+                    $ordercharge->order_id = $uniqid;
+                    $ordercharge->grand_total = $total;
+                    $ordercharge->save();
+                }
+                if ($_POST['TvcOrder']['service_type'] == 2) {
+                    $n = 0;
+                    $total = 0.0;
+                    foreach ($_POST['non_tran']['id'] as $val) {
+                        $channelnontran = new TvcOrderServices();
+                        $total += TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]);
+                        $channelnontran->order_id = $uniqid;
+                        $channelnontran->sub_cat_id = $_POST['non_tran']['id'][$n];
+                        $channelnontran->qty = $_POST['non_tran']['qty'][$n];
+                        $channelnontran->price = TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]);
+                        $channelnontran->cat_id = TvcMgmtExtraServicesSub::model()->get_cat_id($_POST['non_tran']['id'][$n]);
+                        $channelnontran->save();
+                        ++$n;
+                    }
+
+                    $ordercharge = new TvcOrderCharges();
+                    $ordercharge->order_id = $uniqid;
+                    $ordercharge->grand_total = $total;
+                    $ordercharge->save();
+                }
+
+                if (!empty($_FILES['po_file']['name'])) {
+                    $po = 0;
+                    foreach ($_FILES['po_file']['name'] as $val) {
+                        $targetDir = 'attachments/upload_pdf/';
+                        $fileName = basename($_FILES['po_file']['name'][$po]);
+                        $targetFilePath = $targetDir . $fileName;
+                        $size = filesize($_FILES['po_file']['tmp_name']); // bytes
+                        $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
+
+                        if (move_uploaded_file($_FILES['po_file']['tmp_name'][$po], $targetFilePath)) {
+                            $attachment = new TvcOrderAttachment();
+                            $attachment->order_id = $uniqid;
+                            $attachment->filename = $fileName;
+                            $attachment->path = $targetFilePath;
+                            $attachment->filesize = $size;
+                            $attachment->format = $fileType;
+                            $attachment->type = 1;
+                            $attachment->save();
+
+                            #    echo 'success';
+                        } else {
+                            # echo 'error asdasd';
+                        }
+
+                        ++$po;
+                    }
+                }
+
+                if (!empty($_FILES['material_file']['name'])) {
+                    $po = 0;
+                    foreach ($_FILES['material_file']['name'] as $val) {
+                        $targetDir = 'attachments/materials/';
+                        $fileName = basename($_FILES['material_file']['name'][$po]);
+                        $targetFilePath = $targetDir . $fileName;
+                        $size = filesize($_FILES['material_file']['tmp_name']); // bytes
+                        $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
+
+                        if (move_uploaded_file($_FILES['material_file']['tmp_name'][$po], $targetFilePath)) {
+                            $attachment = new TvcOrderAttachment();
+                            $attachment->order_id = $uniqid;
+                            $attachment->filename = $fileName;
+                            $attachment->path = $targetFilePath;
+                            $attachment->filesize = $size;
+                            $attachment->format = $fileType;
+                            $attachment->type = 2;
+                            $attachment->save();
+
+                            # echo 'success';
+                        } else {
+                            # echo 'error asdasd';
+                        }
+
+                        ++$po;
+                    }
+                }
+
+                if (!empty($_FILES['asc_file']['name'])) {
+                    $po = 0;
+                    foreach ($_FILES['asc_file']['name'] as $val) {
+                        $targetDir = 'attachments/asc_clearance/';
+                        $fileName = basename($_FILES['asc_file']['name'][$po]);
+                        $targetFilePath = $targetDir . $fileName;
+                        $size = filesize($_FILES['asc_file']['tmp_name']); // bytes
+                        $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
+
+                        if (move_uploaded_file($_FILES['asc_file']['tmp_name'][$po], $targetFilePath)) {
+                            $attachment = new TvcOrderAttachment();
+                            $attachment->order_id = $uniqid;
+                            $attachment->filename = $fileName;
+                            $attachment->path = $targetFilePath;
+                            $attachment->filesize = $size;
+                            $attachment->format = $fileType;
+                            $attachment->type = 3;
+                            $attachment->save();
+
+                            # echo 'success';
+                        } else {
+                            #  echo 'error asdasd';
+                        }
+
+                        ++$po;
+                    }
+                }
+
+                // print_r($_FILES);
+                // print_r($_POST);
+
+                // print_r($_POST);
+                // $model->attributes=$_POST['TvcOrder'];
+                // if($model->save())
+                // 	$this->redirect(array('view','id'=>$model->id));
+
+                $this->emailorder($model->order_code);
+
+                $res['val'] = 1;
+                $res['id'] = $model->id;
+                // $this->redirect(['view', 'id' => $model->id]);
+            }
+        }
+
+        echo json_encode($res);
     }
 
 
@@ -1188,227 +1288,279 @@ class TvcOrderController extends Controller
     public function actionUpdateTran()
     {
 
-        Yii::app()->db
-            ->createCommand('UPDATE tvc_order SET type = 4 WHERE order_id=:order_id')
-            ->bindValues([':order_id' => $_POST['TvcOrder']['order_id']])
-            ->execute();
-        // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
 
-        $models = new TvcOrder();
+        $res = array();
 
-        // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
-
-        if (isset($_POST['TvcOrder'])) {
-            $uniqid = uniqid();
-
-            $models->attributes = $_POST['TvcOrder'];
-
-            $models->break_date = $_POST['TvcOrder']['break_date'] == '' ? null : $_POST['TvcOrder']['break_date'];
-            $models->share_date = $_POST['TvcOrder']['share_date'] == '' ? null : $_POST['TvcOrder']['share_date'];
-            $models->asc_date = $_POST['TvcOrder']['asc_date'] == '' ? null : $_POST['TvcOrder']['asc_date'];
-            $models->asc_valid_from = $_POST['TvcOrder']['asc_valid_from'] == '' ? null : $_POST['TvcOrder']['asc_valid_from'];
-            $models->asc_valid_to = $_POST['TvcOrder']['asc_valid_to'] == '' ? null : $_POST['TvcOrder']['asc_valid_to'];
-            $models->order_id = $uniqid;
-            $models->type = 1;
-            $models->created_by = 1;
-            $models->created_at = date('Y-m-d');
-            $models->save();
-
-            if ($_POST['share_link'] != '') {
-                $s = 0;
-                foreach ($_POST['share_link'] as $val) {
-                    $sharelink = new TvcOrderShareLink();
-                    $sharelink->order_id = $uniqid;
-                    $sharelink->share_link = $_POST['share_link'][$s];
-                    $sharelink->save();
-                    ++$s;
-                }
-            }
-
-            $grandtotal = 0.0;
-            if ($_POST['TvcOrder']['service_type'] == 1) {
-                $c = 0;
-                $total = 0.0;
-                foreach ($_POST['channel'] as $val) {
-                    $total += TvcMgmtRate::model()->get_rate($_POST['TvcOrder']['advertiser'], $_POST['TvcOrder']['agency_company'], $_POST['TvcOrder']['length']);
-                    $channelorder = new TvcOrderChannel();
-                    $channelorder->order_id = $uniqid;
-                    $channelorder->channel_id = $_POST['channel'][$c];
-                    $channelorder->cluster_id = TvcMgmtChannel::model()->get_cluster_id($_POST['channel'][$c]);
-                    $channelorder->price = TvcMgmtRate::model()->get_rate($_POST['TvcOrder']['advertiser'], $_POST['TvcOrder']['agency_company'], $_POST['TvcOrder']['length']);
-                    $channelorder->save();
-                    ++$c;
-                }
-                $ordercharge = new TvcOrderCharges();
-                $ordercharge->order_id = $uniqid;
-                $ordercharge->grand_total = $total;
-                $ordercharge->save();
-            }
-            if ($_POST['TvcOrder']['service_type'] == 2) {
-                $n = 0;
-                $total = 0.0;
-                foreach ($_POST['non_tran']['id'] as $val) {
-                    $total += TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]);
-                    $channelnontran = new TvcOrderServices();
-                    $channelnontran->order_id = $uniqid;
-                    $channelnontran->sub_cat_id = $_POST['non_tran']['id'][$n];
-                    $channelnontran->qty = $_POST['non_tran']['qty'][$n];
-                    $channelnontran->price = TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]);
-                    $channelnontran->cat_id = TvcMgmtExtraServicesSub::model()->get_cat_id($_POST['non_tran']['id'][$n]);
-                    $channelnontran->save();
-                    ++$n;
-                }
-                $ordercharge = new TvcOrderCharges();
-                $ordercharge->order_id = $uniqid;
-                $ordercharge->grand_total = $total;
-                $ordercharge->save();
-            }
-
-            if (!empty($_FILES['po_file']['name'])) {
-                $po = 0;
-                foreach ($_FILES['po_file']['name'] as $val) {
-                    $targetDir = 'attachments/upload_pdf/';
-                    $fileName = basename($_FILES['po_file']['name'][$po]);
-                    $targetFilePath = $targetDir . $fileName;
-                    $size = filesize($_FILES['po_file']['tmp_name']); // bytes
-                    $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
-
-                    if (move_uploaded_file($_FILES['po_file']['tmp_name'][$po], $targetFilePath)) {
-                        $attachment = new TvcOrderAttachment();
-                        $attachment->order_id = $uniqid;
-                        $attachment->filename = $fileName;
-                        $attachment->path = $targetFilePath;
-                        $attachment->filesize = $size;
-                        $attachment->format = $fileType;
-                        $attachment->type = 1;
-                        $attachment->save();
-
-                        #echo 'success';
-                    } else {
-                        # echo 'error asdasd';
-                    }
-
-                    ++$po;
-                }
-            }
-
-            if (!empty($_FILES['material_file']['name'])) {
-                $po = 0;
-                foreach ($_FILES['material_file']['name'] as $val) {
-                    $targetDir = 'attachments/materials/';
-                    $fileName = basename($_FILES['material_file']['name'][$po]);
-                    $targetFilePath = $targetDir . $fileName;
-                    $size = filesize($_FILES['material_file']['tmp_name']); // bytes
-                    $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
-
-                    if (move_uploaded_file($_FILES['material_file']['tmp_name'][$po], $targetFilePath)) {
-                        $attachment = new TvcOrderAttachment();
-                        $attachment->order_id = $uniqid;
-                        $attachment->filename = $fileName;
-                        $attachment->path = $targetFilePath;
-                        $attachment->filesize = $size;
-                        $attachment->format = $fileType;
-                        $attachment->type = 2;
-                        $attachment->save();
-
-                        #echo 'success';
-                    } else {
-                        #  echo 'error asdasd';
-                    }
-
-                    ++$po;
-                }
-            }
-
-            if (!empty($_FILES['asc_file']['name'])) {
-                $po = 0;
-                foreach ($_FILES['asc_file']['name'] as $val) {
-                    $targetDir = 'attachments/asc_clearance/';
-                    $fileName = basename($_FILES['asc_file']['name'][$po]);
-                    $targetFilePath = $targetDir . $fileName;
-                    $size = filesize($_FILES['asc_file']['tmp_name']); // bytes
-                    $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
-
-                    if (move_uploaded_file($_FILES['asc_file']['tmp_name'][$po], $targetFilePath)) {
-                        $attachment = new TvcOrderAttachment();
-                        $attachment->order_id = $uniqid;
-                        $attachment->filename = $fileName;
-                        $attachment->path = $targetFilePath;
-                        $attachment->filesize = $size;
-                        $attachment->format = $fileType;
-                        $attachment->type = 3;
-                        $attachment->save();
-
-                        #echo 'success';
-                    } else {
-                        #  echo 'error asdasd';
-                    }
-
-                    ++$po;
-                }
-            }
-
-            if (isset($_POST['materialid'])) {
-                $m = 0;
-                foreach ($_POST['materialid'] as $val) {
-                    $attachments = new TvcOrderAttachment();
-
-                    $attachments->order_id = $uniqid;
-                    $attachments->filename = TvcOrderAttachment::model()->get_filename($_POST['materialid'][$m]);
-                    $attachments->path = TvcOrderAttachment::model()->get_path($_POST['materialid'][$m]);
-                    $attachments->filesize = TvcOrderAttachment::model()->get_filesize($_POST['materialid'][$m]);
-                    $attachments->format = TvcOrderAttachment::model()->get_format($_POST['materialid'][$m]);
-                    $attachments->type = TvcOrderAttachment::model()->get_type($_POST['materialid'][$m]);
-                    $attachments->save();
-                    ++$m;
-                }
-            }
-
-            if (isset($_POST['poid'])) {
-                $m = 0;
-                foreach ($_POST['poid'] as $val) {
-                    $attachments = new TvcOrderAttachment();
-
-                    $attachments->order_id = $uniqid;
-                    $attachments->filename = TvcOrderAttachment::model()->get_filename($_POST['poid'][$m]);
-                    $attachments->path = TvcOrderAttachment::model()->get_path($_POST['poid'][$m]);
-                    $attachments->filesize = TvcOrderAttachment::model()->get_filesize($_POST['poid'][$m]);
-                    $attachments->format = TvcOrderAttachment::model()->get_format($_POST['poid'][$m]);
-                    $attachments->type = TvcOrderAttachment::model()->get_type($_POST['poid'][$m]);
-                    $attachments->save();
-                    ++$m;
-                }
-            }
-
-            if (isset($_POST['ascclid'])) {
-                $m = 0;
-                foreach ($_POST['ascclid'] as $val) {
-                    $attachments = new TvcOrderAttachment();
-
-                    $attachments->order_id = $uniqid;
-                    $attachments->filename = TvcOrderAttachment::model()->get_filename($_POST['ascclid'][$m]);
-                    $attachments->path = TvcOrderAttachment::model()->get_path($_POST['ascclid'][$m]);
-                    $attachments->filesize = TvcOrderAttachment::model()->get_filesize($_POST['ascclid'][$m]);
-                    $attachments->format = TvcOrderAttachment::model()->get_format($_POST['ascclid'][$m]);
-                    $attachments->type = TvcOrderAttachment::model()->get_type($_POST['ascclid'][$m]);
-                    $attachments->save();
-                    ++$m;
-                }
-            }
-            // print_r($_FILES);
-            // print_r($_POST);
-
-            // print_r($_POST);
-            // $model->attributes=$_POST['TvcOrder'];
-            // if($model->save())
-            // 	$this->redirect(array('view','id'=>$model->id));
-
-            // $this->redirect(['view', 'id' => $models->id]);
-
-            echo $models->id;
+        if ($_POST['TvcOrder']['billing_ce'] == "") {
+            $res['val'] .= "<span style='color:red'>- <strong>CE/PO/MIO/DO/BO Number</strong> cannot be empty</span><br>";
+            $res['field_id'] .= "TvcOrder_billing_ce,";
         }
+        if ($_POST['TvcOrder']['billing_company'] == "") {
+            $res['val'] .= "<span style='color:red'>- <strong>Company Billing Name</strong> cannot be empty</span><br>";
+            $res['field_id'] .= "TvcOrder_billing_company,";
+        }
+        if ($_POST['TvcOrder']['billing_address'] == "") {
+            $res['val'] .= "<span style='color:red'>- <strong>Company Billing Address</strong> cannot be empty</span><br>";
+            $res['field_id'] .= "TvcOrder_billing_address,";
+        }
+        if ($_POST['TvcOrder']['billing_contact_person'] == "") {
+            $res['val'] .= "<span style='color:red'>- <strong>Company Finance Contact Person</strong> cannot be empty</span><br>";
+            $res['field_id'] .= "TvcOrder_billing_contact_person,";
+        }
+        if ($_POST['TvcOrder']['billing_contact_no'] == "") {
+            $res['val'] .= "<span style='color:red'>- <strong>Company Billing Contact No</strong> cannot be empty</span><br>";
+            $res['field_id'] .= "TvcOrder_billing_contact_no,";
+        }
+        if ($_POST['TvcOrder']['billing_contact_email'] == "") {
+            $res['val'] .= "<span style='color:red'>- <strong>Company Billing Email</strong> cannot be empty</span><br>";
+            $res['field_id'] .= "TvcOrder_billing_contact_email,";
+        }
+        if ($_POST['TvcOrder']['billing_tin'] == "") {
+            $res['val'] .= "<span style='color:red'>- <strong>Company Billing TIN</strong> cannot be empty</span><br>";
+            $res['field_id'] .= "TvcOrder_billing_tin,";
+        }
+        if ($_POST['TvcOrder']['billing_business_type'] == "") {
+            $res['val'] .= "<span style='color:red'>- <strong>Company Billing Style</strong> cannot be empty</span><br>";
+            $res['field_id'] .= "TvcOrder_billing_business_type,";
+        }
+        if ($_POST['TvcOrder']['billing_upload_type'] == "") {
+            $res['val'] .= "<span style='color:red'>- <strong>Company Billing Upload PDF</strong> cannot be empty</span><br>";
+            $res['field_id'] .= "TvcOrder_billing_upload_type,";
+        }
+
+        if (
+            $_POST['TvcOrder']['billing_ce'] != "" && $_POST['TvcOrder']['billing_company'] != "" && $_POST['TvcOrder']['billing_address'] != ""
+            && $_POST['TvcOrder']['billing_contact_person'] != "" && $_POST['TvcOrder']['billing_contact_no'] != "" && $_POST['TvcOrder']['billing_contact_email'] != ""
+            && $_POST['TvcOrder']['billing_tin'] != "" && $_POST['TvcOrder']['billing_business_type'] != "" && $_POST['TvcOrder']['billing_upload_type'] != ""
+        ) {
+
+
+
+            Yii::app()->db
+                ->createCommand('UPDATE tvc_order SET type = 4 WHERE order_id=:order_id')
+                ->bindValues([':order_id' => $_POST['TvcOrder']['order_id']])
+                ->execute();
+            // Uncomment the following line if AJAX validation is needed
+            // $this->performAjaxValidation($model);
+
+            $models = new TvcOrder();
+
+            // Uncomment the following line if AJAX validation is needed
+            // $this->performAjaxValidation($model);
+
+            if (isset($_POST['TvcOrder'])) {
+                $uniqid = uniqid();
+
+                $models->attributes = $_POST['TvcOrder'];
+
+                $models->break_date = $_POST['TvcOrder']['break_date'] == '' ? null : $_POST['TvcOrder']['break_date'];
+                $models->share_date = $_POST['TvcOrder']['share_date'] == '' ? null : $_POST['TvcOrder']['share_date'];
+                $models->asc_date = $_POST['TvcOrder']['asc_date'] == '' ? null : $_POST['TvcOrder']['asc_date'];
+                $models->asc_valid_from = $_POST['TvcOrder']['asc_valid_from'] == '' ? null : $_POST['TvcOrder']['asc_valid_from'];
+                $models->asc_valid_to = $_POST['TvcOrder']['asc_valid_to'] == '' ? null : $_POST['TvcOrder']['asc_valid_to'];
+                $models->order_id = $uniqid;
+                $models->type = 1;
+                $models->created_by = 1;
+                $models->created_at = date('Y-m-d');
+                $models->save();
+
+                if ($_POST['share_link'] != '') {
+                    $s = 0;
+                    foreach ($_POST['share_link'] as $val) {
+                        $sharelink = new TvcOrderShareLink();
+                        $sharelink->order_id = $uniqid;
+                        $sharelink->share_link = $_POST['share_link'][$s];
+                        $sharelink->save();
+                        ++$s;
+                    }
+                }
+
+                $grandtotal = 0.0;
+                if ($_POST['TvcOrder']['service_type'] == 1) {
+                    $c = 0;
+                    $total = 0.0;
+                    foreach ($_POST['channel'] as $val) {
+                        $total += TvcMgmtRate::model()->get_rate($_POST['TvcOrder']['advertiser'], $_POST['TvcOrder']['agency_company'], $_POST['TvcOrder']['length']);
+                        $channelorder = new TvcOrderChannel();
+                        $channelorder->order_id = $uniqid;
+                        $channelorder->channel_id = $_POST['channel'][$c];
+                        $channelorder->cluster_id = TvcMgmtChannel::model()->get_cluster_id($_POST['channel'][$c]);
+                        $channelorder->price = TvcMgmtRate::model()->get_rate($_POST['TvcOrder']['advertiser'], $_POST['TvcOrder']['agency_company'], $_POST['TvcOrder']['length']);
+                        $channelorder->save();
+                        ++$c;
+                    }
+                    $ordercharge = new TvcOrderCharges();
+                    $ordercharge->order_id = $uniqid;
+                    $ordercharge->grand_total = $total;
+                    $ordercharge->save();
+                }
+                if ($_POST['TvcOrder']['service_type'] == 2) {
+                    $n = 0;
+                    $total = 0.0;
+                    foreach ($_POST['non_tran']['id'] as $val) {
+                        $total += TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]);
+                        $channelnontran = new TvcOrderServices();
+                        $channelnontran->order_id = $uniqid;
+                        $channelnontran->sub_cat_id = $_POST['non_tran']['id'][$n];
+                        $channelnontran->qty = $_POST['non_tran']['qty'][$n];
+                        $channelnontran->price = TvcMgmtExtraServicesSub::model()->get_price($_POST['non_tran']['id'][$n]);
+                        $channelnontran->cat_id = TvcMgmtExtraServicesSub::model()->get_cat_id($_POST['non_tran']['id'][$n]);
+                        $channelnontran->save();
+                        ++$n;
+                    }
+                    $ordercharge = new TvcOrderCharges();
+                    $ordercharge->order_id = $uniqid;
+                    $ordercharge->grand_total = $total;
+                    $ordercharge->save();
+                }
+
+                if (!empty($_FILES['po_file']['name'])) {
+                    $po = 0;
+                    foreach ($_FILES['po_file']['name'] as $val) {
+                        $targetDir = 'attachments/upload_pdf/';
+                        $fileName = basename($_FILES['po_file']['name'][$po]);
+                        $targetFilePath = $targetDir . $fileName;
+                        $size = filesize($_FILES['po_file']['tmp_name']); // bytes
+                        $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
+
+                        if (move_uploaded_file($_FILES['po_file']['tmp_name'][$po], $targetFilePath)) {
+                            $attachment = new TvcOrderAttachment();
+                            $attachment->order_id = $uniqid;
+                            $attachment->filename = $fileName;
+                            $attachment->path = $targetFilePath;
+                            $attachment->filesize = $size;
+                            $attachment->format = $fileType;
+                            $attachment->type = 1;
+                            $attachment->save();
+
+                            #echo 'success';
+                        } else {
+                            # echo 'error asdasd';
+                        }
+
+                        ++$po;
+                    }
+                }
+
+                if (!empty($_FILES['material_file']['name'])) {
+                    $po = 0;
+                    foreach ($_FILES['material_file']['name'] as $val) {
+                        $targetDir = 'attachments/materials/';
+                        $fileName = basename($_FILES['material_file']['name'][$po]);
+                        $targetFilePath = $targetDir . $fileName;
+                        $size = filesize($_FILES['material_file']['tmp_name']); // bytes
+                        $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
+
+                        if (move_uploaded_file($_FILES['material_file']['tmp_name'][$po], $targetFilePath)) {
+                            $attachment = new TvcOrderAttachment();
+                            $attachment->order_id = $uniqid;
+                            $attachment->filename = $fileName;
+                            $attachment->path = $targetFilePath;
+                            $attachment->filesize = $size;
+                            $attachment->format = $fileType;
+                            $attachment->type = 2;
+                            $attachment->save();
+
+                            #echo 'success';
+                        } else {
+                            #  echo 'error asdasd';
+                        }
+
+                        ++$po;
+                    }
+                }
+
+                if (!empty($_FILES['asc_file']['name'])) {
+                    $po = 0;
+                    foreach ($_FILES['asc_file']['name'] as $val) {
+                        $targetDir = 'attachments/asc_clearance/';
+                        $fileName = basename($_FILES['asc_file']['name'][$po]);
+                        $targetFilePath = $targetDir . $fileName;
+                        $size = filesize($_FILES['asc_file']['tmp_name']); // bytes
+                        $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
+
+                        if (move_uploaded_file($_FILES['asc_file']['tmp_name'][$po], $targetFilePath)) {
+                            $attachment = new TvcOrderAttachment();
+                            $attachment->order_id = $uniqid;
+                            $attachment->filename = $fileName;
+                            $attachment->path = $targetFilePath;
+                            $attachment->filesize = $size;
+                            $attachment->format = $fileType;
+                            $attachment->type = 3;
+                            $attachment->save();
+
+                            #echo 'success';
+                        } else {
+                            #  echo 'error asdasd';
+                        }
+
+                        ++$po;
+                    }
+                }
+
+                if (isset($_POST['materialid'])) {
+                    $m = 0;
+                    foreach ($_POST['materialid'] as $val) {
+                        $attachments = new TvcOrderAttachment();
+
+                        $attachments->order_id = $uniqid;
+                        $attachments->filename = TvcOrderAttachment::model()->get_filename($_POST['materialid'][$m]);
+                        $attachments->path = TvcOrderAttachment::model()->get_path($_POST['materialid'][$m]);
+                        $attachments->filesize = TvcOrderAttachment::model()->get_filesize($_POST['materialid'][$m]);
+                        $attachments->format = TvcOrderAttachment::model()->get_format($_POST['materialid'][$m]);
+                        $attachments->type = TvcOrderAttachment::model()->get_type($_POST['materialid'][$m]);
+                        $attachments->save();
+                        ++$m;
+                    }
+                }
+
+                if (isset($_POST['poid'])) {
+                    $m = 0;
+                    foreach ($_POST['poid'] as $val) {
+                        $attachments = new TvcOrderAttachment();
+
+                        $attachments->order_id = $uniqid;
+                        $attachments->filename = TvcOrderAttachment::model()->get_filename($_POST['poid'][$m]);
+                        $attachments->path = TvcOrderAttachment::model()->get_path($_POST['poid'][$m]);
+                        $attachments->filesize = TvcOrderAttachment::model()->get_filesize($_POST['poid'][$m]);
+                        $attachments->format = TvcOrderAttachment::model()->get_format($_POST['poid'][$m]);
+                        $attachments->type = TvcOrderAttachment::model()->get_type($_POST['poid'][$m]);
+                        $attachments->save();
+                        ++$m;
+                    }
+                }
+
+                if (isset($_POST['ascclid'])) {
+                    $m = 0;
+                    foreach ($_POST['ascclid'] as $val) {
+                        $attachments = new TvcOrderAttachment();
+
+                        $attachments->order_id = $uniqid;
+                        $attachments->filename = TvcOrderAttachment::model()->get_filename($_POST['ascclid'][$m]);
+                        $attachments->path = TvcOrderAttachment::model()->get_path($_POST['ascclid'][$m]);
+                        $attachments->filesize = TvcOrderAttachment::model()->get_filesize($_POST['ascclid'][$m]);
+                        $attachments->format = TvcOrderAttachment::model()->get_format($_POST['ascclid'][$m]);
+                        $attachments->type = TvcOrderAttachment::model()->get_type($_POST['ascclid'][$m]);
+                        $attachments->save();
+                        ++$m;
+                    }
+                }
+                // print_r($_FILES);
+                // print_r($_POST);
+
+                // print_r($_POST);
+                // $model->attributes=$_POST['TvcOrder'];
+                // if($model->save())
+                // 	$this->redirect(array('view','id'=>$model->id));
+
+                // $this->redirect(['view', 'id' => $models->id]);
+
+                $res['val'] = 1;
+                $res['id'] = $models->id;
+            }
+        }
+
+        echo json_encode($res);
     }
 
 
